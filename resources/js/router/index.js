@@ -15,11 +15,6 @@ import productIndex from '../components/products/Index'
 
 export const routes = [
     {
-        name: 'home',
-        path: '/',
-        component: Home
-    },
-    {
         name: 'register',
         path: '/register',
         component: Register

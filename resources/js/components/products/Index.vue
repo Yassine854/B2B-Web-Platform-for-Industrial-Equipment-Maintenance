@@ -36,7 +36,20 @@
     </side-bar>
     </template>
 
-    <script setup>
-    import sideBar from '../layouts/SideBar.vue'
+<script setup>
+import SideBar from '../layouts/SideBar.vue';
+import { checkLoginStatus } from '../../auth'; // Import the checkLoginStatus function
+</script>
 
-    </script>
+<script>
+export default {
+  name: 'ProductIndex',
+  beforeRouteEnter(to, from, next) {
+    if (checkLoginStatus()) {
+      next();
+    } else {
+      next('/login');
+    }
+  },
+};
+</script>

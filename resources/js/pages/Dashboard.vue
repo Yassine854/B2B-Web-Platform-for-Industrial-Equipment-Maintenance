@@ -1,10 +1,23 @@
 <template>
-<side-bar>
-    welcome to your dashboard {{ name }}
-</side-bar>
-</template>
+    <SideBar>
+      welcome to your dashboard
+    </SideBar>
+  </template>
 <script setup>
-import sideBar from '../components/layouts/SideBar.vue'
-console.log(name); // Check the value of the 'name' variable
+import SideBar from '../components/layouts/SideBar.vue'; // Update the import statement
+import { checkLoginStatus } from '../auth'; // Import the checkLoginStatus function
+</script>
 
+<script>
+export default {
+  name: "Dashboard",
+  //check auth
+  beforeRouteEnter(to, from, next) {
+    if (checkLoginStatus()) {
+      next();
+    } else {
+      next('/login');
+    }
+  }
+};
 </script>
