@@ -1,13 +1,17 @@
 <template>
     <div class="container">
-        <div class="row jutify-content-center">
+        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="d-flex justify-content-center">
             <div class="col-md-8">
                 <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
                     <strong>{{error}}</strong>
                 </div>
-
+                <div class="d-flex justify-content-center">
+                <img :src="'../storage/img/GSI-logo-PNG.png'" style="filter: grayscale(100%);max-width:390px">
+                </div>
+             <br>
                 <div class="card card-default">
                     <div class="card-header"><h5>Register New User</h5></div>
                     <div class="card-body">
@@ -20,7 +24,7 @@
                                            autofocus autocomplete="off"  placeholder="Enter your name">
                                 </div>
                             </div>
-
+                            <br>
                             <div class="form-group row mt-1">
                                 <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
                                 <div class="col-md-8">
@@ -28,7 +32,7 @@
                                            autofocus autocomplete="off" placeholder="Enter your email">
                                 </div>
                             </div>
-
+                            <br>
 
                             <div class="form-group row mt-1">
                                 <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
@@ -37,7 +41,7 @@
                                            required autocomplete="off" placeholder="Enter your password">
                                 </div>
                             </div>
-
+                            <br>
                             <div class="form-group row mt-1 mb-0">
                                 <div class="col-md-8 offset-md-4">
                                     <button type="submit" class="btn btn-success" @click="handleSubmit">
@@ -61,6 +65,7 @@
                 </div>
 
             </div>
+        </div>
         </div>
     </div>
 </template>
