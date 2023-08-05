@@ -19,6 +19,7 @@ class UserController extends Controller
         ];
 
         if(Auth::attempt($credentials)) {
+            $user = Auth::user(); //add
             $success = true;
             $message = "User login successfully";
         } else {
@@ -28,7 +29,9 @@ class UserController extends Controller
 
         $response = [
             'success' => $success,
-            'message' => $message
+            'message' => $message,
+            'user' => $user, // add
+
         ];
 
         return response()->json($response);
@@ -80,4 +83,30 @@ class UserController extends Controller
 
         return response()->json($response);
     }
+    public function get_all_users(){
+        $users=User::all();
+        return response()->json([
+            'users'=>$users
+        ],200);
+    }
+
+    public function deleteUser($id){
+        $user=User::find($id);
+        $user->delete();
+        return response()->json('User deleted');
+    }
+
+    public function search_user(Request $request) {
+        $search = $request->get('s');
+
+        if ($search != null) {
+            $users = User::where('name', 'LIKE', "%$search%")->get();
+            return response()->json([
+                'users' => $users
+            ], 200);
+        } else {
+            return $this->get_all_users();
+        }
+    }
+
 }

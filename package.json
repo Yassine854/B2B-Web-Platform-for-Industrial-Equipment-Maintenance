@@ -28,7 +28,9 @@
         "bootstrap-vue": "^2.23.1",
         "jquery": "^3.7.0",
         "popper.js": "^1.16.1",
+        "sweetalert2": "^11.7.20",
         "vue": "^3.2.36",
-        "vue-router": "^4.0.13"
+        "vue-router": "^4.0.13",
+        "vuex": "^4.0.2"
     }
 }

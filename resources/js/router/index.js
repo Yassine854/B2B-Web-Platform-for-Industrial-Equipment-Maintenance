@@ -5,19 +5,26 @@ import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
+
+//users
+import UserIndex from '../components/admin/users/index'
+
 // import Dashboard from '../components/layouts/navvv.vue';
 // import Posts from '../components/Posts';
 // import EditPost from '../components/EditPost';
 // import AddPost from '../components/AddPost';
 
-//Products
-import productIndex from '../components/products/Index'
 
 export const routes = [
     {
         name: 'register',
         path: '/register',
         component: Register
+    },
+    {
+        name: "Home",
+        path: '/',
+        component: Login
     },
     {
         name: 'login',
@@ -29,10 +36,11 @@ export const routes = [
         path: '/dashboard',
         component: Dashboard
     },
+    //users
     {
-        name: 'productIndex',
-        path: '/products',
-        component: productIndex
+        name: 'users',
+        path: '/users',
+        component: UserIndex
     },
 ];
 

@@ -4,19 +4,19 @@
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                     <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <span class="fs-5 d-none d-sm-inline">Menu</span>
+                        <span class="fs-5 d-none d-sm-inline">Generale Services</span>
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li>
+                        <li id="btnHover">
                             <router-link to="/dashboard"  class="nav-link px-0 align-middle">
-                                <i class="fa-solid fa-gauge"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </router-link>
+                                <i class="fa-solid fa-gauge"></i> <span class="ms-1 d-none d-sm-inline" >Dashboard</span> </router-link>
                         </li>
-                        <li>
+                        <li id="btnHover">
 
-                            <router-link to="/products" class="nav-link px-0 align-middle">
-                                <i class="fa-solid fa-gear"></i> <span class="ms-1 d-none d-sm-inline">Products</span></router-link>
+                            <router-link to="/users" class="nav-link px-0 align-middle">
+                                <i class="fa-solid fa-user"></i> <span class="ms-1 d-none d-sm-inline">Utilisateurs</span></router-link>
                         </li>
-                        <li>
+                        <li id="btnHover">
                             <a href="#" class="nav-link px-0 align-middle">
                                 <i class="fa-brands fa-usps"></i> <span class="ms-1 d-none d-sm-inline">Services</span></a>
                         </li>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col py-3">
+            <div class="col py-3" style="background-color: lightgray;">
 
                 <slot></slot>
             </div>
@@ -86,3 +86,8 @@
 
     }
     </script>
+<style>
+#btnHover:hover{
+background-color: lightgray;
+}
+</style>
