@@ -1,6 +1,6 @@
 <template>
     <!-- Admin Dashboard -->
-    <SideBar v-if="isAdmin()">
+    <SideBar v-if="checkLoginAdmin()">
         <div >
             welcome to your dashboard admin
         </div>
@@ -8,15 +8,18 @@
 
     <!-- Client Dashboard -->
     <SideBar v-else>
-        <div >
-            welcome to your dashboard client
+        <div v-if="checkClientVerification()">
+            Bienvenue dans votre dashboard
+        </div>
+        <div v-else>
+            Veuillez valider votre adresse e-mail
         </div>
     </SideBar>
   </template>
-  
+
 <script setup>
 import SideBar from '../components/layouts/SideBar.vue'; // Update the import statement
-import { checkLoginStatus } from '../auth'; // Import the checkLoginStatus function
+import { checkLoginStatus,checkLoginAdmin,checkClientVerification } from '../auth'; // Import the checkLoginStatus function
 </script>
 
 <script>

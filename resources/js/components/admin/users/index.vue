@@ -33,7 +33,11 @@
               <th scope="row">{{ user.id }}</th>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
-              <td></td>
+              <td v-if="user.role==null ||user.role==1">
+                <p v-if="user.email_verified_at!=null" style="color: green;font-style: italic;">vérifié le {{formatDateTime(user.email_verified_at) }}</p>
+                <button type="button" v-if="user.email_verified_at==null" class="btn btn-warning btn-sm" @click="verifyEmail(user.id)">En attente</button>
+              </td>
+              <td v-else></td>
               <td>
                 <button disabled class="btn btn-info btn-sm">
                   {{ user.role === 2 ? "admin" : "client" }}
@@ -75,7 +79,7 @@
 
   <script setup>
   import SideBar from "../../layouts/SideBar.vue";
-  import { checkLoginStatus } from "../../../auth";
+  import { checkLoginStatus,checkLoginClient,checkClientVerification,checkClientNotVerified } from "../../../auth";
   import { onMounted, ref, computed } from "vue";
   import { useRouter } from "vue-router";
   import Swal from "sweetalert2";
@@ -84,8 +88,20 @@
 
   let users = ref([]);
   const currentPage = ref(1);
-  const itemsPerPage = ref(7); // Set the default number of items per page
+  const itemsPerPage = ref(5); // Set the default number of items per page
   let searchUser=ref([]);
+
+  const formatDateTime = (dateTimeString) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
+    return new Date(dateTimeString).toLocaleString("fr-FR", options);
+  };
 
   onMounted(async () => {
     getUsers();
@@ -136,6 +152,7 @@
                 this.id = window.Laravel.user.id;
             }
         },
+
     methods: {
       deleteUser(user_id) {
         Swal.fire({
@@ -167,6 +184,32 @@
         }
         });
       },
+      verifyEmail(user_id){
+        Swal.fire({
+        title: "Valider l'E-mail ?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText:'Non',
+        confirmButtonText: 'Oui'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            axios.post('/api/user/verifyEmail/'+user_id).then((response)=>{
+                  this.getUsers();
+                  console.log(response);
+              }).catch((errors)=>{
+                  console.log(errors);
+              })
+
+            Swal.fire({
+            title:'E-mail validé !',
+            icon:'success'
+        })
+        }
+})
+      }
+
     },
   };
   </script>

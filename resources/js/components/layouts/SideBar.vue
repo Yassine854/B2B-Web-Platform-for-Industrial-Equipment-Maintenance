@@ -23,6 +23,7 @@
 
                     </ul>
                     <hr>
+                    <i class="fa-solid fa-bell" id="bell"></i>
                     <div class="dropdown pb-4">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
@@ -89,5 +90,10 @@
 <style>
 #btnHover:hover{
 background-color: lightgray;
+}
+#bell{
+    position: relative;
+    margin-left: 120px;
+    top: 23px;
 }
 </style>

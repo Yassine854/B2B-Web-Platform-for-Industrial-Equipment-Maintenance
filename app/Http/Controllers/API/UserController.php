@@ -109,4 +109,18 @@ class UserController extends Controller
         }
     }
 
+    public function verifyEmail($id)
+{
+    $user = User::find($id);
+    if ($user) {
+        if ($user->email_verified_at === null) { // Make sure not to overwrite if it's already verified
+            $user->email_verified_at = now(); // Use the now() function to get the current date and time
+            $user->save();
+        }
+        return response()->json('E-mail vérifié');
+    } else {
+        return response()->json('Utilisateur introuvable', 404);
+    }
+}
+
 }
