@@ -29,6 +29,7 @@ Route::post('/user/delete/{id}', [UserController::class, 'deleteUser']);
 Route::get('/search_user',[UserController::class,'search_user']);
 Route::post('/user/verifyEmail/{id}', [UserController::class, 'verifyEmail']);
 
+
 Route::group(['prefix' => 'posts','middleware' => 'auth:sanctum'], function() {
     Route::get('/', [PostsController::class,'index']);
     Route::post('add', [PostsController::class,'add']);

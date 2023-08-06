@@ -20,6 +20,14 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('role')->nullable();
+            //Client information
+            $table->string('society')->nullable();
+            $table->string('type_ind')->nullable();
+            $table->string('responsable')->nullable();
+            $table->string('N_responsable')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
+            $table->string('address')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

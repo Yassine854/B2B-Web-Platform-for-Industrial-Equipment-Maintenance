@@ -24,14 +24,16 @@
                     </ul>
                     <hr>
                     <i class="fa-solid fa-bell" id="bell"></i>
-                    <div class="dropdown pb-4">
+                    <div class="dropdown pb-4" id="userDropdown">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                            <span class="d-none d-sm-inline mx-1">{{ name }}</span>
+                            <span class="d-none d-sm-inline mx-1">
+                            <span class="text-truncate d-inline-block" style="max-width: 100px;">{{ name }}</span>
+                            </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                             <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><router-link to="/profile" class="dropdown-item" href="#">Profile</router-link></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -92,8 +94,25 @@
 background-color: lightgray;
 }
 #bell{
-    position: relative;
-    margin-left: 120px;
-    top: 23px;
+    position: fixed;
+    left: 180px;
+    bottom: 33px;
+}
+#btnHover:hover{
+background-color: lightgray;
+}
+#userDropdown {
+  position: fixed;
+  bottom: 5px;
+}
+
+/* Adjusting the width of the dropdown menu */
+.dropdown-menu {
+  min-width: 200px;
+}
+
+/* Styling for the dropdown menu */
+.dropdown-menu-dark {
+  background-color: #343a40;
 }
 </style>

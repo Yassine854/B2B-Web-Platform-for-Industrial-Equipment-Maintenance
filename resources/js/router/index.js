@@ -5,6 +5,7 @@ import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
+import Profile from '../components/client/Profile'
 
 //users
 import UserIndex from '../components/admin/users/index'
@@ -41,6 +42,12 @@ export const routes = [
         name: 'users',
         path: '/users',
         component: UserIndex
+    },
+    //Profile
+    {
+        name: 'profile',
+        path: '/profile',
+        component: Profile
     },
 ];
 

@@ -27,6 +27,7 @@
     "dependencies": {
         "autoprefixer": "10.4.5",
         "bootstrap-vue": "^2.23.1",
+        "global-country-state-city-select": "^1.0.7",
         "jquery": "^3.7.0",
         "popper.js": "^1.16.1",
         "sweetalert2": "^11.7.20",
