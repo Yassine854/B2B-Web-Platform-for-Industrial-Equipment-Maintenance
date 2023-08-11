@@ -9,7 +9,7 @@
                     <strong>{{error}}</strong>
                 </div>
                 <div class="d-flex justify-content-center">
-                <img :src="'../storage/img/GSI-logo-PNG.png'" style="filter: grayscale(100%);max-width:390px">
+                <img :src="'../storage/img/GSI-logo-PNG.png'" style="max-width:390px">
                 </div>
              <br>
                 <div class="card card-default">

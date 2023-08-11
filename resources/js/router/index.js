@@ -9,6 +9,7 @@ import Profile from '../components/client/Profile'
 
 //users
 import UserIndex from '../components/admin/users/index'
+import UserCreate from '../components/admin/users/create'
 
 // import Dashboard from '../components/layouts/navvv.vue';
 // import Posts from '../components/Posts';
@@ -42,6 +43,11 @@ export const routes = [
         name: 'users',
         path: '/users',
         component: UserIndex
+    },
+    {
+        name: 'createUser',
+        path: '/users/create',
+        component: UserCreate
     },
     //Profile
     {

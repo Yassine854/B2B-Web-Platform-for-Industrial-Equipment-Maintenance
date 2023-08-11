@@ -22,6 +22,7 @@
           :value="country.id"
           v-for="country in countries"
           :key="country.id"
+          :data-name="country.name"
         >
           {{ country.name }}
         </option>
@@ -46,13 +47,13 @@
         @change="fireCity()"
       >
         <option hidden selected>Open this select menu</option>
-        <option :value="state.id" v-for="state in states" :key="state.id">
+        <option :value="state.id" v-for="state in states" :key="state.id" :data-name="state.name">
           {{ state.name }}
         </option>
       </select>
 </div>
 </div>
-    
+
   </template>
 
   <script>
@@ -144,6 +145,20 @@
         cities: [],
       };
     },
+    computed: {
+    selectedCountryName() {
+        const selectedOption = this.countries.find(
+        (country) => country.id === this.selectedCountry
+        );
+        return selectedOption ? selectedOption.name : '';
+    },
+    selectedStateName() {
+    const selectedOption = this.states.find(
+      (state) => state.id === this.selectedState
+    );
+    return selectedOption ? selectedOption.name : '';
+  },
+    },
     mounted() {},
     methods: {
       fireState() {
@@ -164,6 +179,16 @@
           } else {
             this.arrayRemove(this.cities, city);
           }
+          //pass the data
+          const selectedCountryName = this.selectedCountryName;
+          const selectedStateName = this.selectedStateName;
+          this.$emit('countryStateChanged', {
+            selectedCountry: selectedCountryName,
+            selectedState: selectedStateName,
+            // selectedCountry: this.selectedCountry.name,
+            // selectedState: this.selectedState.name,
+
+            });
         });
       },
       arrayRemove(arr, value) {

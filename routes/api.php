@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\UserController;
+// use App\Http\Controllers\TypeController;
+use App\Http\Controllers\TypeindustrieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,13 +23,32 @@ use App\Http\Controllers\API\UserController;
 //     return $request->user();
 // });
 Route::get('/get_all_users',[UserController::class,'get_all_users']);
+// Route::get('/get_all_types',[TypeController::class,'index']);
+Route::get('/get_type_industries',[TypeindustrieController::class,'get_type_industries']);
 Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 // Route::post('user/delete/{id}','UserController@deleteUser');
+
+//USERS
+
+Route::post('/users/create/admin', [UserController::class, 'createAdmin']);
+Route::post('/users/create/client', [UserController::class, 'createClient']);
+Route::put('/users/edit/{id}', [UserController::class, 'updateUser']);
+
+
 Route::post('/user/delete/{id}', [UserController::class, 'deleteUser']);
+
+
+
+
 Route::get('/search_user',[UserController::class,'search_user']);
 Route::post('/user/verifyEmail/{id}', [UserController::class, 'verifyEmail']);
+
+
+
+
+
 
 
 Route::group(['prefix' => 'posts','middleware' => 'auth:sanctum'], function() {
