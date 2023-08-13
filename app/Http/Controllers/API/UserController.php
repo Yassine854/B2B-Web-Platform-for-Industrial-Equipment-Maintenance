@@ -84,6 +84,8 @@ class UserController extends Controller
 
         return response()->json($response);
     }
+
+
     public function get_all_users(){
         $users=User::all();
         return response()->json([
@@ -121,6 +123,13 @@ class UserController extends Controller
             'name'=>'required',
             'email'=>'required',
             'password'=>'required',
+            'society'=>'required',
+            'type_ind'=>'required',
+            'responsable'=>'required',
+            'N_responsable'=>'required',
+            'country'=>'required',
+            'city'=>'required',
+            'address'=>'required',
         ]);
 
 
@@ -149,14 +158,11 @@ class UserController extends Controller
         $request->validate([
             'name'=>'required',
             'email'=>'required',
-            'password'=>'required',
         ]);
         $user=User::find($id);
         $user->role = $request->role;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-
         $user->society = $request->society;
         $user->type_ind = $request->type_ind;
         $user->responsable = $request->responsable;
@@ -182,7 +188,10 @@ class UserController extends Controller
         $search = $request->get('s');
 
         if ($search != null) {
-            $users = User::where('name', 'LIKE', "%$search%")->get();
+            $users = User::where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%$search%")
+                      ->orWhere('society', 'LIKE', "%$search%");
+            })->get();
             return response()->json([
                 'users' => $users
             ], 200);

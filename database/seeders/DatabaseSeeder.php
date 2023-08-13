@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'role' => 2
         ]);
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 40; $i++) {
             User::create([
                 'name' => 'User ' . $i,
                 'email' => 'user' . $i . '@test.com',

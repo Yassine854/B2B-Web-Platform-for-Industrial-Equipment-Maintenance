@@ -3,15 +3,14 @@
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             <div class="d-flex justify-content-center">
             <div class="col-md-8">
-                <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
-                    <strong>{{error}}</strong>
-                </div>
                 <div class="d-flex justify-content-center">
                 <img :src="'../storage/img/GSI-logo-PNG.png'" style="max-width:390px">
                 </div>
              <br>
+             <div v-if="error !== null" class="alert alert-danger" role="alert">
+                    <strong>{{error}}</strong>
+                </div>
                 <div class="card card-default">
                     <div class="card-header"><h5>Login</h5></div>
                     <div class="card-body">
@@ -19,8 +18,8 @@
                             <div class="form-group row">
                                 <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
                                 <div class="col-md-8">
-                                    <input id="email" type="email" class="form-control" v-model="email" required
-                                           autofocus autocomplete="off" placeholder="Enter your email">
+                                    <input id="email" type="email" class="form-control" v-model="email"
+                                           autofocus autocomplete="off" placeholder="Enter your email" required>
                                 </div>
                             </div>
                             <br>
@@ -74,7 +73,9 @@
         methods: {
             handleSubmit(e) {
                 e.preventDefault()
-                if(this.password.length > 0) {
+                if (this.email.trim() == "" || this.password.trim() == "")
+                    this.error = "Veuillez remplir à la fois les champs de l'adresse e-mail et du mot de passe.";
+                else if (this.email.trim() !== "" && this.password.trim() !== "") {
                     this.$axios.get('/sanctum/csrf-cookie').then(response => {
                         this.$axios.post('api/login', {
                             email: this.email,
@@ -87,11 +88,18 @@
                                 this.error = response.data.message
                             }
                         })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
+                        .catch(error => {
+                        console.error(error);
+                        this.error = "Une erreur s'est produite lors de la connexion. Veuillez vérifier votre adresse e-mail ou votre mot de passe.";
+                    });
                     })
                 }
+                else{
+                    this.error = "idk";
+                }
+                // this.email= "",
+                // this.password= "",
+                // this.error= null
             }
         },
 

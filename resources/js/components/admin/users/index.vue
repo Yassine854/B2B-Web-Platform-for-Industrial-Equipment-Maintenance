@@ -12,15 +12,12 @@
             <input
               type="search"
               class="form-control rounded"
-              placeholder="Search"
+              placeholder="Rechercher"
               aria-label="Search"
               aria-describedby="search-addon"
               v-model="searchUser"
               @keyup="search()"
             />
-            <span class="input-group-text border-0" id="search-addon">
-              <i class="fas fa-search"></i>
-            </span>
           </div>
         </div>
         <div class="col-md-8 text-end">
@@ -67,6 +64,7 @@
                         name="role"
                         aria-label="Defaultstartf select example"
                         v-model="selectRole"
+                        required
                       >
                         <option value="1">Client</option>
                         <option value="2">Admin</option>
@@ -116,6 +114,7 @@
                                   type="text"
                                   placeholder="Entrer le nom d'utilisateur"
                                   v-model="nameClient"
+                                  required
                                 />
                               </div>
                               <!-- Form Group (location)-->
@@ -132,6 +131,7 @@
                                   type="text"
                                   placeholder="Entrer l'adresse E-mail"
                                   v-model="emailClient"
+                                  required
                                 />
                               </div>
                               <div class="col-md-12">
@@ -145,7 +145,9 @@
                                   class="form-control"
                                   id="inputLocation"
                                   type="password"
+                                  placeholder="Entrer le mot de passe"
                                   v-model="passwordClient"
+                                  required
                                 />
                               </div>
                             </div>
@@ -160,16 +162,16 @@
                               class="accordion-button collapsed"
                               type="button"
                               data-bs-toggle="collapse"
-                              data-bs-target="#panelsStayOpen-collapseTwo"
-                              aria-expanded="false"
+                              data-bs-target="#CreateAccordion"
+                              aria-expanded="true"
                               aria-controls="panelsStayOpen-collapseTwo"
                             >
                               Détails du compte
                             </button>
                           </h2>
                           <div
-                            id="panelsStayOpen-collapseTwo"
-                            class="accordion-collapse collapse"
+                            id="CreateAccordion"
+                            class="accordion-collapse collapse show"
                             aria-labelledby="panelsStayOpen-headingTwo"
                           >
                             <div class="accordion-body">
@@ -187,6 +189,7 @@
                                     type="text"
                                     placeholder="Entrer le nom de votre société"
                                     v-model="society"
+                                    required
                                   />
                                 </div>
 
@@ -202,6 +205,7 @@
                                     id="inputLastName"
                                     aria-label="Default select example"
                                     v-model="type_ind"
+                                    required
                                   >
                                     <option
                                       v-for="industrie in type_industries"
@@ -228,6 +232,7 @@
                                     type="text"
                                     placeholder="Entrer le nom du répsponsable"
                                     v-model="responsable"
+                                    required
                                   />
                                 </div>
 
@@ -244,13 +249,55 @@
                                     type="text"
                                     placeholder="Entrer le numéro du répsponsable"
                                     v-model="N_responsable"
+                                    required
                                   />
                                 </div>
                               </div>
-                              <SelectCountryStateCity
-                                @countryStateChanged="handleCountryStateChanged"
-                              />
-
+                              <!-- Country & state Add  -->
+                              <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                  <label for="country" style="float: left"
+                                    >Pays</label
+                                  >
+                                  <select
+                                    class="form-select"
+                                    v-model="selectedCountry"
+                                    @change="fireState()"
+                                  >
+                                    <option selected hidden>
+                                      Open this select menu
+                                    </option>
+                                    <option
+                                      :value="country.id"
+                                      v-for="country in countries"
+                                      :key="country.id"
+                                    >
+                                      {{ country.name }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <div class="col-md-6">
+                                  <label for="country" style="float: left"
+                                    >Gouvernorat</label
+                                  >
+                                  <select
+                                    class="form-select"
+                                    :disabled="selectedCountry == ''"
+                                    v-model="selectedState"
+                                  >
+                                    <option hidden selected>
+                                      Open this select menu
+                                    </option>
+                                    <option
+                                      :value="state.id"
+                                      v-for="state in states"
+                                      :key="state.id"
+                                    >
+                                      {{ state.name }}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
                               <div class="mb-3">
                                 <label
                                   class="small mb-1"
@@ -264,6 +311,7 @@
                                   rows="4"
                                   placeholder="Entrer votre adresse"
                                   v-model="address"
+                                  required
                                 ></textarea>
                               </div>
                             </div>
@@ -280,11 +328,11 @@
                           Annuler
                         </button>
                         <button
-                          type="button"
+                          type="submit"
                           class="btn btn-primary"
                           @click="createClient"
                         >
-                          Ajouter client
+                          Ajouter
                         </button>
                       </div>
                       <!-- ... (other fields and inputs for the client form) ... -->
@@ -306,6 +354,7 @@
                         type="text"
                         placeholder="Entrer le nom d'utilisateur"
                         v-model="nameAdmin"
+                        required
                       />
                     </div>
                     <!-- Form Group (location)-->
@@ -322,6 +371,7 @@
                         type="text"
                         placeholder="Entrer l'adresse E-mail"
                         v-model="emailAdmin"
+                        required
                       />
                     </div>
                     <div class="col-md-12">
@@ -335,7 +385,9 @@
                         class="form-control"
                         id="inputLocation"
                         type="password"
+                        placeholder="Entrer le mot de passe"
                         v-model="passwordAdmin"
+                        required
                       />
                     </div>
                     <div class="modal-footer">
@@ -347,7 +399,7 @@
                         Annuler
                       </button>
                       <button
-                        type="button"
+                        type="submit"
                         class="btn btn-primary"
                         @click="createAdmin()"
                       >
@@ -362,9 +414,9 @@
 
           <!----------------------------------------------- End Create User------------------------------------------>
 
-            <!-----------------------------------------------Edit User------------------------------------------>
+          <!-----------------------------------------------Edit User------------------------------------------>
 
-            <div class="modal fade" id="editUserModal" tabindex="-1">
+          <div class="modal fade" id="editUserModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
@@ -436,14 +488,14 @@
                                   class="small mb-1"
                                   for="inputOrgName"
                                   style="float: left"
-                                  ></label
-                                >
+                                >Nom d'utilisateur</label>
                                 <input
                                   class="form-control"
                                   id="inputOrgName"
                                   type="text"
                                   placeholder="Entrer le nom d'utilisateur"
                                   v-model="nameEdited"
+                                  required
                                 />
                               </div>
                               <!-- Form Group (location)-->
@@ -460,20 +512,7 @@
                                   type="text"
                                   placeholder="Entrer l'adresse E-mail"
                                   v-model="emailEdited"
-                                />
-                              </div>
-                              <div class="col-md-12">
-                                <label
-                                  class="small mb-1"
-                                  for="inputLocation"
-                                  style="float: left"
-                                  >Mot de passe</label
-                                >
-                                <input
-                                  class="form-control"
-                                  id="inputLocation"
-                                  type="password"
-                                  v-model="passwordEdited"
+                                  required
                                 />
                               </div>
                             </div>
@@ -488,16 +527,16 @@
                               class="accordion-button collapsed"
                               type="button"
                               data-bs-toggle="collapse"
-                              data-bs-target="#panelsStayOpen-collapseTwo"
-                              aria-expanded="false"
+                              data-bs-target="#EditAccordion"
+                              aria-expanded="true"
                               aria-controls="panelsStayOpen-collapseTwo"
                             >
                               Détails du compte
                             </button>
                           </h2>
                           <div
-                            id="panelsStayOpen-collapseTwo"
-                            class="accordion-collapse collapse"
+                            id="EditAccordion"
+                            class="accordion-collapse collapse show"
                             aria-labelledby="panelsStayOpen-headingTwo"
                           >
                             <div class="accordion-body">
@@ -515,6 +554,7 @@
                                     type="text"
                                     placeholder="Entrer le nom de votre société"
                                     v-model="societyEdited"
+                                    required
                                   />
                                 </div>
 
@@ -530,6 +570,7 @@
                                     id="inputLastName"
                                     aria-label="Default select example"
                                     v-model="type_indEdited"
+                                    required
                                   >
                                     <option
                                       v-for="industrie in type_industries"
@@ -556,6 +597,7 @@
                                     type="text"
                                     placeholder="Entrer le nom du répsponsable"
                                     v-model="responsableEdited"
+                                    required
                                   />
                                 </div>
 
@@ -572,12 +614,57 @@
                                     type="text"
                                     placeholder="Entrer le numéro du répsponsable"
                                     v-model="N_responsableEdited"
+                                    required
                                   />
                                 </div>
                               </div>
-                              <SelectCountryStateCity
-                                @countryStateChanged="handleCountryStateChanged"
-                              />
+
+                              <!-- Country & state Add  -->
+                              <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
+                                  <label for="country" style="float: left"
+                                    >Pays</label
+                                  >
+                                  <select
+                                    id="selectCountry"
+                                    class="form-select"
+                                    v-model="selectedCountry"
+                                    @change="fireState()"
+                                  >
+                                    <option selected hidden>
+                                      Open this select menu
+                                    </option>
+                                    <option
+                                      :value="country.id"
+                                      v-for="country in countries"
+                                      :key="country.id"
+                                    >
+                                      {{ country.name }}
+                                    </option>
+                                  </select>
+                                </div>
+                                <div class="col-md-6">
+                                  <label for="country" style="float: left"
+                                    >Gouvernorat</label
+                                  >
+                                  <select
+                                    class="form-select"
+                                    :disabled="selectedCountry == ''"
+                                    v-model="selectedState"
+                                  >
+                                    <option hidden selected>
+                                      Open this select menu
+                                    </option>
+                                    <option
+                                      :value="state.id"
+                                      v-for="state in states"
+                                      :key="state.id"
+                                    >
+                                      {{ state.name }}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
 
                               <div class="mb-3">
                                 <label
@@ -592,6 +679,7 @@
                                   rows="4"
                                   placeholder="Entrer votre adresse"
                                   v-model="addressEdited"
+                                  required
                                 ></textarea>
                               </div>
                             </div>
@@ -608,9 +696,9 @@
                           Annuler
                         </button>
                         <button
-                          type="button"
+                          type="submit"
                           class="btn btn-primary"
-                          @click="updateUser()"
+                          @click="updateUser(userEdit)"
                         >
                           Modifier
                         </button>
@@ -634,6 +722,7 @@
                         type="text"
                         placeholder="Entrer le nom d'utilisateur"
                         v-model="nameEdited"
+                        required
                       />
                     </div>
                     <!-- Form Group (location)-->
@@ -650,22 +739,10 @@
                         type="text"
                         placeholder="Entrer l'adresse E-mail"
                         v-model="emailEdited"
+                        required
                       />
                     </div>
-                    <div class="col-md-12">
-                      <label
-                        class="small mb-1"
-                        for="inputLocation"
-                        style="float: left"
-                        >Mot de passe</label
-                      >
-                      <input
-                        class="form-control"
-                        id="inputLocation"
-                        type="password"
-                        v-model="passwordEdited"
-                      />
-                    </div>
+
                     <div class="modal-footer">
                       <button
                         type="button"
@@ -675,12 +752,11 @@
                         Annuler
                       </button>
                       <button
-                        type="button"
+                        type="submit"
                         class="btn btn-primary"
                         @click="updateUser(userEdit)"
                       >
-                        Modifier
-                      </button>
+                        Modifier</button>
                     </div>
                   </form>
                 </div>
@@ -690,6 +766,141 @@
 
           <!----------------------------------------------- End Edit User------------------------------------------>
 
+          <!--------------------- Start show client ------------------------------>
+
+          <div class="modal fade" id="showUserModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <i class="fa-solid fa-user-plus fa-xl"></i>
+                  <h5 class="modal-title" id="showUserModal">
+                    Détails du compte
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <!-- First form content here (existing form) -->
+
+                  <!-- Client form -->
+
+
+                        <form>
+                          <!-- Form Group (username)-->
+                          <!-- <div class="mb-3">
+                            <label class="small mb-1" for="inputUsername">Nom et Prénom</label>
+                            <input class="form-control" id="inputUsername" type="text" placeholder="Entrer votre nom et pénom">
+                        </div> -->
+                          <!-- Form Row-->
+                          <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                              <label class="small mb-1" for="inputFirstName"
+                                >Société</label
+                              >
+                              <input
+                                class="form-control"
+                                id="inputFirstName"
+                                type="text"
+                                v-model="societyEdited"
+                                disabled
+                              />
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                              <label class="small mb-1" for="Type_industrie"
+                                >Type industrie</label
+                              >
+                              <input
+                                class="form-control"
+                                id="Type_industrie"
+                                type="text"
+                                v-model="type_indEdited"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <!-- Form Row        -->
+                          <div class="row gx-3 mb-3">
+                            <!-- Form Group (organization name)-->
+                            <div class="col-md-6">
+                              <label class="small mb-1" for="Responsable"
+                                >Responsable</label
+                              >
+                              <input
+                                class="form-control"
+                                id="Responsable"
+                                type="text"
+                                v-model="responsableEdited"
+                                disabled
+                              />
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                              <label class="small mb-1" for="N_responsableEdited"
+                                >Numéro du Responsable</label
+                              >
+                              <input
+                                class="form-control"
+                                id="N_responsableEdited"
+                                type="text"
+                                v-model="N_responsableEdited"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <!-- Form Row        -->
+                          <div class="row gx-3 mb-3">
+                            <!-- Form Group (organization name)-->
+                            <div class="col-md-6">
+                              <label class="small mb-1" for="Pays"
+                                >Pays</label
+                              >
+                              <input
+                                class="form-control"
+                                id="Pays"
+                                type="text"
+                                v-model="SelectedCountryShow"
+                                disabled
+                              />
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                              <label class="small mb-1" for="Gouvernorat"
+                                >Gouvernorat</label
+                              >
+                              <input
+                                class="form-control"
+                                id="Gouvernorat"
+                                type="text"
+                                v-model="SelectedStateShow"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <!-- Form Group (username)-->
+                          <div class="mb-3">
+                              <label class="small mb-1" for="Adresse"
+                                >Adresse</label
+                              >
+                              <input
+                                class="form-control"
+                                id="Adresse"
+                                type="textarea"
+                                v-model="addressEdited"
+                                disabled
+                              />
+                            </div>
+                        </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Show client -->
         </div>
       </div>
       <br />
@@ -732,11 +943,20 @@
               </button>
             </td>
             <td>
-              <a id="crudBtn" href="" class="me-4 text-info">
+              <a
+                v-if="user.role == null || user.role == 1"
+                id="crudBtn"
+                class="me-4 text-info"
+                @click="openShowModal(user)"
+              >
                 <i class="fa-solid fa-eye"></i>
               </a>
-              <a  id="crudBtn" @click="openEditModal(user)" class="me-4 text-warning">
-                <i class="fa-solid fa-pen-to-square" ></i>
+              <a
+                id="crudBtn"
+                @click="openEditModal(user)"
+                class="me-4 text-warning"
+              >
+                <i class="fa-solid fa-pen-to-square"></i>
               </a>
               <a id="crudBtn" @click="deleteUser(user.id)" class="text-danger">
                 <i class="fa-solid fa-trash"></i>
@@ -748,19 +968,40 @@
           <p>Pas d'utilisateurs</p>
         </tbody>
       </table>
+
       <nav aria-label="User pagination" v-if="totalPages > 1" class="pb-1">
-        <ul class="pagination justify-content-end">
-          <li
-            class="page-item"
-            :class="{ active: page === currentPage }"
-            v-for="page in totalPages"
-            :key="page"
-            style="cursor: pointer"
-          >
-            <a class="page-link shadow" @click="changePage(page)">{{ page }}</a>
-          </li>
-        </ul>
-      </nav>
+    <ul class="pagination justify-content-end">
+      <li class="page-item" v-if="currentPage !== 1">
+        <a
+        id="crudBtn"
+          class="page-link shadow"
+          @click="changePage(currentPage - 1)"
+        >
+        Précédent
+        </a>
+      </li>
+      <li
+        class="page-item"
+        :class="{ active: page === currentPage }"
+        v-for="(page, index) in displayedPages"
+        :key="index"
+        style="cursor: pointer"
+      >
+        <a v-if="page === '...'" class="page-link shadow">...</a>
+        <a v-else class="page-link shadow" @click="changePage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" v-if="currentPage !== totalPages">
+        <a
+          class="page-link shadow"
+          @click="changePage(currentPage + 1)"
+          id="crudBtn"
+        >
+          Suivant
+        </a>
+      </li>
+    </ul>
+  </nav>
+
     </div>
   </SideBar>
 </template>
@@ -777,7 +1018,8 @@ import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import axios from "axios";
-import SelectCountryStateCity from "../../../pages/SelectCountryStateCity.vue";
+import listCountries from "../../../../json/country.json";
+import listStates from "../../../../json/state.json";
 
 window.Swal = Swal;
 
@@ -787,8 +1029,6 @@ const currentPage = ref(1);
 const itemsPerPage = ref(5); // Set the default number of items per page
 let searchUser = ref([]);
 
-let selectedCountry = ref("");
-let selectedState = ref("");
 let selectRole = ref(1);
 
 const formatDateTime = (dateTimeString) => {
@@ -807,7 +1047,6 @@ onMounted(async () => {
   getUsers();
   get_all_types();
 });
-
 
 const getUsers = async () => {
   let response = await axios.get("/api/get_all_users");
@@ -854,24 +1093,21 @@ const totalPages = computed(() =>
 const changePage = (page) => {
   currentPage.value = page;
 };
-
-const handleCountryStateChanged = (stateData) => {
-  // Access selectedCountry and selectedState from stateData object
-  selectedCountry.value = stateData.selectedCountry;
-  selectedState.value = stateData.selectedState;
-};
 </script>
 
 
   <script>
 export default {
-  components: {
-    SelectCountryStateCity,
-  },
   data() {
     return {
-    //Create
-        //Admin
+      empty:null,
+      countries: listCountries,
+      selectedCountry: "",
+      selectedState: "",
+      states: [],
+      cities:listStates,
+      //Create
+      //Admin
       users: {},
       nameAdmin: "",
       emailAdmin: "",
@@ -884,13 +1120,10 @@ export default {
       type_ind: "",
       responsable: "",
       N_responsable: "",
-      selectedCountry: "",
-      selectedState: "",
       address: "",
-        //Edit
-      nameEdited:"",
-      emailEdited:"",
-      passwordEdited: "",
+      //Edit
+      nameEdited: "",
+      emailEdited: "",
       societyEdited: "",
       type_indEdited: "",
       responsableEdited: "",
@@ -899,8 +1132,12 @@ export default {
       selectedStateEdited: "",
       addressEdited: "",
 
-      selectRole:"1",
-      userEdit:{}
+      selectRole: "1",
+      userEdit: {},
+
+      //show
+      SelectedCountryShow:"",
+      SelectedStateShow:"",
     };
   },
 
@@ -909,8 +1146,79 @@ export default {
       this.id = window.Laravel.user.id;
     }
   },
+  props: {
+    users: Array,
+    itemsPerPage: Number,
+    currentPage: Number,
+    totalPages: Number,
+  },
+  computed: {
+    displayedPages() {
+      const pages = [];
+      const maxDisplayedPages = Math.min(5, this.totalPages);
 
+      if (this.totalPages <= 5) {
+        for (let i = 1; i <= maxDisplayedPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        if (this.currentPage <= 3) {
+          for (let i = 1; i <= 5; i++) {
+            pages.push(i);
+          }
+          pages.push('...');
+          pages.push(this.totalPages);
+        } else if (this.currentPage >= this.totalPages - 2) {
+          pages.push(1);
+          pages.push('...');
+          for (let i = this.totalPages - 4; i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          pages.push(1);
+          pages.push('...');
+          for (let i = this.currentPage - 1; i <= this.currentPage + 1; i++) {
+            pages.push(i);
+          }
+          pages.push('...');
+          pages.push(this.totalPages);
+        }
+      }
+
+      return pages;
+    },
+  },
   methods: {
+    selectedCountryName(countryId) {
+      const country = this.countries.find(country => country.id === countryId);
+      return country ? country.name : '';
+    },
+
+    selectedStateName(StateId) {
+      const state = this.cities.find(state => state.id === StateId);
+      return state ? state.name : '';
+    },
+
+    SelectedType_indShow(type_ind) {
+        console.log(this.type_industries);
+      const type = this.type_industries.find(type => type.id === type_ind);
+      return type ? type.name : '';
+    },
+
+    changePage(page) {
+      this.$emit("page-change", page);
+    },
+    fireState() {
+      this.states = [];
+      this.states = listStates.filter(
+        (state) => state.country_id === this.selectedCountry
+      );
+    },
+    arrayRemove(arr, value) {
+      return arr.filter(function (ele) {
+        return ele != value;
+      });
+    },
     async createAdmin() {
       try {
         await axios.post(`/api/users/create/admin`, {
@@ -938,8 +1246,8 @@ export default {
         });
         // $('#addUserModal').removeClass('show');
 
-        $('#addUserModal').modal('hide');
-        $('.modal-backdrop').hide();
+        $("#addUserModal").modal("hide");
+        $(".modal-backdrop").hide();
 
         this.$router.push("/users");
       } catch (error) {
@@ -985,6 +1293,8 @@ export default {
           icon: "success",
           title: "Utilisateur ajouté avec succés !",
         });
+        $("#addUserModal").modal("hide");
+        $(".modal-backdrop").hide();
 
         this.$router.push("/users");
       } catch (error) {
@@ -992,56 +1302,79 @@ export default {
       }
     },
 
+    openEditModal(user) {
+      //   console.log("userId is: " + user.id);
+      console.log("password is " + user.password);
+      $("#editUserModal").modal("show");
+      if (user.role == 2) this.selectRole = "2";
+      else this.selectRole = "1";
 
-openEditModal(user){
-//   console.log("userId is: " + user.id);
- console.log("password is "+user.password);
-  $('#editUserModal').modal('show');
-  if (user.role == 2)
-  this.selectRole = '2';
-  else
-  this.selectRole = '1';
+      this.userEdit = user;
+      this.selectRole = user.role;
+      this.nameEdited = user.name;
+      this.emailEdited = user.email;
 
-    this.userEdit=user;
-    this.selectRole=user.role;
-    this.nameEdited=user.name;
-    this.emailEdited =user.email;
-    this.passwordEdited = user.password;
+      this.societyEdited = user.society;
+      this.type_indEdited = user.type_ind;
+      this.responsableEdited = user.responsable;
+      this.N_responsableEdited = user.N_responsable;
+      this.selectedCountry = user.country;
 
-    this.society =user.society;
-    this.type_ind =user.type_ind;
-    this.responsable =user.responsable;
-    this.N_responsable =user.N_responsable;
-    this.selectedCountry =user.country;
-    this.selectedState =user.state;
-    this.address =user.address;
+      this.selectedState = user.city;
+      this.$nextTick(() => {
+        this.fireState();
+      });
+      console.log("country=" + this.selectedCountry);
+      console.log("city=" + this.selectedState);
+      this.addressEdited = user.address;
+    },
+    openShowModal(user) {
+      //   console.log("userId is: " + user.id);
+      $("#showUserModal").modal("show");
 
-},
+      this.userEdit = user;
 
-updateUser(user){
-    console.log("userID is: "+user.id);
-    try{
-    axios.put(`/api/users/edit/${user.id}`, {
-        role:this.selectRole,
-        name: this.nameEdited,
-        email: this.emailEdited,
-        password: this.passwordEdited,
+      this.societyEdited = user.society;
+      console.log("type===="+user.type_ind);
+      this.type_indEdited = this.SelectedType_indShow(user.type_ind);
+      console.log(this.type_indEdited);
+      this.responsableEdited = user.responsable;
+      this.N_responsableEdited = user.N_responsable;
+      this.SelectedCountryShow = this.selectedCountryName(user.country);
+      this.SelectedStateShow = this.selectedStateName(user.city);
+      console.log("country=" + this.SelectedCountryShow);
+      console.log("city=" + this.SelectedStateShow);
+      this.addressEdited = user.address;
+    },
 
-        society:this.society,
-        type_ind:this.type_ind,
-        responsable:this.responsable,
-        N_responsable:this.N_responsable,
-        country:this.selectedCountry,
-        city:this.selectedState,
-        address:this.address,
+    updateUser(user) {
+      console.log("userID is: " + user.id);
+      try {
+        axios.put(`/api/users/edit/${user.id}`, {
+          role: this.selectRole,
+          name: this.nameEdited,
+          email: this.emailEdited,
 
-    });
-    console.log("the name i want"+this.nameEdited);
-    console.log("the mail i want"+this.emailEdited);
-    this.nameEdited = "";
-    this.emailEdited = "";
-    this.passwordEdited = "";
-    const toast = Swal.mixin({
+          society: this.societyEdited,
+          type_ind: this.type_indEdited,
+          responsable: this.responsableEdited,
+          N_responsable: this.N_responsableEdited,
+          country: this.selectedCountry,
+          city: this.selectedState,
+          address: this.addressEdited,
+        });
+        this.userEdit = {};
+        this.selectRole = "";
+        this.nameEdited = "";
+        this.emailEdited = "";
+        this.societyEdited = "";
+        this.type_indEdited = "";
+        this.responsableEdited = "";
+        this.N_responsableEdited = "";
+        this.selectedCountry = "";
+        this.selectedState = "";
+        this.addressEdited = "";
+        const toast = Swal.mixin({
           toast: true,
           position: "top-end",
           showConfirmButton: false,
@@ -1052,19 +1385,18 @@ updateUser(user){
         });
         toast.fire({
           icon: "success",
-          title: "Utilisateur modifié avec succés !",
+          title: "Utilisateur modifié avec succés!",
         });
         // $('#addUserModal').removeClass('show');
 
-        $('#addUserModal').modal('hide');
-        $('.modal-backdrop').hide();
+        $("#editUserModal").modal("hide");
+        $(".modal-backdrop").hide();
 
         this.$router.push("/users");
-    }
-     catch (error) {
+      } catch (error) {
         console.log(error);
       }
-},
+    },
     deleteUser(user_id) {
       Swal.fire({
         title: "Êtes-vous sûr(e) ?",
@@ -1093,7 +1425,7 @@ updateUser(user){
               .catch((errors) => {
                 console.log(errors);
               });
-            Swal.fire("Deleted!", "L'utilisateur a été supprimé!", "success");
+            Swal.fire("Supprimé!", "L'utilisateur a été supprimé!", "success");
           }
         }
       });

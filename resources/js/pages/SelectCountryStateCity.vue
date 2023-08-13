@@ -16,6 +16,7 @@
         aria-label="Default select country"
         v-model="selectedCountry"
         @change="fireState()"
+        :value="value" @input="$emit('input', $event.target.value)"
       >
         <option selected hidden>Open this select menu</option>
         <option
@@ -62,79 +63,6 @@
   import listCities from "../../json/city.json";
 
   export default {
-    props: {
-      // country
-      countryLabel: {
-        type: String,
-        default: "Pays :",
-      },
-      countryBgColor: {
-        type: String,
-        default: "default",
-        validator(x) {
-          return ["default", "blue", "green", "red"].indexOf(x) !== -1;
-        },
-      },
-      countryRounded: {
-        type: Boolean,
-        default: true,
-      },
-      countrySize: {
-        type: String,
-        default: "default",
-        validator(x) {
-          return ["small", "default", "large"].indexOf(x) !== -1;
-        },
-      },
-
-      // state
-      stateLabel: {
-        type: String,
-        default: "Gouvernorat :",
-      },
-      stateBgColor: {
-        type: String,
-        default: "default",
-        validator(x) {
-          return ["default", "blue", "green", "red"].indexOf(x) !== -1;
-        },
-      },
-      stateRounded: {
-        type: Boolean,
-        default: true,
-      },
-      stateSize: {
-        type: String,
-        default: "default",
-        validator(x) {
-          return ["small", "default", "large"].indexOf(x) !== -1;
-        },
-      },
-
-      // city
-      cityLabel: {
-        type: String,
-        default: "Choose your city :",
-      },
-      cityBgColor: {
-        type: String,
-        default: "default",
-        validator(x) {
-          return ["default", "blue", "green", "red"].indexOf(x) !== -1;
-        },
-      },
-      cityRounded: {
-        type: Boolean,
-        default: true,
-      },
-      citySize: {
-        type: String,
-        default: "default",
-        validator(x) {
-          return ["small", "default", "large"].indexOf(x) !== -1;
-        },
-      },
-    },
     data() {
       return {
         countries: listCountries,
@@ -189,6 +117,7 @@
             // selectedState: this.selectedState.name,
 
             });
+            // console.log("value:"+this.selectedCountry);
         });
       },
       arrayRemove(arr, value) {
@@ -201,137 +130,5 @@
   </script>
 
   <style >
-  /* country */
-  .country-inp-select--blue {
-    background-color: #0194ef !important;
-    color: #fff !important ;
-  }
 
-  .country-inp-select--green {
-    background-color: #1bb934 !important;
-    color: #fff !important ;
-  }
-
-  .country-inp-select--red {
-    background-color: #e1112c !important;
-    color: #fff !important ;
-  }
-
-  /* state */
-
-  .state-inp-select--blue {
-    background-color: #0194ef !important;
-    color: #fff !important ;
-  }
-
-  .state-inp-select--green {
-    background-color: #1bb934 !important;
-    color: #fff !important ;
-  }
-
-  .state-inp-select--red {
-    background-color: #e1112c !important;
-    color: #fff !important ;
-  }
-
-  /* city */
-
-  .city-inp-select--blue {
-    background-color: #0194ef !important;
-    color: #fff !important ;
-  }
-
-  .city-inp-select--green {
-    background-color: #1bb934 !important;
-    color: #fff !important ;
-  }
-
-  .city-inp-select--red {
-    background-color: #e1112c !important;
-    color: #fff !important ;
-  }
-
-  /* --> SIZES <-- */
-
-  /* country */
-  .country-inp-select--small {
-    padding: 8px 10px !important;
-    border-radius: 4px !important;
-    font-size: 12px !important;
-    line-height: 12px !important;
-  }
-
-  .country-inp-select--default {
-    padding: 12px 14px !important;
-    border-radius: 6px !important;
-    font-size: 14px !important;
-    line-height: 16px !important;
-  }
-
-  .country-inp-select--large {
-    padding: 16px 18px !important;
-    border-radius: 8px !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
-  }
-
-  /* state */
-
-  .state-inp-select--small {
-    padding: 8px 10px !important;
-    border-radius: 4px !important;
-    font-size: 12px !important;
-    line-height: 12px !important;
-  }
-
-  .state-inp-select--default {
-    padding: 12px 14px !important;
-    border-radius: 6px !important;
-    font-size: 14px !important;
-    line-height: 16px !important;
-  }
-
-  .state-inp-select--large {
-    padding: 16px 18px !important;
-    border-radius: 8px !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
-  }
-
-  /* city */
-
-  .city-inp-select--small {
-    padding: 8px 10px !important;
-    border-radius: 4px !important;
-    font-size: 12px !important;
-    line-height: 12px !important;
-  }
-
-  .city-inp-select--default {
-    padding: 12px 14px !important;
-    border-radius: 6px !important;
-    font-size: 14px !important;
-    line-height: 16px !important;
-  }
-
-  .city-inp-select--large {
-    padding: 16px 18px !important;
-    border-radius: 8px !important;
-    font-size: 16px !important;
-    line-height: 20px !important;
-  }
-  /* --> BOOLEANS <-- */
-
-  /* country */
-  .country-inp-select--rounded {
-    border-radius: 60px !important;
-  }
-  /* state */
-  .state-inp-select--rounded {
-    border-radius: 60px !important;
-  }
-  /* city */
-  .city-inp-select--rounded {
-    border-radius: 60px !important;
-  }
   </style>
