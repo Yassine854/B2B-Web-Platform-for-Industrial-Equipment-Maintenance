@@ -564,12 +564,6 @@
         "phonecode": "354"
     },
     {
-        "id": "106",
-        "sortname": "IL",
-        "name": "Israël",
-        "phonecode": "972"
-    },
-    {
         "id": "107",
         "sortname": "IT",
         "name": "Italie",
@@ -880,6 +874,12 @@
         "sortname": "PW",
         "name": "Palau",
         "phonecode": "680"
+    },
+    {
+        "id": "106",
+        "sortname": "IL",
+        "name": "Palestine",
+        "phonecode": "972"
     },
     {
         "id": "169",

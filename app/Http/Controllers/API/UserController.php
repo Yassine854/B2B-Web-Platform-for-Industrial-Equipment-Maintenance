@@ -8,6 +8,8 @@ use App\Models\Typeindustrie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -177,6 +179,33 @@ class UserController extends Controller
     }
 
 
+    public function updateClientDetails(Request $request, $id)
+    {
+        $request->validate([
+            'society'=>'required',
+            'type_ind'=>'required',
+            'responsable'=>'required',
+            'N_responsable'=>'required',
+            'country'=>'required',
+            'city'=>'required',
+            'address'=>'required',
+        ]);
+
+        $user=User::find($id);
+        $user->society = $request->society;
+        $user->type_ind = $request->type_ind;
+        $user->responsable = $request->responsable;
+        $user->N_responsable = $request->N_responsable;
+        $user->country = $request->country;
+        $user->city = $request->city;
+        $user->address = $request->address;
+        $user->update();
+        return response()->json([
+            'message'=>'User updated successfully'
+        ]);
+    }
+
+
 
     public function deleteUser($id){
         $user=User::find($id);
@@ -213,5 +242,43 @@ class UserController extends Controller
         return response()->json('Utilisateur introuvable', 404);
     }
 }
+
+
+public function verifyOldPassword( Request $request,$id)
+{
+    $this->validate($request, [
+        'old_password' => 'required',
+    ]);
+
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json(['error' => 'Utilisateur non trouvé.'], 404);
+    }
+
+    if (!Hash::check($request->old_password, $user->password)) {
+        throw ValidationException::withMessages([
+            'password' => ['Le mot de passe précédent est incorrect.'],
+        ]);
+    }
+
+    return response()->json(['success' => true]);
+}
+
+
+public function updatePassword(Request $request, $id)
+    {
+        $request->validate([
+            'new_password'=>'required',
+        ]);
+
+        $user=User::find($id);
+        $user->password = Hash::make($request->new_password);
+        $user->update();
+        return response()->json([
+            'message'=>'User updated successfully'
+        ]);
+    }
+
 
 }

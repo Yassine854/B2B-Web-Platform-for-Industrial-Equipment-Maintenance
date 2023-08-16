@@ -1,7 +1,5 @@
 <template>
   <SideBar ref="table">
-    <h5>Utilisateurs</h5>
-    <br />
     <div
       class="container shadow p-3"
       style="background-color: white; position: relative"
@@ -28,7 +26,7 @@
               data-bs-toggle="modal"
               data-bs-target="#addUserModal"
             >
-              Ajouter
+            <i class="fa-sharp fa-solid fa-user-plus"></i>
             </button>
           </div>
 
@@ -38,10 +36,12 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
+                <div class="d-flex align-items-center justify-content-center mb-3">
                   <i class="fa-solid fa-user-plus fa-xl"></i>
-                  <h5 class="modal-title" id="addUserModalLabel">
+                  <h5 class="modal-title col-11" id="addUserModalLabel">
                     Ajouter un nouvel utilisateur
                   </h5>
+                </div>
                   <button
                     type="button"
                     class="btn-close"
@@ -420,10 +420,14 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
-                  <i class="fa-solid fa-user-plus fa-xl"></i>
-                  <h5 class="modal-title" id="addUserModalLabel">
-                    Modifier l'utilisateur
-                  </h5>
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-user-pen fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="addUserModalLabel">
+                        Modifier l'utilisateur
+                    </h5>
+                    </div>
+
+
                   <button
                     type="button"
                     class="btn-close"
@@ -446,7 +450,7 @@
                         name="role"
                         id="role"
                         aria-label="Default select example"
-                        v-model="selectRole"
+                        v-model="selectRole" required
                       >
                         <option value="1">Client</option>
                         <option value="2">Admin</option>
@@ -455,7 +459,7 @@
                   </form>
 
                   <!-- Client form -->
-                  <form v-if="startForm() == false">
+                  <form v-if="startForm() == false" @submit.prevent="updateUser(userEdit)">
                     <div class="mb-3">
                       <div
                         class="accordion"
@@ -698,7 +702,6 @@
                         <button
                           type="submit"
                           class="btn btn-primary"
-                          @click="updateUser(userEdit)"
                         >
                           Modifier
                         </button>
@@ -707,7 +710,7 @@
                     </div>
                   </form>
                   <!-- Admin form -->
-                  <form v-if="startForm() == true">
+                  <form v-if="startForm() == true" @submit.prevent="updateUser(userEdit)">
                     <!-- Form Group (organization name)-->
                     <div class="col-md-12">
                       <label
@@ -754,7 +757,6 @@
                       <button
                         type="submit"
                         class="btn btn-primary"
-                        @click="updateUser(userEdit)"
                       >
                         Modifier</button>
                     </div>
@@ -772,10 +774,12 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
-                  <i class="fa-solid fa-user-plus fa-xl"></i>
-                  <h5 class="modal-title" id="showUserModal">
-                    Détails du compte
-                  </h5>
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-user fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="addUserModalLabel">
+                        Détails du compte
+                    </h5>
+                </div>
                   <button
                     type="button"
                     class="btn-close"
@@ -904,6 +908,13 @@
         </div>
       </div>
       <br />
+
+      <div class="card mb-4">
+        <div class="card-header d-flex align-items-center">
+        <i class="fa-solid fa-users me-2"></i>
+        <h5 class="mb-0">Utilisateurs</h5>
+    </div>
+
       <table class="table table-striped caption-top">
         <thead>
           <tr>
@@ -968,6 +979,7 @@
           <p>Pas d'utilisateurs</p>
         </tbody>
       </table>
+      </div>
 
       <nav aria-label="User pagination" v-if="totalPages > 1" class="pb-1">
     <ul class="pagination justify-content-end">
@@ -1007,19 +1019,20 @@
 </template>
 
   <script setup>
-import SideBar from "../../layouts/SideBar.vue";
+import SideBar from "../layouts/SideBar.vue";
 import {
   checkLoginStatus,
+  checkLoginAdmin,
   checkLoginClient,
   checkClientVerification,
   checkClientNotVerified,
-} from "../../../auth";
+} from "../../auth";
 import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import axios from "axios";
-import listCountries from "../../../../json/country.json";
-import listStates from "../../../../json/state.json";
+import listCountries from "../../../json/country.json";
+import listStates from "../../../json/state.json";
 
 window.Swal = Swal;
 
@@ -1098,6 +1111,15 @@ const changePage = (page) => {
 
   <script>
 export default {
+    name: "Users",
+  //check auth
+  beforeRouteEnter(to, from, next) {
+    if (checkLoginAdmin()) {
+      next();
+    } else {
+      next("/login");
+    }
+  },
   data() {
     return {
       empty:null,
@@ -1409,7 +1431,7 @@ export default {
         cancelButtonText: "Annuler",
       }).then((result) => {
         if (result.isConfirmed) {
-          if (this.id == user_id) {
+          if (this.id == user_id || user_id==1) {
             Swal.fire({
               icon: "error",
               title: "Oops...",

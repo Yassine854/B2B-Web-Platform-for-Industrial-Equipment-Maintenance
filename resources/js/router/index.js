@@ -8,8 +8,11 @@ import Dashboard from '../pages/Dashboard';
 import Profile from '../components/client/Profile'
 
 //users
-import UserIndex from '../components/admin/users/index'
-import UserCreate from '../components/admin/users/create'
+import Users from '../components/admin/users'
+//types_industrie
+import types_industrie from '../components/admin/type_industries'
+import types_product from '../components/admin/type_products'
+
 
 // import Dashboard from '../components/layouts/navvv.vue';
 // import Posts from '../components/Posts';
@@ -42,18 +45,26 @@ export const routes = [
     {
         name: 'users',
         path: '/users',
-        component: UserIndex
-    },
-    {
-        name: 'createUser',
-        path: '/users/create',
-        component: UserCreate
+        component: Users
     },
     //Profile
     {
         name: 'profile',
         path: '/profile',
         component: Profile
+    },
+    //type_industries
+    {
+        name: 'types_industrie',
+        path: '/types_industrie',
+        component: types_industrie
+    },
+
+    //types_produits
+    {
+        name: 'types_product',
+        path: '/types_product',
+        component: types_product
     },
 ];
 

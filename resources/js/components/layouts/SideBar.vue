@@ -5,13 +5,21 @@
         <div
           class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
         >
-          <a
-            href="/"
-            class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-          >
-            <span class="fs-5 d-none d-sm-inline">Generale Services</span>
-          </a>
-          <hr>
+
+
+            <i class="mx-auto" ><img :src="'../storage/img/GSI-logo-PNG.png'" style="width:150px;background-color: white;"></i>
+
+          <hr class="mx-auto" style="width: 70%;">
+
+          <div class="mx-auto" style="display: flex; align-items: center;">
+            <img :src="'../storage/img/admin.png'" style="width: 40px; margin-right: 5px;">
+            <span style="font-family: 'Raleway', sans-serif; font-size: 16px;">{{ name }}</span>
+            </div>
+
+
+          <hr class="mx-auto" style="width: 70%;">
+
+
           <ul
             class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
             id="menu"
@@ -25,7 +33,7 @@
 
             <li>
               <router-link to="/users" class="nav-link px-0 align-middle">
-                <i class="fa-solid fa-user fa-lg"></i>
+                <i class="fa-solid fa-users fa-lg"></i>
                 <span class="ms-1 d-none d-sm-inline"
                   >Utilisateurs</span
                 ></router-link
@@ -40,15 +48,15 @@
             </li>
 
 
-            <li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link align-middle px-0">
-                            <i class="fa-solid fa-keyboard fa-lg"></i> <span class="ms-1 d-none d-sm-inline"></span>Types</a>
+                    <li>
+                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                          <i class="fa-solid fa-keyboard fa-lg"></i> <span class="ms-1 d-none d-sm-inline">Types</span></a>
                         <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline"></span>Type de produit</a>
+                                <router-link to="/types_industrie" class="nav-link px-0"> <span class="d-none d-sm-inline"></span>Type industrie</router-link>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline"></span>Type d'Industrie</a>
+                                <router-link to="/types_product" class="nav-link px-0"> <span class="d-none d-sm-inline"></span> Type produit</router-link>
                             </li>
                         </ul>
                     </li>
@@ -68,7 +76,14 @@
             </li>
 
             <li>
-              <a href="#" class="nav-link px-0 align-middle">
+              <router-link to="/profile" class="nav-link px-0 align-middle">
+                <i class="fa-solid fa-user fa-lg"></i>
+                <span class="ms-1 d-none d-sm-inline">Profile</span></router-link
+              >
+            </li>
+
+            <li>
+              <a style="cursor: pointer" @click="logout" class="nav-link px-0 align-middle">
                 <i class="fa-solid fa-power-off fa-lg" style="color: #c70000;"></i>
                 <span class="ms-1 d-none d-sm-inline">Déconnexion</span></a
               >
@@ -77,50 +92,8 @@
           </ul>
 
           <hr />
-          <i class="fa-solid fa-bell" id="bell"></i>
-          <div class="dropdown pb-4" id="userDropdown">
-            <a
-              href="#"
-              class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-              id="dropdownUser1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                src="https://github.com/mdo.png"
-                alt="hugenerd"
-                width="30"
-                height="30"
-                class="rounded-circle"
-              />
-              <span class="d-none d-sm-inline mx-1">
-                <span
-                  class="text-truncate d-inline-block"
-                  style="max-width: 100px"
-                  >{{ name }}</span
-                >
-              </span>
-            </a>
-            <ul
-              class="dropdown-menu dropdown-menu-dark text-small shadow"
-              aria-labelledby="dropdownUser1"
-            >
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li>
-                <router-link to="/profile" class="dropdown-item" href="#"
-                  >Profile</router-link
-                >
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a class="dropdown-item" style="cursor: pointer" @click="logout"
-                  >Sign out</a
-                >
-              </li>
-            </ul>
-          </div>
+
+
         </div>
       </div>
       <div class="col py-3" style="background-color: lightgray">
@@ -170,11 +143,6 @@ export default {
 };
 </script>
 <style>
-#bell {
-  position: fixed;
-  left: 180px;
-  bottom: 33px;
-}
 
 #userDropdown {
   position: fixed;
