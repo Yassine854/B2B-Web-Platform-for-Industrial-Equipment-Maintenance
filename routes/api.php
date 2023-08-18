@@ -8,6 +8,7 @@ use App\Http\Controllers\API\UserController;
 // use App\Http\Controllers\TypeController;
 use App\Http\Controllers\TypeindustrieController;
 use App\Http\Controllers\TypeproductController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,8 +57,13 @@ Route::put('/types_product/update/{id}', [TypeproductController::class, 'updateT
 Route::post('/types_product/delete/{id}', [TypeproductController::class, 'deleteType']);
 Route::get('/types_product/search_type',[TypeproductController::class,'searchType']);
 
-
-
+//Products
+Route::get('/get_products',[ProductController::class,'get_products']);
+Route::post('/products/create', [ProductController::class, 'createProduct']);
+Route::post('/products/update/{id}', [ProductController::class, 'updateProduct']);
+Route::get('/products/show/{id}', [ProductController::class, 'showProduct']);
+Route::post('/products/delete/{id}', [ProductController::class, 'deleteProduct']);
+Route::get('/products/search_product',[ProductController::class,'searchProduct']);
 
 
 

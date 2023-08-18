@@ -41,9 +41,9 @@
             </li>
 
             <li>
-              <a href="#" class="nav-link px-0 align-middle">
+              <router-link to="/products" class="nav-link px-0 align-middle">
                 <i class="fa-brands fa-product-hunt fa-lg"></i>
-                <span class="ms-1 d-none d-sm-inline">Produits</span></a
+                <span class="ms-1 d-none d-sm-inline">Produits</span></router-link
               >
             </li>
 

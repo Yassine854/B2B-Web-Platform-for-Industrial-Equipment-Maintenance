@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('address')->nullable();
             $table->foreign('type_ind')
-              ->references('id')->on('typeindustries')->onDelete('cascade');
+              ->references('id')->on('typeindustries')->onDelete('restrict');
             $table->rememberToken();
             $table->timestamps();
         });

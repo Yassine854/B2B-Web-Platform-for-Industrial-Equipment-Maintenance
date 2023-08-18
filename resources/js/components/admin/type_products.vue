@@ -455,11 +455,16 @@
                 .then((response) => {
                   this.get_all_types();
                   console.log(response);
+                  Swal.fire("Supprimé!", "L'élement a été supprimé!", "success");
                 })
                 .catch((errors) => {
                   console.log(errors);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Il y a eu un problème!",
+                    });
                 });
-              Swal.fire("Supprimé!", "L'élement a été supprimé!", "success");
           }
         });
       },

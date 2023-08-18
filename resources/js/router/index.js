@@ -7,11 +7,11 @@ import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../components/client/Profile'
 
-//users
+
 import Users from '../components/admin/users'
-//types_industrie
 import types_industrie from '../components/admin/type_industries'
 import types_product from '../components/admin/type_products'
+import products from '../components/admin/products'
 
 
 // import Dashboard from '../components/layouts/navvv.vue';
@@ -65,6 +65,13 @@ export const routes = [
         name: 'types_product',
         path: '/types_product',
         component: types_product
+    },
+
+    //produits
+    {
+        name: 'products',
+        path: '/products',
+        component: products
     },
 ];
 
