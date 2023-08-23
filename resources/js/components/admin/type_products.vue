@@ -431,7 +431,7 @@
           $("#editTypeProduct").modal("hide");
           $(".modal-backdrop").hide();
 
-          this.$router.push("/types_product");
+          this.get_all_types();
           this.typeEdit = {};
         } catch (error) {
           console.log(error);

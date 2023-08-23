@@ -270,7 +270,7 @@ export default {
     updateClientDetails(user) {
       console.log("user name:" + user.name);
       try {
-        axios.put(`/api/users/updateClientDetails/${user.id}`, {
+        axios.put(`/api/users/requestVerification/${user.id}`, {
           society: this.society,
           type_ind: this.type_ind,
           responsable: this.responsable,

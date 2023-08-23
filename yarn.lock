@@ -1775,7 +1775,7 @@
     "picocolors" "^1.0.0"
     "postcss-value-parser" "^4.2.0"
 
-"axios@^0.25":
+"axios@^0.25.0":
   "integrity" "sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-0.25.0.tgz"
   "version" "0.25.0"
@@ -3456,7 +3456,7 @@
     "merge-stream" "^2.0.0"
     "supports-color" "^8.0.0"
 
-"jquery@^3.7.0":
+"jquery@^3.3.1", "jquery@^3.7.0":
   "integrity" "sha512-umpJ0/k8X0MvD1ds0P9SfowREz2LenHsQaxSohMZ5OMNEU2r0tf8pdeEFTHMFxWVxKNyU9rTtK3CWzUCTKJUeQ=="
   "resolved" "https://registry.npmjs.org/jquery/-/jquery-3.7.0.tgz"
   "version" "3.7.0"
@@ -4816,6 +4816,11 @@
   "resolved" "https://registry.npmjs.org/select-hose/-/select-hose-2.0.0.tgz"
   "version" "2.0.0"
 
+"select2@^4.0.7-rc.0":
+  "integrity" "sha512-1JeB87s6oN/TDxQQYCvS5EFoQyvV6eYMZZ0AeA4tdFDYWN3BAGZ8npr17UBFddU0lgAt3H0yjX3X6/ekOj1yjw=="
+  "resolved" "https://registry.npmjs.org/select2/-/select2-4.0.13.tgz"
+  "version" "4.0.13"
+
 "selfsigned@^2.1.1":
   "integrity" "sha512-GSL3aowiF7wa/WtSFwnUrludWFoNhftq8bUkH9pkzjpN2XSPOAYEgg6e0sS9s0rZwgJzJiQRPU18A6clnoW5wQ=="
   "resolved" "https://registry.npmjs.org/selfsigned/-/selfsigned-2.1.1.tgz"
@@ -5362,6 +5367,11 @@
   dependencies:
     "@vue/devtools-api" "^6.0.0"
 
+"vue-search-select@^3.1.2":
+  "integrity" "sha512-4VXBCqPwlzAYrAa52h5a0o3r1iurZ+nSraXcTqCqLDsc5V69mWyZbRK/gy/YMJGkPBBVCQUjdVCm/0hkRwFaYg=="
+  "resolved" "https://registry.npmjs.org/vue-search-select/-/vue-search-select-3.1.2.tgz"
+  "version" "3.1.2"
+
 "vue-style-loader@^4.1.3":
   "integrity" "sha512-sFuh0xfbtpRlKfm39ss/ikqs9AbKCoXZBpHeVZ8Tx650o0k0q/YCM7FRvigtxpACezfq6af+a7JeqVTWvncqDg=="
   "resolved" "https://registry.npmjs.org/vue-style-loader/-/vue-style-loader-4.1.3.tgz"
@@ -5391,10 +5401,18 @@
     "@vue/server-renderer" "3.2.36"
     "@vue/shared" "3.2.36"
 
-"vuex@^4.0.2":
-  "integrity" "sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q=="
-  "resolved" "https://registry.npmjs.org/vuex/-/vuex-4.0.2.tgz"
-  "version" "4.0.2"
+"vue3-select2-component@^0.1.7":
+  "integrity" "sha512-8UPZmFl02I47XwW+j8ICmHyAND8wfbavlvMrqh10wwdSVER1aF2kI9XCmfIrNlVQvxSbvc0mJjWQAHHSCW9dkw=="
+  "resolved" "https://registry.npmjs.org/vue3-select2-component/-/vue3-select2-component-0.1.7.tgz"
+  "version" "0.1.7"
+  dependencies:
+    "jquery" "^3.3.1"
+    "select2" "^4.0.7-rc.0"
+
+"vuex@^4.1.0":
+  "integrity" "sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ=="
+  "resolved" "https://registry.npmjs.org/vuex/-/vuex-4.1.0.tgz"
+  "version" "4.1.0"
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.11"
 

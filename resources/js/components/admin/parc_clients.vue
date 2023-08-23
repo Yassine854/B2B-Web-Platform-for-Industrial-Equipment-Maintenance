@@ -14,7 +14,7 @@
                 aria-label="Search"
                 aria-describedby="search-addon"
                 v-model="searchProduct"
-                @keyup="search()"
+
               />
             </div>
           </div>
@@ -30,7 +30,7 @@
               </button>
             </div>
 
-            <!-----------------------------------------------Create product------------------------------------------>
+            <!-----------------------------------------------Create assignment------------------------------------------>
 
             <div class="modal fade" id="addProduct" tabindex="-1">
               <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -39,7 +39,7 @@
                     <div class="d-flex align-items-center justify-content-center mb-3">
                     <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
                     <h5 class="modal-title col-11" id="addProductLabel">
-                        Ajouter une nouvelle Pompe
+                        Assigner une pompe au client
                     </h5>
                     </div>
 
@@ -51,95 +51,66 @@
                     ></button>
                   </div>
                   <div class="modal-body">
+                    <div>
 
-                    <form  @submit.prevent="createProduct()">
+                    </div>
+                    <form  @submit.prevent="createAssignment()">
+
 
                         <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="name"
-                                style="float: left"
-                                >Nom</label
-                                >
-                                <input
-                                class="form-control"
-                                id="name"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer le nom du pompe"
-                                v-model="name"
-                                required
-                                >
-                            </div>
 
                             <div class="col-md-6">
                                   <label
                                     class="small mb-1"
                                     for="type_prod"
                                     style="float: left"
-                                    >Type de produit</label
+                                    >Clients</label
                                   >
                                   <select
                                     class="form-select"
                                     id="type_prod"
                                     aria-label="Default select example"
-                                    v-model="type_prod"
+                                    v-model="client"
                                     required
                                   >
                                         <option
-                                        v-for="types in type_products"
-                                        :key="types.id"
-                                        :value="types.id"
+                                        v-for="client in clients"
+                                        :key="client.id"
+                                        :value="client.id"
                                         >
-                                        {{ types.name }}
+                                        {{ client.society }}
+                                        </option>
+                                  </select>
+                            </div>
+
+
+
+                            <div class="col-md-6">
+                                  <label
+                                    class="small mb-1"
+                                    for="type_prod"
+                                    style="float: left"
+                                    >Pompes</label
+                                  >
+                                  <select
+                                    class="form-select"
+                                    id="type_prod"
+                                    aria-label="Default select example"
+                                    v-model="product"
+                                    required
+                                  >
+                                        <option
+                                        v-for="product in products"
+                                        :key="product.id"
+                                        :value="product.id"
+                                        >
+                                        {{ product.name }}
                                         </option>
                                   </select>
                             </div>
                         </div>
 
-                        <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <div class="row gx-3 mb-6">
-                                    <div class="col-md-6">
-                                        <label class="small mb-1" for="debit" style="float: left">Débit</label>
-                                        <input
-                                            class="form-control"
-                                            id="debit"
-                                            type="text"
-                                            placeholder="Entrer le débit"
-                                            v-model="debit"
-                                            required
-                                        >
-                                    </div>
-                                    <div class="col-md-4">
-                                    <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
-                                    <select id="flow-rate" class="form-select" v-model="unity_debit" required>
-                                        <option value="m³/h">m³/h</option>
-                                        <option value="l/s">l/s</option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="Pression"
-                                style="float: left"
-                                >Pression</label
-                                >
-                                <input
-                                class="form-control"
-                                id="Pression"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer la pression"
-                                v-model="pression"
-                                required
-                                >
-                            </div>
-                        </div>
 
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
@@ -147,15 +118,15 @@
                                 class="small mb-1"
                                 for="Année"
                                 style="float: left"
-                                >Année</label
+                                >Changement d'huile</label
                                 >
                                 <input
                                 class="form-control"
                                 id="Année"
                                 rows="4"
                                 type="text"
-                                placeholder="Entrer l'année"
-                                v-model="year"
+                                placeholder="Entrer le temps de changement d'huile"
+                                v-model="c_huile"
                                 required
                                 >
                             </div>
@@ -165,24 +136,59 @@
                                 class="small mb-1"
                                 for="time_day"
                                 style="float: left"
-                                >HT/J</label
+                                >Changement des cartouches de filtres</label
                                 >
                                 <input
                                 class="form-control"
                                 id="time_day"
                                 rows="4"
                                 type="text"
-                                placeholder="Entrer l'heure du travail"
-                                v-model="time_day"
+                                placeholder="Entrer le temps de changement de filtre"
+                                v-model="c_filtre"
                                 required
                                 >
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                        <label for="image" class="form-label" style="float: left">Image</label>
-                        <input @change="uploadImage" class="form-control" type="file" id="image">
+
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="Année"
+                                style="float: left"
+                                >Changement des déshuileurs</label
+                                >
+                                <input
+                                class="form-control"
+                                id="Année"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps de changement des déshuileurs"
+                                v-model="c_dehuil"
+                                required
+                                >
+                            </div>
+
+                            <div class="col-md-6">
+                                <label
+                                  class="small mb-1"
+                                  for="inputOrgName"
+                                  style="float: left"
+                                  >Entretien</label
+                                >
+                                <input
+                                  class="form-control"
+                                  id="inputOrgName"
+                                  type="text"
+                                  placeholder="Entrer le temps d'entretien"
+                                  v-model="entretien"
+                                  required
+                                />
+                              </div>
                         </div>
+
+                              <br>
 
                         <div class="modal-footer">
                             <button
@@ -205,7 +211,7 @@
               </div>
             </div>
 
-            <!----------------------------------------------- End Create product------------------------------------------>
+            <!----------------------------------------------- End Create assignment------------------------------------------>
 
             <!-----------------------------------------------Edit product------------------------------------------>
 
@@ -479,7 +485,7 @@
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center">
             <i class="fa-brands fa-product-hunt me-2"></i>
-          <h5 class="mb-0">Liste des pompes</h5>
+          <h5 class="mb-0">Parc Clients</h5>
       </div>
 
         <table class="table-responsive">
@@ -576,9 +582,13 @@
   import { useRouter } from "vue-router";
   import Swal from "sweetalert2";
   import axios from "axios";
+  import Select2 from 'vue3-select2-component';
   window.Swal = Swal;
 
+  let clients = ref([]);
   let products = ref([]);
+
+
   let type_products = ref([]);
   let searchProduct = ref([]);
 
@@ -587,13 +597,25 @@
 
 
   onMounted(async () => {
-    get_products();
-    get_all_types();
+
+    get_all_products();
+    get_all_clients();
   });
 
-  const get_products = async () => {
+  const get_all_clients = async () => {
     try {
-      let response = await axios.get("/api/get_products");
+      let response = await axios.get("/api/get_all_clients");
+      console.log(response.data);
+      clients.value = response.data.clients;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  const get_all_products = async () => {
+    try {
+      let response = await axios.get("/api/get_all_products");
       console.log(response.data); // Log the response data
       products.value = response.data.products;
     } catch (error) {
@@ -601,16 +623,6 @@
     }
   };
 
-
-  const get_all_types = async () => {
-    try {
-      let response = await axios.get("/api/get_type_products");
-      console.log(response.data); // Log the response data
-      type_products.value = response.data.type_products;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const search = async () => {
     let response = await axios.get("/api/products/search_product?s=" + searchProduct.value);
@@ -649,15 +661,12 @@
     },
     data() {
       return {
-        product: {},
-        name: "",
-        type_prod:"",
-        debit:"",
-        pression:"",
-        year:"",
-        time_day:"",
-        image:null,
-        unity_debit:"",
+        client: "",
+        product:"",
+        c_huile:"",
+        c_filtre:"",
+        c_dehuil:"",
+        entretien:"",
 
         //Edit
         productEdit: {},
@@ -740,28 +749,24 @@
         this.imageEdit=e.target.files[0];
       },
 
-      async createProduct() {
-        console.log(this.image);
+      async createAssignment() {
         try {
             let form = new FormData();
-            form.append('name', this.name);
-            form.append('type_prod', this.type_prod);
-            form.append('debit', this.debit);
-            form.append('unity_debit',this.unity_debit);
-            form.append('pression', this.pression);
-            form.append('year', this.year);
-            form.append('time_day', this.time_day);
-            form.append('image', this.image);
-          await axios.post(`/api/products/create`, form);
+            form.append('client_id', this.client);
+            form.append('product_id', this.product);
+            form.append('c_huile', this.c_huile);
+            form.append('c_filtre',this.c_filtre);
+            form.append('c_dehuil',this.c_dehuil);
+            form.append('entretien', this.entretien);
+          await axios.post(`/api/assignments/create`, form);
           console.log(form);
-          this.name = "";
-          this.type_prod="";
-          this.debit="";
-          this.pression="";
-          this.year="";
-          this.time_day="";
-          this.image="";
-          this.unity_debit="";
+          this.client = "";
+          this.product="";
+          this.c_huile="";
+          this.c_filtre="";
+          this.c_dehuil="";
+          this.entretien="";
+
 
           const toast = Swal.mixin({
             toast: true,
@@ -774,12 +779,12 @@
           });
           toast.fire({
             icon: "success",
-            title: "Pompe ajouté avec succés !",
+            title: "Attribution ajouté avec succés !",
           });
           $("#addProduct").modal("hide");
           $(".modal-backdrop").hide();
 
-          this.$router.push("/products");
+          this.$router.push("/parc_clients");
           window.location.reload();
         } catch (error) {
           console.log(error);

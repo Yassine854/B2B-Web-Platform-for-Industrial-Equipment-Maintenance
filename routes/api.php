@@ -9,7 +9,8 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\TypeindustrieController;
 use App\Http\Controllers\TypeproductController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AssignmentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,10 +38,12 @@ Route::post('/users/create/admin', [UserController::class, 'createAdmin']);
 Route::post('/users/create/client', [UserController::class, 'createClient']);
 Route::put('/users/edit/{id}', [UserController::class, 'updateUser']);
 Route::put('/users/updateClientDetails/{id}', [UserController::class, 'updateClientDetails']);
+Route::put('/users/requestVerification/{id}', [UserController::class, 'requestVerification']);
 Route::post('/user/verifyOldPassword/{id}', [UserController::class, 'verifyOldPassword']);
 Route::put('/user/updatePassword/{id}', [UserController::class, 'updatePassword']);
 Route::post('/user/delete/{id}', [UserController::class, 'deleteUser']);
 Route::get('/search_user',[UserController::class,'search_user']);
+
 Route::post('/user/verifyEmail/{id}', [UserController::class, 'verifyEmail']);
 
 //Types_industrie
@@ -66,6 +69,16 @@ Route::post('/products/delete/{id}', [ProductController::class, 'deleteProduct']
 Route::get('/products/search_product',[ProductController::class,'searchProduct']);
 
 
+
+//Parc Clients
+Route::get('/get_all_clients',[AssignmentController::class,'get_all_clients']);
+Route::get('/get_all_products',[AssignmentController::class,'get_all_products']);
+Route::post('/assignments/create', [AssignmentController::class, 'createAssignment']);
+
+
+
+//Notification
+Route::get('/get_all_notifications',[NotificationController::class,'get_all_notifications']);
 
 
 // Route::group(['prefix' => 'posts','middleware' => 'auth:sanctum'], function() {

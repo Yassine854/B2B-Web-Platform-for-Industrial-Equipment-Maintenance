@@ -1414,7 +1414,7 @@ export default {
         $("#editUserModal").modal("hide");
         $(".modal-backdrop").hide();
 
-        this.$router.push("/users");
+        this.getUsers();
       } catch (error) {
         console.log(error);
       }
@@ -1478,6 +1478,14 @@ export default {
             icon: "success",
           });
         }
+        axios.get("/notifications/" + user_id)
+             .then((response) => {
+              this.getUsers();
+              console.log("notification sent !");
+            })
+            .catch((errors) => {
+              console.log(errors);
+            });
       });
     },
   },

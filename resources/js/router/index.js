@@ -12,6 +12,7 @@ import Users from '../components/admin/users'
 import types_industrie from '../components/admin/type_industries'
 import types_product from '../components/admin/type_products'
 import products from '../components/admin/products'
+import parc_clients from '../components/admin/parc_clients'
 
 
 // import Dashboard from '../components/layouts/navvv.vue';
@@ -72,6 +73,11 @@ export const routes = [
         name: 'products',
         path: '/products',
         component: products
+    },
+    {
+        name: 'parc_clients',
+        path: '/parc_clients',
+        component: parc_clients
     },
 ];
 

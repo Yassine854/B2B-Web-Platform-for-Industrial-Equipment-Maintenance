@@ -414,6 +414,9 @@
           axios.put(`/api/types_industrie/update/${type_ind.id}`, {
             name: this.name,
           });
+
+
+
           const toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -431,7 +434,7 @@
           $("#editTypeIndustry").modal("hide");
           $(".modal-backdrop").hide();
 
-          this.$router.push("/types_industrie");
+          this.get_all_types();
           this.typeEdit = {};
         } catch (error) {
           console.log(error);

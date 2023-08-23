@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'User ' . $i,
                 'email' => 'user' . $i . '@test.com',
                 'password' => Hash::make('password'),
-                'role' => 1 // Assuming 1 represents regular users
+                'role' => null // Assuming 1 represents regular users
             ]);
         }
     }

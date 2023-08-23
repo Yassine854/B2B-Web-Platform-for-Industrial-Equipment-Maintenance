@@ -5,12 +5,14 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Typeindustrie;
+use App\Notifications\ClientRegistrationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
@@ -205,6 +207,35 @@ class UserController extends Controller
         ]);
     }
 
+    public function requestVerification(Request $request, $id)
+    {
+        $request->validate([
+            'society'=>'required',
+            'type_ind'=>'required',
+            'responsable'=>'required',
+            'N_responsable'=>'required',
+            'country'=>'required',
+            'city'=>'required',
+            'address'=>'required',
+        ]);
+
+        $user=User::find($id);
+        $user->society = $request->society;
+        $user->type_ind = $request->type_ind;
+        $user->responsable = $request->responsable;
+        $user->N_responsable = $request->N_responsable;
+        $user->country = $request->country;
+        $user->city = $request->city;
+        $user->address = $request->address;
+        $user->update();
+
+        $admins = User::where('role', 2)->get();
+        Notification::send($admins,new ClientRegistrationNotification($user->society));
+        return response()->json([
+            'message'=>'User updated successfully'
+        ]);
+    }
+
 
 
     public function deleteUser($id){
@@ -229,12 +260,14 @@ class UserController extends Controller
         }
     }
 
+
     public function verifyEmail($id)
 {
     $user = User::find($id);
     if ($user) {
         if ($user->email_verified_at === null) { // Make sure not to overwrite if it's already verified
             $user->email_verified_at = now(); // Use the now() function to get the current date and time
+            $user->role=1; //Become verified client
             $user->save();
         }
         return response()->json('E-mail vérifié');

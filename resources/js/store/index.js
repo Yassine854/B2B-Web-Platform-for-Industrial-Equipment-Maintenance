@@ -1,21 +1,15 @@
-// store/index.js
+// store.js
 import { createStore } from 'vuex';
 
-export default createStore({
+const store = createStore({
   state: {
-    user: null,
+    initialSearchValue: null,
   },
   mutations: {
-    setUser(state, user) {
-      state.user = user;
-    },
-  },
-  actions: {
-    login({ commit }, userData) {
-      // Perform login logic and set the user in state
-      // For example, after a successful login response:
-      const user = response.data.user;
-      commit('setUser', user);
+    setInitialSearchValue(state, value) {
+      state.initialSearchValue = value;
     },
   },
 });
+
+export default store;
