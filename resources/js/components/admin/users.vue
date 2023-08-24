@@ -1,5 +1,5 @@
 <template>
-  <SideBar ref="table">
+  <layout ref="table">
     <div
       class="container shadow p-3"
       style="background-color: white; position: relative"
@@ -915,7 +915,8 @@
         <h5 class="mb-0">Utilisateurs</h5>
     </div>
 
-      <table class="table table-striped caption-top">
+    <div class="table-responsive">
+      <table class="table table-bordered">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -950,12 +951,13 @@
             <td v-else></td>
             <td>
               <button disabled class="btn btn-info btn-sm">
-                {{ user.role === 2 ? "admin" : "client" }}
+                {{ user.role === 1 ? "client" : user.role === 2 ? "admin" : "user" }}
+
               </button>
             </td>
             <td>
               <a
-                v-if="user.role == null || user.role == 1"
+                v-if="user.role == 1 || user.role == null"
                 id="crudBtn"
                 class="me-4 text-info"
                 @click="openShowModal(user)"
@@ -979,6 +981,7 @@
           <p>Pas d'utilisateurs</p>
         </tbody>
       </table>
+      </div>
       </div>
 
       <nav aria-label="User pagination" v-if="totalPages > 1" class="pb-1">
@@ -1015,11 +1018,11 @@
   </nav>
 
     </div>
-  </SideBar>
+</layout>
 </template>
 
   <script setup>
-import SideBar from "../layouts/SideBar.vue";
+import layout from "../layouts/layout.vue";
 import {
   checkLoginStatus,
   checkLoginAdmin,
@@ -1269,7 +1272,6 @@ export default {
         // $('#addUserModal').removeClass('show');
 
         $("#addUserModal").modal("hide");
-        $(".modal-backdrop").hide();
 
         this.$router.push("/users");
       } catch (error) {
@@ -1316,7 +1318,6 @@ export default {
           title: "Utilisateur ajouté avec succés !",
         });
         $("#addUserModal").modal("hide");
-        $(".modal-backdrop").hide();
 
         this.$router.push("/users");
       } catch (error) {
@@ -1412,7 +1413,6 @@ export default {
         // $('#addUserModal').removeClass('show');
 
         $("#editUserModal").modal("hide");
-        $(".modal-backdrop").hide();
 
         this.getUsers();
       } catch (error) {
@@ -1443,11 +1443,16 @@ export default {
               .then((response) => {
                 this.getUsers();
                 console.log(response);
+                Swal.fire("Supprimé!", "L'utilisateur a été supprimé!", "success");
               })
               .catch((errors) => {
                 console.log(errors);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Il y a eu un problème!",
+                    });
               });
-            Swal.fire("Supprimé!", "L'utilisateur a été supprimé!", "success");
           }
         }
       });

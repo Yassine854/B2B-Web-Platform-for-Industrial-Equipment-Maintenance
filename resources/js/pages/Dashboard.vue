@@ -1,11 +1,11 @@
 <template>
   <!-- Admin Dashboard -->
-  <SideBar v-if="checkLoginAdmin()">
+  <layout v-if="checkLoginAdmin()">
     <div>welcome to your dashboard admin</div>
-  </SideBar>
+  </layout>
 
   <!-- Client Dashboard -->
-  <SideBar v-else >
+  <layout v-else >
     <div v-if="checkClientVerification()">Bienvenue dans votre dashboard</div>
 
 
@@ -177,12 +177,12 @@
     </div>
 
 
-  </SideBar>
+</layout>
 </template>
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import SideBar from "../components/layouts/SideBar.vue"; // Update the import statement
+import layout from "../components/layouts/layout.vue";
 import {
   checkLoginStatus,
   checkLoginAdmin,

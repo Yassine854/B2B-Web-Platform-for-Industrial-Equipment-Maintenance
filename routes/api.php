@@ -71,9 +71,13 @@ Route::get('/products/search_product',[ProductController::class,'searchProduct']
 
 
 //Parc Clients
+Route::get('/get_all_assignments',[AssignmentController::class,'get_all_assignments']);
 Route::get('/get_all_clients',[AssignmentController::class,'get_all_clients']);
 Route::get('/get_all_products',[AssignmentController::class,'get_all_products']);
 Route::post('/assignments/create', [AssignmentController::class, 'createAssignment']);
+Route::put('/assignments/update/{id}', [AssignmentController::class, 'updateAssignment']);
+Route::get('/assignments/show/{id}', [AssignmentController::class, 'showAssignment']);
+Route::post('/assignments/delete/{id}', [AssignmentController::class, 'deleteAssignment']);
 
 
 

@@ -117,10 +117,7 @@
 
           <!-- <hr class="mx-auto" style="width: 70%;"> -->
 
-          <div class="mx-auto" style="display: flex; align-items: center;">
-            <img :src="'../storage/img/client.png'" style="width: 40px; margin-right: 5px;">
-            <span style="font-family: 'Raleway', sans-serif; font-size: 16px;">{{ name }}</span>
-            </div>
+       
 
 
           <hr class="mx-auto" style="width: 70%;">

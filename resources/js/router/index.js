@@ -15,6 +15,7 @@ import products from '../components/admin/products'
 import parc_clients from '../components/admin/parc_clients'
 
 
+
 // import Dashboard from '../components/layouts/navvv.vue';
 // import Posts from '../components/Posts';
 // import EditPost from '../components/EditPost';
@@ -79,6 +80,7 @@ export const routes = [
         path: '/parc_clients',
         component: parc_clients
     },
+
 ];
 
 const router = createRouter({

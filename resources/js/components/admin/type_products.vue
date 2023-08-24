@@ -1,5 +1,5 @@
 <template>
-    <SideBar ref="table">
+    <layout ref="table">
       <div
         class="container shadow p-3"
         style="background-color: white; position: relative"
@@ -167,7 +167,9 @@
           <h5 class="mb-0">Types de produits</h5>
       </div>
 
-        <table class="table table-striped caption-top">
+
+      <div class="table-responsive">
+      <table class="table table-bordered">
           <thead>
             <tr>
               <th scope="col">ID</th>
@@ -197,6 +199,7 @@
             <p>Pas de types de produits</p>
           </tbody>
         </table>
+        </div>
         </div>
 
      <nav aria-label="User pagination" v-if="totalPages > 1" class="pb-1">
@@ -233,12 +236,11 @@
     </nav>
 
       </div>
-    </SideBar>
+    </layout>
   </template>
 
     <script setup>
-  import SideBar from "../layouts/SideBar.vue";
-  import {
+import layout from "../layouts/layout.vue";  import {
     checkLoginStatus,
     checkLoginAdmin,
     checkLoginClient,

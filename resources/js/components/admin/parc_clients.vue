@@ -1,5 +1,5 @@
 <template>
-    <SideBar ref="table">
+    <layout ref="table">
       <div
         class="container shadow p-3"
         style="background-color: white; position: relative"
@@ -73,6 +73,7 @@
                                     v-model="client"
                                     required
                                   >
+                                  <option value="" selected disabled hidden>Sélectionner un client</option>
                                         <option
                                         v-for="client in clients"
                                         :key="client.id"
@@ -99,6 +100,7 @@
                                     v-model="product"
                                     required
                                   >
+                                  <option value="" selected disabled hidden>Sélectionner une pompe</option>
                                         <option
                                         v-for="product in products"
                                         :key="product.id"
@@ -213,15 +215,15 @@
 
             <!----------------------------------------------- End Create assignment------------------------------------------>
 
-            <!-----------------------------------------------Edit product------------------------------------------>
+            <!-----------------------------------------------Edit assignment------------------------------------------>
 
-            <div class="modal fade" id="editProduct" tabindex="-1">
+            <div class="modal fade" id="editAssignment" tabindex="-1">
               <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
                     <div class="d-flex align-items-center">
                     <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px;"></i>
-                    <h5 class="modal-title mb-0" id="editProductLabel">
+                    <h5 class="modal-title mb-0" id="editAssignmentLabel">
                         Modifier la pompe
                     </h5>
                     </div>
@@ -235,155 +237,156 @@
                     ></button>
                   </div>
                   <div class="modal-body">
-                    <form @submit.prevent="updateProduct(productEdit)" >
+                    <form @submit.prevent="updateAssignment(AssignmentEdit)" >
 
                         <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="name"
-                                style="float: left"
-                                >Nom</label
-                                >
-                                <input
-                                class="form-control"
-                                id="name"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer le nom du pompe"
-                                v-model="nameEdit"
-                                required
-                                >
-                            </div>
 
-                            <div class="col-md-6">
-                                  <label
-                                    class="small mb-1"
-                                    for="type_prod"
-                                    style="float: left"
-                                    >Type de produit</label
-                                  >
-                                  <select
-                                    class="form-select"
-                                    id="type_prod"
-                                    aria-label="Default select example"
-                                    v-model="type_prodEdit"
-                                    required
-                                  >
-                                        <option
-                                        v-for="types in type_products"
-                                        :key="types.id"
-                                        :value="types.id"
-                                        >
-                                        {{ types.name }}
-                                        </option>
-                                  </select>
-                            </div>
+                        <div class="col-md-6">
+                            <label
+                                class="small mb-1"
+                                for="type_prod"
+                                style="float: left"
+                                >Clients</label
+                            >
+                            <select
+                                class="form-select"
+                                id="type_prod"
+                                aria-label="Default select example"
+                                v-model="clientEdit"
+                                required
+                            >
+                                    <option
+                                    v-for="client in clients"
+                                    :key="client.id"
+                                    :value="client.id"
+                                    >
+                                    {{ client.society }}
+                                    </option>
+                            </select>
                         </div>
 
-                            <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <div class="row gx-3 mb-6">
-                                    <div class="col-md-6">
-                                        <label class="small mb-1" for="debit" style="float: left">Débit</label>
-                                        <input
-                                            class="form-control"
-                                            id="debit"
-                                            type="text"
-                                            placeholder="Entrer le débit"
-                                            v-model="debitEdit"
-                                            required
-                                        >
-                                    </div>
-                                    <div class="col-md-4">
-                                    <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
-                                    <select id="flow-rate" class="form-select" v-model="unity_debitEdit" required>
-                                        <option value="m³/h">m³/h</option>
-                                        <option value="l/s">l/s</option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="col-md-6">
-                                <label
+
+                        <div class="col-md-6">
+                            <label
                                 class="small mb-1"
-                                for="Pression"
+                                for="type_prod"
                                 style="float: left"
-                                >Pression</label
-                                >
-                                <input
-                                class="form-control"
-                                id="Pression"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer la pression"
-                                v-model="pressionEdit"
+                                >Pompes</label
+                            >
+                            <select
+                                class="form-select"
+                                id="type_prod"
+                                aria-label="Default select example"
+                                v-model="productEdit"
                                 required
-                                >
-                            </div>
+                            >
+                                    <option
+                                    v-for="product in products"
+                                    :key="product.id"
+                                    :value="product.id"
+                                    >
+                                    {{ product.name }}
+                                    </option>
+                            </select>
                         </div>
+                        </div>
+
+
 
                         <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="Année"
-                                style="float: left"
-                                >Année</label
-                                >
-                                <input
-                                class="form-control"
-                                id="Année"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer l'année"
-                                v-model="yearEdit"
-                                required
-                                >
-                            </div>
-
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="time_day"
-                                style="float: left"
-                                >HT/J</label
-                                >
-                                <input
-                                class="form-control"
-                                id="time_day"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer l'heure du travail"
-                                v-model="time_dayEdit"
-                                required
-                                >
-                            </div>
+                        <div class="col-md-6">
+                            <label
+                            class="small mb-1"
+                            for="Année"
+                            style="float: left"
+                            >Changement d'huile</label
+                            >
+                            <input
+                            class="form-control"
+                            id="Année"
+                            rows="4"
+                            type="text"
+                            placeholder="Entrer le temps de changement d'huile"
+                            v-model="c_huileEdit"
+                            required
+                            >
                         </div>
 
-                        <div class="mb-3">
-                        <label for="imageEdit" class="form-label" style="float: left">Image</label>
-                        <input  @change="uploadImageEdit" class="form-control" type="file" id="imageEdit">
+                        <div class="col-md-6">
+                            <label
+                            class="small mb-1"
+                            for="time_day"
+                            style="float: left"
+                            >Changement des cartouches de filtres</label
+                            >
+                            <input
+                            class="form-control"
+                            id="time_day"
+                            rows="4"
+                            type="text"
+                            placeholder="Entrer le temps de changement de filtre"
+                            v-model="c_filtreEdit"
+                            required
+                            >
+                        </div>
                         </div>
 
 
+                        <div class="row gx-3 mb-3">
+                        <div class="col-md-6">
+                            <label
+                            class="small mb-1"
+                            for="Année"
+                            style="float: left"
+                            >Changement des déshuileurs</label
+                            >
+                            <input
+                            class="form-control"
+                            id="Année"
+                            rows="4"
+                            type="text"
+                            placeholder="Entrer le temps de changement des déshuileurs"
+                            v-model="c_dehuilEdit"
+                            required
+                            >
+                        </div>
+
+                        <div class="col-md-6">
+                            <label
+                            class="small mb-1"
+                            for="inputOrgName"
+                            style="float: left"
+                            >Entretien</label
+                            >
+                            <input
+                            class="form-control"
+                            id="inputOrgName"
+                            type="text"
+                            placeholder="Entrer le temps d'entretien"
+                            v-model="entretienEdit"
+                            required
+                            />
+                        </div>
+                        </div>
+
+                        <br>
 
                         <div class="modal-footer">
-                            <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                            >
-                            Annuler
-                            </button>
-                            <button
-                            type="submit"
-                            class="btn btn-primary"
-                            >
-                             Modifier
+                        <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                        >
+                        Annuler
                         </button>
-                      </div>
+                        <button
+                        type="submit"
+                        class="btn btn-primary"
+                        >
+                        Modifier
+                        </button>
+                        </div>
 
                     </form>
 
@@ -393,19 +396,19 @@
               </div>
             </div>
 
-            <!----------------------------------------------- End Edit product------------------------------------------>
+            <!----------------------------------------------- End Edit Assignment------------------------------------------>
 
 
-            <!-----------------------------------------------show product------------------------------------------>
+            <!-----------------------------------------------show Assignment------------------------------------------>
 
-            <div class="modal fade" id="showProduct" tabindex="-1">
+            <div class="modal fade" id="showAssignment" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
           <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px;"></i>
-          <h5 class="modal-title mb-0" id="editProductLabel">
-            Détails de la pompe
+          <h5 class="modal-title mb-0" id="showAssignmentLabel">
+            Détails du parc
           </h5>
         </div>
         <button
@@ -419,43 +422,43 @@
         <form>
 
           <div class="row gx-3 mb-3">
-            <div class="col-md-6">
+            <div class="col-md-8">
               <div class="row gx-3 mb-3">
                 <div class="col-md-6">
-                  <label class="small mb-1" for="name" style="float: left">Nom</label>
-                  <input class="form-control" id="name" type="text"  v-model="nameShow" disabled>
+                  <label class="small mb-1" for="name" style="float: left">Société</label>
+                  <input class="form-control" id="name" type="text"  v-model="clientShow" disabled>
                 </div>
 
                 <div class="col-md-6">
-                  <label class="small mb-1" for="type" style="float: left">Type</label>
-                  <input class="form-control" id="type" type="text"  v-model="type_prodShow" disabled>
+                  <label class="small mb-1" for="type" style="float: left">Pompe</label>
+                  <input class="form-control" id="type" type="text"  v-model="productShow" disabled>
                 </div>
 
               </div>
               <div class="row gx-3 mb-3">
                 <div class="col-md-6">
-                  <label class="small mb-1" for="debit" style="float: left">Débit</label>
-                  <input class="form-control" id="debit" type="text"  v-model="debitShow" disabled>
+                  <label class="small mb-1" for="debit" style="float: left">Changement d'huile</label>
+                  <input class="form-control" id="debit" type="text"  v-model="c_huileShow" disabled>
                 </div>
                 <div class="col-md-6">
-                  <label class="small mb-1" for="pression" style="float: left">Pression</label>
-                  <input class="form-control" id="pression" type="text" v-model="pressionShow" disabled>
+                  <label class="small mb-1" for="pression" style="float: left">Changement des cartouches de filtres</label>
+                  <input class="form-control" id="pression" type="text" v-model="c_filtreShow" disabled>
                 </div>
               </div>
               <div class="row gx-3 mb-3">
                 <div class="col-md-6">
-                  <label class="small mb-1" for="annee" style="float: left">Année</label>
-                  <input class="form-control" id="annee" type="text"  v-model="yearShow" disabled>
+                  <label class="small mb-1" for="annee" style="float: left">Changement des déshuileurs</label>
+                  <input class="form-control" id="annee" type="text"  v-model="c_dehuilShow" disabled>
                 </div>
                 <div class="col-md-6">
-                  <label class="small mb-1" for="time_day" style="float: left">HT/J</label>
-                  <input class="form-control" id="time_day" type="text"  v-model="time_dayShow" disabled>
+                  <label class="small mb-1" for="time_day" style="float: left">Entretien Génerale</label>
+                  <input class="form-control" id="time_day" type="text"  v-model="entretienShow" disabled>
                 </div>
               </div>
             </div>
 
 
-            <div class="col-md-6">
+            <div class="col-md-4">
   <div class="d-flex align-items-center justify-content-center h-100">
     <div class="border border-secondary image">
       <img :src="'/storage/img/pompes/' + imageShow" class="centered-image"/>
@@ -475,61 +478,64 @@
 
 
 
-            <!----------------------------------------------- End show product------------------------------------------>
+            <!----------------------------------------------- End show Assignment------------------------------------------>
 
 
           </div>
         </div>
         <br />
 
+
+
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center">
             <i class="fa-brands fa-product-hunt me-2"></i>
           <h5 class="mb-0">Parc Clients</h5>
-      </div>
+          </div>
 
-        <table class="table-responsive">
+        <div class="table-responsive">
+        <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col">CODE GSI</th>
-              <th scope="col">Nom</th>
+              <th scope="col">ID</th>
+              <th scope="col">Société</th>
+              <th scope="col">Pompe</th>
               <th scope="col">Image</th>
-              <th scope="col">Type</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
-          <tbody v-if="products.length > 0">
-            <tr v-for="product in displayedproducts" :key="product.id">
-              <th scope="row">{{ product.id }}</th>
-              <td>{{ product.name }}</td>
-              <td><img :src="'/storage/img/pompes/'+product.image" width="100" /></td>
-              <td v-if="product.type">{{ product.type.name }}</td>
-              <td v-else></td>
+          <tbody v-if="assignments.length > 0">
+            <tr v-for="assignment in displayedassignments" :key="assignment.id">
+              <th scope="row">{{ assignment.id }}</th>
+              <td v-if="assignment.client">{{ assignment.client.society }}</td>
+              <td v-if="assignment.product">{{ assignment.product.name }}</td>
+              <td v-if="assignment.product"><img :src="'/storage/img/pompes/'+assignment.product.image" width="100" /></td>
               <td>
                 <a
                 id="crudBtn"
                 class="me-4 text-info"
-                @click="openShowModal(product)"
+                @click="openShowModal(assignment)"
               >
                 <i class="fa-solid fa-eye"></i>
               </a>
                 <a
                   id="crudBtn"
-                  @click="openEditModal(product)"
+                  @click="openEditModal(assignment)"
                   class="me-4 text-warning"
                 >
                   <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a id="crudBtn" @click="deleteProduct(product.id)" class="text-danger">
+                <a id="crudBtn" @click="deleteAssignment(assignment.id)" class="text-danger">
                   <i class="fa-solid fa-trash"></i>
                 </a>
               </td>
             </tr>
           </tbody>
           <tbody v-else>
-            <p>Pas de pompes</p>
+            <p>Pas de parcs</p>
           </tbody>
         </table>
+        </div>
         </div>
 
      <nav aria-label="User pagination" v-if="totalPages > 1" class="pb-1">
@@ -566,11 +572,11 @@
     </nav>
 
       </div>
-    </SideBar>
+    </layout>
   </template>
 
     <script setup>
-  import SideBar from "../layouts/SideBar.vue";
+import layout from "../layouts/layout.vue";
   import {
     checkLoginStatus,
     checkLoginAdmin,
@@ -585,6 +591,7 @@
   import Select2 from 'vue3-select2-component';
   window.Swal = Swal;
 
+  let assignments=ref([]);
   let clients = ref([]);
   let products = ref([]);
 
@@ -597,10 +604,21 @@
 
 
   onMounted(async () => {
-
+    get_all_assignments();
     get_all_products();
     get_all_clients();
   });
+
+  const get_all_assignments = async () => {
+    try {
+      let response = await axios.get("/api/get_all_assignments");
+      console.log(response.data);
+      assignments.value = response.data.assignments;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const get_all_clients = async () => {
     try {
@@ -632,14 +650,14 @@
 
 
   //Page numbers
-  const displayedproducts = computed(() => {
+  const displayedassignments = computed(() => {
     const startIndex = (currentPage.value - 1) * itemsPerPage.value;
     const endIndex = startIndex + itemsPerPage.value;
-    return products.value.slice(startIndex, endIndex);
+    return assignments.value.slice(startIndex, endIndex);
   });
 
   const totalPages = computed(() =>
-    Math.ceil(products.value.length / itemsPerPage.value)
+    Math.ceil(assignments.value.length / itemsPerPage.value)
   );
 
   const changePage = (page) => {
@@ -669,32 +687,29 @@
         entretien:"",
 
         //Edit
-        productEdit: {},
-        nameEdit: "",
-        type_prodEdit:"",
-        debitEdit:"",
-        pressionEdit:"",
-        yearEdit:"",
-        time_dayEdit:"",
-        imageEdit:null,
-        unity_debitEdit:"",
+        AssignmentEdit: {},
+        clientEdit: "",
+        productEdit:"",
+        c_huileEdit:"",
+        c_filtreEdit:"",
+        c_dehuilEdit:"",
+        entretienEdit:"",
+
 
         //show
-        productShow: {},
-        nameShow: "",
-        type_prodShow:"",
-        debitShow:"",
-        pressionShow:"",
-        yearShow:"",
-        time_dayShow:"",
-        imageShow:null,
-        unity_debitShow:"",
+        assignmentShow: {},
+        clientShow: "",
+        productShow:"",
+        c_huileShow:"",
+        c_filtreShow:"",
+        c_dehuilShow:"",
+        entretienShow:"",
+        imageShow:"",
 
       };
     },
 
     props: {
-      products: Array,
       itemsPerPage: Number,
       currentPage: Number,
       totalPages: Number,
@@ -791,91 +806,73 @@
         }
       },
 
-      openEditModal(product) {
-        $("#editProduct").modal("show");
-        this.productEdit=product;
-        this.nameEdit = product.name;
-        this.type_prodEdit=product.type_prod;
-        this.debitEdit=product.debit;
-        this.unity_debitEdit=product.unity_debit;
-        this.pressionEdit=product.pression;
-        this.yearEdit=product.year;
-        this.time_dayEdit=product.time_day;
-        this.imageEdit=product.image;
-
+      openEditModal(assignment) {
+        $("#editAssignment").modal("show");
+        this.AssignmentEdit=assignment;
+        this.clientEdit=assignment.client.id;
+        this.productEdit=assignment.product.id;
+        this.c_huileEdit=assignment.c_huile;
+        this.c_filtreEdit=assignment.c_filtre;
+        this.c_dehuilEdit=assignment.c_dehuil;
+        this.entretienEdit=assignment.entretien;
           },
 
-updateProduct(product) {
-  try {
-    let formEdit = new FormData();
-    formEdit.append('name', this.nameEdit);
-    formEdit.append('type_prod', this.type_prodEdit);
-    formEdit.append('debit', this.debitEdit);
-    formEdit.append('unity_debit', this.unity_debitEdit);
-    formEdit.append('pression', this.pressionEdit);
-    formEdit.append('year', this.yearEdit);
-    formEdit.append('time_day', this.time_dayEdit);
-    formEdit.append('image', this.imageEdit);
-    axios({
-      method: 'post',
-      url: `/api/products/update/${product.id}`,
-      data: formEdit,
-      headers: {
-        'Content-Type': 'multipart/form-data', // Set proper content type
+
+    updateAssignment(assignment) {
+      try {
+        axios.put(`/api/assignments/update/${assignment.id}`, {
+            client_id: this.clientEdit,
+            product_id: this.productEdit,
+            c_huile: this.c_huileEdit,
+            c_filtre:this.c_filtreEdit,
+            c_dehuil:this.c_dehuilEdit,
+            entretien: this.entretienEdit,
+        });
+
+        const toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          customClass: {
+            popup: "colored-toast",
+          },
+          timer: 3000,
+        });
+        toast.fire({
+          icon: "success",
+          title: "Attribution modifié avec succés!",
+        });
+        // $('#addUserModal').removeClass('show');
+
+        $("#editAssignment").modal("hide");
+
+        this.get_all_assignments();
+
+      this.AssignmentEdit = {};
+      this.productEdit="";
+      this.c_huileEdit="";
+      this.c_filtreEdit="";
+      this.c_dehuilEdit="";
+      this.entretienEdit="";
+      } catch (error) {
+        console.log(error);
       }
-    }).then(response => {
-      const toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        customClass: {
-          popup: "colored-toast",
-        },
-        timer: 3000,
-      });
-      toast.fire({
-        icon: "success",
-        title: "Pompe modifié avec succés!",
-      });
+    },
 
-      $("#editProduct").modal("hide");
-      $(".modal-backdrop").hide();
 
-      this.get_products();
-    //   this.$router.push("/products");
-      this.productEdit = {};
-      this.nameEdit = "";
-      this.type_prodEdit = "";
-      this.debitEdit = "";
-      this.pressionEdit = "";
-      this.yearEdit = "";
-      this.time_dayEdit = "";
-      this.imageEdit = "";
-      this.unity_debitEdit="";
-    }).catch(error => {
-      console.log(error);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-},
-
-openShowModal(product) {
-  $("#showProduct").modal("show");
+openShowModal(assignment) {
+  $("#showAssignment").modal("show");
   try {
-    axios.get(`/api/products/show/${product.id}`)
+    axios.get(`/api/assignments/show/${assignment.id}`)
       .then(response => {
-        this.showProduct = response.data.product;
-        this.productShow=product;
-        this.nameShow=this.showProduct.name;
-        this.type_prodShow=this.showProduct.type.name;
-        this.debitShow=this.showProduct.debit+' '+this.showProduct.unity_debit;
-        this.pressionShow=this.showProduct.pression+" mbar";
-        this.yearShow=this.showProduct.year;
-        this.time_dayShow=this.showProduct.time_day+' H';
-        this.imageShow=this.showProduct.image;
-
-        console.log(this.showProduct);
+        this.assignmentShow = response.data.assignment;
+        this.clientShow=this.assignmentShow.client.society;
+        this.productShow=this.assignmentShow.product.name;
+        this.c_huileShow=this.assignmentShow.c_huile+" H";
+        this.c_filtreShow=this.assignmentShow.c_filtre;
+        this.c_dehuilShow=this.assignmentShow.c_dehuil+" H";
+        this.entretienShow=this.assignmentShow.entretien+" H";
+        this.imageShow=this.assignmentShow.product.image;
       })
       .catch(error => {
         console.error(error);
@@ -887,8 +884,7 @@ openShowModal(product) {
 
 
 
-      deleteProduct(prod_id) {
-        console.log(prod_id);
+      deleteAssignment(assignment_id) {
         Swal.fire({
           title: "Êtes-vous sûr(e) ?",
           text: "Vous ne pourrez pas revenir en arrière !",
@@ -901,15 +897,15 @@ openShowModal(product) {
         }).then((result) => {
           if (result.isConfirmed) {
               axios
-                .post("/api/products/delete/" + prod_id)
+                .post("/api/assignments/delete/" + assignment_id)
                 .then((response) => {
-                  this.get_products();
+                  this.get_all_assignments();
                   console.log(response);
+                  Swal.fire("Supprimé!", "attachement a été supprimé!", "success");
                 })
                 .catch((errors) => {
                   console.log(errors);
                 });
-              Swal.fire("Supprimé!", "Pompe a été supprimé!", "success");
           }
         });
       },

@@ -1,8 +1,9 @@
 <template>
-  <SideBar>
+  <layout>
     <div class="container-xl px-4">
-      <h2>Profile</h2>
-      <br />
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Profile</h1>
+            </div>
 
       <div class="row">
         <div class="col-xl-12">
@@ -362,11 +363,11 @@
         </div>
       </div>
     </div>
-  </SideBar>
+</layout>
 </template>
 
 <script setup>
-import SideBar from "../../components/layouts/SideBar.vue";
+import layout from "../layouts/layout.vue";
 import { onMounted, ref, computed } from "vue";
 import {
   checkLoginStatus,

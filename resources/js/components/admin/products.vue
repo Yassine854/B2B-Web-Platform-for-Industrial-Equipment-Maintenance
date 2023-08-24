@@ -1,5 +1,5 @@
 <template>
-    <SideBar ref="table">
+    <layout ref="table">
       <div
         class="container shadow p-3"
         style="background-color: white; position: relative"
@@ -482,7 +482,8 @@
           <h5 class="mb-0">Liste des pompes</h5>
       </div>
 
-        <table class="table-responsive">
+      <div class="table-responsive">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th scope="col">CODE GSI</th>
@@ -525,6 +526,7 @@
           </tbody>
         </table>
         </div>
+        </div>
 
      <nav aria-label="User pagination" v-if="totalPages > 1" class="pb-1">
       <ul class="pagination justify-content-end">
@@ -560,11 +562,11 @@
     </nav>
 
       </div>
-    </SideBar>
+    </layout>
   </template>
 
     <script setup>
-  import SideBar from "../layouts/SideBar.vue";
+  import layout from "../layouts/layout.vue";
   import {
     checkLoginStatus,
     checkLoginAdmin,
@@ -880,8 +882,6 @@ openShowModal(product) {
   }
 },
 
-
-
       deleteProduct(prod_id) {
         console.log(prod_id);
         Swal.fire({
@@ -900,11 +900,17 @@ openShowModal(product) {
                 .then((response) => {
                   this.get_products();
                   console.log(response);
+                  Swal.fire("Supprimé!", "Pompe a été supprimé!", "success");
                 })
                 .catch((errors) => {
                   console.log(errors);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Il y a eu un problème!",
+                    });
                 });
-              Swal.fire("Supprimé!", "Pompe a été supprimé!", "success");
+
           }
         });
       },
