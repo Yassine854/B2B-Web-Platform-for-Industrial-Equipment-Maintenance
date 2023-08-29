@@ -19,12 +19,12 @@ class Assignment extends Model
 
     public function client()
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsToMany(User::class, 'assignment_client', 'assignment_id', 'client_id');
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsToMany(Product::class, 'assignment_product', 'assignment_id', 'product_id');
     }
 
 }

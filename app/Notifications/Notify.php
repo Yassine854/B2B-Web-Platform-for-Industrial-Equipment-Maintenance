@@ -7,18 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ClientRegistrationNotification extends Notification
+class Notify extends Notification
 {
     use Queueable;
-    public $name;
+    public $message;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($name)
+    public function __construct($message)
     {
-        $this->name=$name;
+        $this->message=$message;
     }
 
     /**
@@ -55,7 +55,7 @@ class ClientRegistrationNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'name'=>$this->name
+            'message' => $this->message
         ];
     }
 }

@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Typeindustrie extends Model
+class Intervention extends Model
 {
     use HasFactory;
-    protected $table = 'typeindustries';
 
     protected $fillable = [
         'name',
+        'client_id',
+        'product_id',
+        'designation',
+        'ref',
+        'quantite',
+        'description',
+        'date'
     ];
-
-    public function type()
-    {
-        return $this->belongsTo(User::class, 'type_ind');
-    }
 }

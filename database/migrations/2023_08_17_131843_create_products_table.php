@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -14,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->id()->start_from(2015001);
             $table->string('image')->nullable();
             $table->string('name');
             $table->unsignedBigInteger('type_prod');
@@ -27,6 +28,8 @@ return new class extends Migration
             ->references('id')->on('typeproducts')->onDelete('restrict');
             $table->timestamps();
         });
+
+        DB::statement('ALTER TABLE products AUTO_INCREMENT = 2015001;');
     }
 
     /**

@@ -17,10 +17,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('product_id');
-            $table->string('c_huile');
-            $table->string('c_filtre');
-            $table->string('c_dehuil');
-            $table->string('entretien');
+            $table->string('c_huile')->nullable();
+            $table->string('c_filtre')->nullable();
+            $table->string('c_dehuil')->nullable();
+            $table->string('entretien')->nullable();
+
+            $table->timestamp('updated_c_huile')->nullable();
+
+
             $table->foreign('client_id')
               ->references('id')->on('users')->onDelete('restrict');
             $table->foreign('product_id')
@@ -36,6 +40,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assignments');
+        Schema::table('assignments', function (Blueprint $table) {
+            $table->dropColumn('updated_c_huile');
+        });
     }
 };

@@ -495,7 +495,7 @@
           </thead>
           <tbody v-if="products.length > 0">
             <tr v-for="product in displayedproducts" :key="product.id">
-              <th scope="row">{{ product.id }}</th>
+              <th scope="row">#{{ product.id }}</th>
               <td>{{ product.name }}</td>
               <td><img :src="'/storage/img/pompes/'+product.image" width="100" /></td>
               <td v-if="product.type">{{ product.type.name }}</td>
@@ -566,7 +566,7 @@
   </template>
 
     <script setup>
-  import layout from "../layouts/layout.vue";
+  import layout from "../layouts/layout";
   import {
     checkLoginStatus,
     checkLoginAdmin,

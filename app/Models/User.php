@@ -54,6 +54,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function client()
+{
+    return $this->belongsToMany(Assignment::class, 'assignment_client', 'client_id', 'assignment_id');
+}
+
     public function typeIndustrie()
      {
         return $this->belongsTo(Typeindustrie::class);

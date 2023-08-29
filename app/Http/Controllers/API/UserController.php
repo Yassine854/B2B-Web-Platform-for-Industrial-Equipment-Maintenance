@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Typeindustrie;
-use App\Notifications\ClientRegistrationNotification;
+use App\Notifications\Notify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +13,9 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Notification;
+use App\Models\Assignment;
+use Illuminate\Support\Carbon;
+use App\Models\Product;
 
 class UserController extends Controller
 {
@@ -38,6 +41,22 @@ class UserController extends Controller
             'user' => $user, // add
 
         ];
+
+
+    //Notifications
+    $currentDate = Carbon::now();
+    $assignments = Assignment::all();
+    foreach ($assignments as $assignment) {
+        $product = Product::where('id', $assignment->product_id)->first();
+         $huile=intval($assignment->c_huile)/(intval($product->time_day)*365);
+         if ($huile<0.1)
+            if(round($huile/0.0033333)==10){
+                $client = User::where('id', $assignment->client_id)->first();
+                $message="il vous reste 10 jours";
+                Notification::send($client,new Notify($message));
+            }
+    }
+
 
         return response()->json($response);
     }
@@ -230,7 +249,8 @@ class UserController extends Controller
         $user->update();
 
         $admins = User::where('role', 2)->get();
-        Notification::send($admins,new ClientRegistrationNotification($user->society));
+        $message="La société ".$user->society." a demandé la vérification de son adresse E-mail.";
+        Notification::send($admins,new Notify($message));
         return response()->json([
             'message'=>'User updated successfully'
         ]);

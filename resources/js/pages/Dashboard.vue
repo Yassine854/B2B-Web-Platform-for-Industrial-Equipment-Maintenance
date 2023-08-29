@@ -4,13 +4,51 @@
     <div>welcome to your dashboard admin</div>
   </layout>
 
-  <!-- Client Dashboard -->
-  <layout v-else >
-    <div v-if="checkClientVerification()">Bienvenue dans votre dashboard</div>
+  <!-- Client Dashboard submitted -->
+  <layout v-else>
+    <div v-if="checkClientVerification()">
+      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+      </div>
 
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Parc client</h6>
+        </div>
 
+        <div class="card-body">
+          <div class="px-lg-5">
+            <div class="row">
+              <!-- v-for loop to iterate over assignments -->
+              <div
+                class="col-xl-3 col-lg-4 col-md-6 mb-4"
+                v-for="assignment in ClientAssignments"
+                :key="assignment.id"
+              >
+                <div
+                  class="bg-white rounded shadow-sm d-flex flex-column align-items-center justify-content-center " @click="openShowModal(assignment)" style="cursor: pointer;"
+                >
+                  <img
+                    :src="'/storage/img/pompes/' + assignment.product.image"
+                    alt=""
+                    class="img-fluid card-img-top"
+                    style="height: 150px; width: 150px"
+                  />
+                  <div class="p-4">
+                    <h5 class="text-dark">{{ assignment.product.name }}</h5>
+                    <p class="small text-muted mb-0">
+                      {{ assignment.product.id }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-
+    <!-- Client not submitted -->
     <div v-else-if="!formSubmitted">
       <div class="alert alert-warning" role="alert">
         Votre e-mail est en attente de vérification.<br />Veuillez vous assurer
@@ -171,13 +209,116 @@
       </div>
     </div>
     <div v-else-if="formSubmitted">
-        <div class="alert alert-info" role="alert">
-            Votre e-mail est en attente de vérification.
-    </div>
+      <div class="alert alert-info" role="alert">
+        Votre e-mail est en attente de vérification.
+      </div>
     </div>
 
+    <!-----------------------------------------------show Assignment------------------------------------------>
 
-</layout>
+    <div class="modal fade" id="showAssignment" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex align-items-center">
+              <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
+              <h5 class="modal-title mb-0" id="showAssignmentLabel">
+                Détails du parc
+              </h5>
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row gx-3 mb-3">
+                <div class="col-md-8">
+
+                  <div class="row gx-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="small mb-1" for="debit" style="float: left"
+                        >Changement d'huile</label
+                      >
+                      <input
+                        class="form-control"
+                        id="debit"
+                        type="text"
+                        v-model="c_huileShow"
+                        disabled
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label
+                        class="small mb-1"
+                        for="pression"
+                        style="float: left"
+                        >Changement des cartouches de filtres</label
+                      >
+                      <input
+                        class="form-control"
+                        id="pression"
+                        type="text"
+                        v-model="c_filtreShow"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div class="row gx-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="small mb-1" for="annee" style="float: left"
+                        >Changement des déshuileurs</label
+                      >
+                      <input
+                        class="form-control"
+                        id="annee"
+                        type="text"
+                        v-model="c_dehuilShow"
+                        disabled
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label
+                        class="small mb-1"
+                        for="time_day"
+                        style="float: left"
+                        >Entretien Génerale</label
+                      >
+                      <input
+                        class="form-control"
+                        id="time_day"
+                        type="text"
+                        v-model="entretienShow"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="d-flex align-items-center justify-content-center h-100"
+                  >
+                    <div class="border border-secondary image">
+                      <img
+                        :src="'/storage/img/pompes/' + imageShow"
+                        class="centered-image"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!----------------------------------------------- End show Assignment------------------------------------------>
+  </layout>
 </template>
 
 <script setup>
@@ -193,16 +334,28 @@ import listStates from "../../json/state.json";
 import Swal from "sweetalert2";
 
 let type_industries = ref([]);
-
+let ClientAssignments = ref([]);
+let ClientId = window.Laravel.user.id;
 onMounted(async () => {
   get_all_types();
+  get_client_assignments();
 });
 
 const get_all_types = async () => {
   try {
     let response = await axios.get("/api/get_type_industries");
-    console.log(response.data); // Log the response data
+    console.log(response.data);
     type_industries.value = response.data.type_industries;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const get_client_assignments = async () => {
+  try {
+    let response = await axios.get(`/api/get_client_assignments/${ClientId}`);
+    console.log(response.data);
+    ClientAssignments.value = response.data.ClientAssignments;
   } catch (error) {
     console.error(error);
   }
@@ -235,26 +388,40 @@ export default {
       selectedState: "",
       states: [],
       address: "",
+
+      //Show assignment
+      c_huileShow:"",
+      c_filtreShow:"",
+      c_dehuilShow:"",
+      entretienShow:"",
     };
   },
   created() {
     if (window.Laravel.user) {
-    this.user = window.Laravel.user;
-    this.role = window.Laravel.user.role;
-    this.id = window.Laravel.user.id;
-    console.log("user's role is " + this.role);
-    console.log("user's id is " + this.id);
-    //Client
-    this.society = window.Laravel.user.society;
-    this.type_ind = window.Laravel.user.type_ind;
-    this.responsable = window.Laravel.user.responsable;
-    this.N_responsable = window.Laravel.user.N_responsable;
-    this.selectedCountry = window.Laravel.user.country;
-    this.selectedState = window.Laravel.user.city;
-    this.address = window.Laravel.user.address;
+      this.user = window.Laravel.user;
+      this.role = window.Laravel.user.role;
+      this.id = window.Laravel.user.id;
+      console.log("user's role is " + this.role);
+      console.log("user's id is " + this.id);
+      //Client
+      this.society = window.Laravel.user.society;
+      this.type_ind = window.Laravel.user.type_ind;
+      this.responsable = window.Laravel.user.responsable;
+      this.N_responsable = window.Laravel.user.N_responsable;
+      this.selectedCountry = window.Laravel.user.country;
+      this.selectedState = window.Laravel.user.city;
+      this.address = window.Laravel.user.address;
     }
-    if (this.society && this.type_ind && this.responsable && this.N_responsable && this.selectedCountry && this.selectedState && this.address)
-        this.formSubmitted=true;
+    if (
+      this.society &&
+      this.type_ind &&
+      this.responsable &&
+      this.N_responsable &&
+      this.selectedCountry &&
+      this.selectedState &&
+      this.address
+    )
+      this.formSubmitted = true;
   },
   methods: {
     isAdmin() {
@@ -308,7 +475,27 @@ export default {
         console.log(error);
       }
     },
-  },
+
+openShowModal(assignment) {
+  try {
+    this.c_huileShow = assignment.c_huile + " H";
+    this.c_filtreShow = assignment.c_filtre;
+    this.c_dehuilShow = assignment.c_dehuil + " H";
+    this.entretienShow = assignment.entretien + " H";
+    this.imageShow = assignment.product.image;
+
+    $("#showAssignment").modal("show");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+
+},
+
+
+
   props: {
     // country
     countryLabel: {

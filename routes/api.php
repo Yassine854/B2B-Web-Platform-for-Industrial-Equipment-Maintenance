@@ -11,6 +11,7 @@ use App\Http\Controllers\TypeproductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\InterventionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -72,13 +73,22 @@ Route::get('/products/search_product',[ProductController::class,'searchProduct']
 
 //Parc Clients
 Route::get('/get_all_assignments',[AssignmentController::class,'get_all_assignments']);
+Route::get('/get_client_assignments/{id}', [AssignmentController::class, 'get_client_assignments']);
 Route::get('/get_all_clients',[AssignmentController::class,'get_all_clients']);
 Route::get('/get_all_products',[AssignmentController::class,'get_all_products']);
 Route::post('/assignments/create', [AssignmentController::class, 'createAssignment']);
 Route::put('/assignments/update/{id}', [AssignmentController::class, 'updateAssignment']);
 Route::get('/assignments/show/{id}', [AssignmentController::class, 'showAssignment']);
 Route::post('/assignments/delete/{id}', [AssignmentController::class, 'deleteAssignment']);
+Route::get('/assignments/search_assignment',[AssignmentController::class,'search_assignment']);
+Route::get('/assignments/search_society',[AssignmentController::class,'search_society']);
 
+
+    //Parc
+    Route::get('/get_assignments/{id}',[AssignmentController::class,'get_assignments']);
+
+//Interventions
+Route::get('/get_all_interventions',[InterventionController::class,'get_all_interventions']);
 
 
 //Notification

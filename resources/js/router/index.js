@@ -13,6 +13,8 @@ import types_industrie from '../components/admin/type_industries'
 import types_product from '../components/admin/type_products'
 import products from '../components/admin/products'
 import parc_clients from '../components/admin/parc_clients'
+import parc from '../components/admin/parc'
+import interventions from '../components/admin/interventions'
 
 
 
@@ -79,6 +81,17 @@ export const routes = [
         name: 'parc_clients',
         path: '/parc_clients',
         component: parc_clients
+    },
+    {
+        name: 'parc',
+        path: '/parc_clients/:id',
+        component: parc,
+        props: true
+    },
+    {
+        name: 'interventions',
+        path: '/interventions',
+        component: interventions
     },
 
 ];

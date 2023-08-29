@@ -103,7 +103,7 @@ public function searchProduct(Request $request) {
     $search = $request->get('s');
 
     if ($search != null) {
-        $products = Product::where(function ($query) use ($search) {
+        $products = Product::with('type')->where(function ($query) use ($search) {
             $query->where('name', 'LIKE', "%$search%")
             ->orWhere('id', 'LIKE', "%$search%");
         })->get();

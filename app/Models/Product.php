@@ -20,6 +20,10 @@ class Product extends Model
         'time_day',
     ];
 
+    public function product()
+{
+    return $this->belongsToMany(Assignment::class, 'assignment_product', 'product_id', 'assignment_id');
+}
 
     public function type()
     {

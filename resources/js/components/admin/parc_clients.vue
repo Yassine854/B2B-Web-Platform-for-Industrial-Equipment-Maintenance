@@ -13,7 +13,8 @@
                 placeholder="Rechercher"
                 aria-label="Search"
                 aria-describedby="search-addon"
-                v-model="searchProduct"
+                v-model="searchSociety"
+                @keyup="search_society()"
 
               />
             </div>
@@ -129,7 +130,6 @@
                                 type="text"
                                 placeholder="Entrer le temps de changement d'huile"
                                 v-model="c_huile"
-                                required
                                 >
                             </div>
 
@@ -147,7 +147,6 @@
                                 type="text"
                                 placeholder="Entrer le temps de changement de filtre"
                                 v-model="c_filtre"
-                                required
                                 >
                             </div>
                         </div>
@@ -168,7 +167,6 @@
                                 type="text"
                                 placeholder="Entrer le temps de changement des déshuileurs"
                                 v-model="c_dehuil"
-                                required
                                 >
                             </div>
 
@@ -185,7 +183,6 @@
                                   type="text"
                                   placeholder="Entrer le temps d'entretien"
                                   v-model="entretien"
-                                  required
                                 />
                               </div>
                         </div>
@@ -214,6 +211,12 @@
             </div>
 
             <!----------------------------------------------- End Create assignment------------------------------------------>
+
+
+
+
+
+
 
             <!-----------------------------------------------Edit assignment------------------------------------------>
 
@@ -309,7 +312,6 @@
                             type="text"
                             placeholder="Entrer le temps de changement d'huile"
                             v-model="c_huileEdit"
-                            required
                             >
                         </div>
 
@@ -327,7 +329,6 @@
                             type="text"
                             placeholder="Entrer le temps de changement de filtre"
                             v-model="c_filtreEdit"
-                            required
                             >
                         </div>
                         </div>
@@ -348,7 +349,6 @@
                             type="text"
                             placeholder="Entrer le temps de changement des déshuileurs"
                             v-model="c_dehuilEdit"
-                            required
                             >
                         </div>
 
@@ -365,7 +365,6 @@
                             type="text"
                             placeholder="Entrer le temps d'entretien"
                             v-model="entretienEdit"
-                            required
                             />
                         </div>
                         </div>
@@ -398,6 +397,37 @@
 
             <!----------------------------------------------- End Edit Assignment------------------------------------------>
 
+            <!-- Start List products -->
+            <!-- Modal -->
+            <div class="modal fade" id="openProductsModal" tabindex="-1" aria-labelledby="openProductsModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paginationModalLabel">Pagination Modal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Content of the modal goes here -->
+                    <div id="page1" class="page">
+                    Page 1 Content
+                    </div>
+                    <div id="page2" class="page" style="display: none;">
+                    Page 2 Content
+                    </div>
+                    <div id="page3" class="page" style="display: none;">
+                    Page 3 Content
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Previous and Next buttons -->
+                    <button type="button" class="btn btn-secondary" id="prevBtn">Previous</button>
+                    <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+                </div>
+                </div>
+            </div>
+            </div>
+            <!-- End list products -->
+
 
             <!-----------------------------------------------show Assignment------------------------------------------>
 
@@ -425,32 +455,32 @@
             <div class="col-md-8">
               <div class="row gx-3 mb-3">
                 <div class="col-md-6">
-                  <label class="small mb-1" for="name" style="float: left">Société</label>
-                  <input class="form-control" id="name" type="text"  v-model="clientShow" disabled>
+                  <label class="small mb-1" for="name" style="float: left">Pompe</label>
+                  <input class="form-control" id="name" type="text"  v-model="productShow" disabled>
                 </div>
 
                 <div class="col-md-6">
-                  <label class="small mb-1" for="type" style="float: left">Pompe</label>
-                  <input class="form-control" id="type" type="text"  v-model="productShow" disabled>
+                  <label class="small mb-1" for="type" style="float: left">CODE GSI</label>
+                  <input class="form-control" id="type" type="text"  v-model="codeShow" disabled>
                 </div>
 
               </div>
               <div class="row gx-3 mb-3">
-                <div class="col-md-6">
+                <div class="col-md-6" >
                   <label class="small mb-1" for="debit" style="float: left">Changement d'huile</label>
                   <input class="form-control" id="debit" type="text"  v-model="c_huileShow" disabled>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" >
                   <label class="small mb-1" for="pression" style="float: left">Changement des cartouches de filtres</label>
                   <input class="form-control" id="pression" type="text" v-model="c_filtreShow" disabled>
                 </div>
               </div>
               <div class="row gx-3 mb-3">
-                <div class="col-md-6">
+                <div class="col-md-6" >
                   <label class="small mb-1" for="annee" style="float: left">Changement des déshuileurs</label>
                   <input class="form-control" id="annee" type="text"  v-model="c_dehuilShow" disabled>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" v-if="!entretienShow">
                   <label class="small mb-1" for="time_day" style="float: left">Entretien Génerale</label>
                   <input class="form-control" id="time_day" type="text"  v-model="entretienShow" disabled>
                 </div>
@@ -469,7 +499,11 @@
 
 
           </div>
-
+          <div class="modal-footer">
+                    <!-- Previous and Next buttons -->
+                    <button type="button" class="btn btn-secondary" id="prevBtn">Previous</button>
+                    <button type="button" class="btn btn-primary" id="nextBtn"  @click="nextAssignment(Index)">Next</button>
+                </div>
         </form>
       </div>
     </div>
@@ -494,23 +528,20 @@
           </div>
 
         <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">ID</th>
               <th scope="col">Société</th>
-              <th scope="col">Pompe</th>
-              <th scope="col">Image</th>
-              <th scope="col">Actions</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody v-if="assignments.length > 0">
-            <tr v-for="assignment in displayedassignments" :key="assignment.id">
-              <th scope="row">{{ assignment.id }}</th>
-              <td v-if="assignment.client">{{ assignment.client.society }}</td>
-              <td v-if="assignment.product">{{ assignment.product.name }}</td>
-              <td v-if="assignment.product"><img :src="'/storage/img/pompes/'+assignment.product.image" width="100" /></td>
-              <td>
+            <tr v-for="(assignment,index) in displayedassignments" :key="index" id="crudBtn" @click="ShowAssignments(index)" >
+              <td v-if="assignment.client">{{ assignment.client[0].society  }}</td>
+              <th ><i class="fa-solid fa-chevron-right fa-lg text-dark"></i></th>
+            </tr>
+              <!-- <td v-if="assignment.product"><img :src="'/storage/img/pompes/'+assignment.product.image" width="100" /></td> -->
+            <!-- <td>
                 <a
                 id="crudBtn"
                 class="me-4 text-info"
@@ -528,8 +559,7 @@
                 <a id="crudBtn" @click="deleteAssignment(assignment.id)" class="text-danger">
                   <i class="fa-solid fa-trash"></i>
                 </a>
-              </td>
-            </tr>
+              </td> -->
           </tbody>
           <tbody v-else>
             <p>Pas de parcs</p>
@@ -576,7 +606,7 @@
   </template>
 
     <script setup>
-import layout from "../layouts/layout.vue";
+import layout from "../layouts/layout";
   import {
     checkLoginStatus,
     checkLoginAdmin,
@@ -597,7 +627,7 @@ import layout from "../layouts/layout.vue";
 
 
   let type_products = ref([]);
-  let searchProduct = ref([]);
+  let searchSociety = ref([]);
 
   const currentPage = ref(1);
   const itemsPerPage = ref(5); // Set the default number of items per page
@@ -642,10 +672,10 @@ import layout from "../layouts/layout.vue";
   };
 
 
-  const search = async () => {
-    let response = await axios.get("/api/products/search_product?s=" + searchProduct.value);
+  const search_society = async () => {
+    let response = await axios.get("/api/assignments/search_society?s=" + searchSociety.value);
     console.log("response", response);
-    products.value = response.data.products;
+    assignments.value = response.data.assignments;
   };
 
 
@@ -700,12 +730,14 @@ import layout from "../layouts/layout.vue";
         assignmentShow: {},
         clientShow: "",
         productShow:"",
+        codeShow:"",
         c_huileShow:"",
         c_filtreShow:"",
         c_dehuilShow:"",
         entretienShow:"",
         imageShow:"",
 
+        Index:0,
       };
     },
 
@@ -806,6 +838,15 @@ import layout from "../layouts/layout.vue";
         }
       },
 
+
+        ShowAssignments(assignment) {
+            this.$router.push({
+                name: 'parc',
+                params: { id: assignment },
+                props: true
+         });
+      },
+
       openEditModal(assignment) {
         $("#editAssignment").modal("show");
         this.AssignmentEdit=assignment;
@@ -862,25 +903,23 @@ import layout from "../layouts/layout.vue";
 
 openShowModal(assignment) {
   $("#showAssignment").modal("show");
-  try {
-    axios.get(`/api/assignments/show/${assignment.id}`)
-      .then(response => {
-        this.assignmentShow = response.data.assignment;
-        this.clientShow=this.assignmentShow.client.society;
-        this.productShow=this.assignmentShow.product.name;
-        this.c_huileShow=this.assignmentShow.c_huile+" H";
-        this.c_filtreShow=this.assignmentShow.c_filtre;
-        this.c_dehuilShow=this.assignmentShow.c_dehuil+" H";
-        this.entretienShow=this.assignmentShow.entretien+" H";
-        this.imageShow=this.assignmentShow.product.image;
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  } catch (error) {
-    console.error(error);
-  }
+    this.updateModalContent(assignment[this.Index]);
+
+
 },
+
+  updateModalContent(assignmentItem) {
+      this.productShow = assignmentItem.product[0].name;
+      this.codeShow = assignmentItem.product[0].id;
+      this.c_huileShow = assignmentItem.c_huile;
+      this.c_filtreShow = assignmentItem.c_filtre;
+      this.c_dehuilShow = assignmentItem.c_dehuil;
+      this.entretienShow = assignmentItem.entretien;
+      this.imageShow = assignmentItem.product[0].image;
+},
+
+
+
 
 
 
@@ -919,6 +958,7 @@ openShowModal(assignment) {
   #crudBtn {
     cursor: pointer;
   }
+
 
   .image {
   width: 200px;
