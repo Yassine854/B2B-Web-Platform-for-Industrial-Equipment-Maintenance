@@ -16,16 +16,11 @@ return new class extends Migration
         Schema::create('interventions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('assignment_id');
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('product_id');
-            $table->string('designation');
-            $table->string('ref');
-            $table->string('quantite');
             $table->string('description');
             $table->date('date');
-            $table->foreign('assignment_id')
-              ->references('id')->on('assignments')->onDelete('restrict');
+
         });
     }
 

@@ -62,11 +62,11 @@
                             <!-- Client Dropdown -->
                             <div class="col-md-6">
                             <label class="small mb-1" for="client_select" style="float: left">Clients</label>
-                                <select class="form-select" id="client_select" aria-label="Default select example" v-model="client" required>
-                                    <option value="" selected disabled hidden>Sélectionner un client</option>
-                                    <option v-for="client in uniqueClients" :key="client.id" :value="client.id">{{ client.society }}</option>
-                                </select>
-                            </div>
+                            <select class="form-select" id="client_select" aria-label="Default select example" v-model="client" required>
+                                <option value="" selected disabled hidden>Sélectionner un client</option>
+                                <option v-for="client in uniqueClients" :key="client.id" :value="client.id">{{ client.name }}</option>
+                            </select>
+                        </div>
 
 
 
@@ -75,7 +75,7 @@
                             <label class="small mb-1" for="product_select" style="float: left">Pompes</label>
                                 <select class="form-select" id="product_select" aria-label="Default select example" v-model="product" required>
                                     <option value="" selected disabled hidden>Sélectionner un produit</option>
-                                    <option v-for="product in productsForSelectedClient" :key="product.id" :value="product.id">{{ product.name }}</option>
+                                    <option v-for="product in productsForSelectedClient" :key="product.product_id" :value="product.product_id">{{ product.product[0].name }}</option>
                                 </select>
                             </div>
                         </div>
@@ -101,17 +101,23 @@
     </div>
   </div>
 
-  <!-- Piéces de Rechange -->
-  <div class="row gx-3 mb-3">
+
+
+  <!-- Pièces de Rechange -->
+  <div class="row gx-3 mb-3" v-for="(piece, index) in pieces" :key="index">
     <div class="col-md-12">
-      <label class="small mb-1" style="float: left">Piéces de rechange</label>
+      <label class="small mb-1" style="float: left">Pièces de rechange</label>
       <div class="input-group">
-        <input class="form-control" type="text" placeholder="Désignation" v-model="designation" />
-        <input class="form-control" type="text" placeholder="Référence" v-model="reference" />
-        <input class="form-control" type="text" placeholder="Quantité" v-model="quantite" />
+        <input class="form-control" type="text" placeholder="Désignation" v-model="piece.designation" />
+        <input class="form-control" type="text" placeholder="Référence" v-model="piece.reference" />
+        <input class="form-control" type="text" placeholder="Quantité" v-model="piece.quantite" />
+        <button class="btn btn-success" @click="removePiece(index)">-</button>
       </div>
     </div>
   </div>
+
+  <button class="btn btn-primary" @click="addPiece">+</button>
+
 
   <!-- Description Textarea -->
   <div class="row gx-3 mb-3">
@@ -343,7 +349,7 @@ import layout from "../layouts/layout.vue";
 
   const get_all_assignments = async () => {
     try {
-      let response = await axios.get("/api/get_all_assignments");
+      let response = await axios.get("/api/interventions/get_all_assignments");
       console.log(response.data); // Log the response data
       assignments.value = response.data.assignments;
     } catch (error) {
@@ -352,16 +358,20 @@ import layout from "../layouts/layout.vue";
   };
 
   //Fetch clients
-
-  let uniqueClients = computed(() => {
-  const clientSet = new Set();
+  const uniqueClients = computed(() => {
+  const societyMap = new Map(); // Using a Map to store ID-society pairs
   assignments.value.forEach(assignment => {
-    if (assignment.client.length > 0) {
-      clientSet.add(assignment.client[0]);
-    }
+    const clientId = assignment.client[0].id;
+    const societyName = assignment.client[0].society; // Assuming 'society' property holds the society name
+    societyMap.set(clientId, societyName); // Store ID-society pairs in the Map
   });
-  return Array.from(clientSet);
+
+  // Create an array of objects containing society ID and name
+  const societies = Array.from(societyMap, ([id, name]) => ({ id, name }));
+
+  return societies;
 });
+
 
 //Fetch Products by clients
 
@@ -370,13 +380,20 @@ let product = ref(null);
 
 const productsForSelectedClient = computed(() => {
   if (client.value !== null) {
-    const selectedAssignment = assignments.value.find(assignment => assignment.client_id === client.value);
-    if (selectedAssignment) {
-      return selectedAssignment.product;
+    const selectedAssignments = assignments.value.filter(
+      assignment => assignment.client_id === client.value
+    );
+
+    if (selectedAssignments.length > 0) {
+        console.log(selectedAssignments);
+      return selectedAssignments; // Assuming you want the product of the first selected assignment
     }
   }
-  return [];
+
+  return null; // Return a default value if no products are found
 });
+
+
 
 
   const search = async () => {
@@ -426,7 +443,9 @@ const productsForSelectedClient = computed(() => {
         reference: "",
         quantite: "",
 
-
+        pieces: [
+            { designation: '', reference: '', quantite: '' }
+        ]
 
       };
     },
@@ -474,6 +493,12 @@ const productsForSelectedClient = computed(() => {
     },
     methods: {
 
+    addPiece() {
+      this.pieces.push({ designation: '', reference: '', quantite: '' });
+    },
+    removePiece(index) {
+      this.pieces.splice(index, 1);
+    },
 
       changePage(page) {
         this.$emit("page-change", page);
@@ -482,12 +507,24 @@ const productsForSelectedClient = computed(() => {
 
 
       async createIntervention() {
+        console.log(this.client);
+        console.log(this.name);
+        console.log(this.product);
+        console.log(this.description);
+        console.log(this.date);
+        console.log(this.pieces);
         try {
-          await axios.post(`/api/types_industrie/create`, {
-            name: this.name,
-          });
-          this.name = "";
+            const formData = {
+                name: this.name,
+                client_id: this.client,
+                product_id: this.product,
+                description: this.description,
+                date: this.date,
+                pieces: this.pieces,
+                };
+          const response = await axios.post('/api/interventions/create',formData);
 
+        console.log(response.data.message);
           const toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -499,17 +536,18 @@ const productsForSelectedClient = computed(() => {
           });
           toast.fire({
             icon: "success",
-            title: "Element ajouté avec succés !",
+            title: "Intervention ajoutée avec succés !",
           });
-          // $('#addUserModal').removeClass('show');
 
-          $("#addTypeIndustry").modal("hide");
-          $(".modal-backdrop").hide();
-
-          this.$router.push("/types_industrie");
-          window.location.reload();
+          this.$router.push("/interventions");
+          this.name = "";
+          this.client_id = "";
+          this.product_id = "";
+          this.description = "";
+          this.date = "";
+          this.pieces = [];
         } catch (error) {
-          console.log(error);
+            console.error('Error creating intervention:', error);
         }
       },
 

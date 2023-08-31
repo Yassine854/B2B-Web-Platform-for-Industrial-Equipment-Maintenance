@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Pdr;
 class Intervention extends Model
 {
     use HasFactory;
@@ -13,10 +13,14 @@ class Intervention extends Model
         'name',
         'client_id',
         'product_id',
-        'designation',
-        'ref',
-        'quantite',
         'description',
         'date'
     ];
+
+
+
+    public function pdrs()
+    {
+        return $this->hasMany(Pdr::class);
+    }
 }

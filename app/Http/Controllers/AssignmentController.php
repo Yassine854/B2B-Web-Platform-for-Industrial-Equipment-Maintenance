@@ -82,22 +82,22 @@ class AssignmentController extends Controller
     $assignment->client()->attach($assignment->client_id); // Array of client IDs
     $assignment->product()->attach($assignment->product_id); // Array of product IDs
 
-    //Client notification
-    $product = Product::where('id', $assignment->product_id)->first();
-    $client = User::where('id', $assignment->client_id)->get();
+    // //Client notification
+    // $product = Product::where('id', $assignment->product_id)->first();
+    // $client = User::where('id', $assignment->client_id)->get();
 
-    $date_huile = intval($assignment->c_huile) / (intval($product->time_day) * 365);
-    $totalDays_huile = (365/$date_huile);
+    // $date_huile = intval($assignment->c_huile) / (intval($product->time_day) * 365);
+    // $totalDays_huile = (365/$date_huile);
 
-    if($date_huile>=1){
-        $message="changement de huile dans ".floor($date_huile)." an(s) et " .round(($date_huile-floor($date_huile))*10). " moi(s).";
-    }
-    if($date_huile<1)
-        $message="changement de huile dans ".round($date_huile*10)." moi(s).";
-    if($date_huile<0.1)
-        $message="changement de huile dans ".round($date_huile/0.0033333)." jour(s).";
+    // if($date_huile>=1){
+    //     $message="changement de huile dans ".floor($date_huile)." an(s) et " .round(($date_huile-floor($date_huile))*10). " moi(s).";
+    // }
+    // if($date_huile<1)
+    //     $message="changement de huile dans ".round($date_huile*10)." moi(s).";
+    // if($date_huile<0.1)
+    //     $message="changement de huile dans ".round($date_huile/0.0033333)." jour(s).";
 
-    Notification::send($client,new Notify($message));
+    // Notification::send($client,new Notify($message));
 
     return response()->json(['message' => 'Assignment created successfully'], 201);
 }
@@ -162,24 +162,27 @@ public function deleteAssignment($id){
     return response()->json('assignment deleted');
 }
 
-public function search_society(Request $request)
+
+
+
+
+public function search_product(Request $request)
 {
-    $search = $request->get('s');
+    $search = $request->query('s');
+    $assignmentId = $request->query('id');
 
     if ($search !== null) {
-        $assignments = Assignment::with('client')->where(function ($query) use ($search) {
-            $query->whereHas('client', function ($clientQuery) use ($search) {
-                $clientQuery->where('society', 'LIKE', "%$search%");
-            });
-        })->get();
+        $assignments = Assignment::where('product_id', 'LIKE', "%$search%")->get();
 
         return response()->json([
             'assignments' => $assignments
         ], 200);
     } else {
-        return $this->get_all_assignments();
+        return $this->get_assignments($assignmentId);
     }
 }
+
+
 
 
 

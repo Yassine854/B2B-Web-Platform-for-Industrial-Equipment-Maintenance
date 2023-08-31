@@ -82,6 +82,7 @@ Route::get('/assignments/show/{id}', [AssignmentController::class, 'showAssignme
 Route::post('/assignments/delete/{id}', [AssignmentController::class, 'deleteAssignment']);
 Route::get('/assignments/search_assignment',[AssignmentController::class,'search_assignment']);
 Route::get('/assignments/search_society',[AssignmentController::class,'search_society']);
+Route::get('/assignments/search_product', [AssignmentController::class, 'search_product']);
 
 
     //Parc
@@ -89,6 +90,8 @@ Route::get('/assignments/search_society',[AssignmentController::class,'search_so
 
 //Interventions
 Route::get('/get_all_interventions',[InterventionController::class,'get_all_interventions']);
+Route::get('/interventions/get_all_assignments',[InterventionController::class,'get_all_assignments']);
+Route::post('/interventions/create', [InterventionController::class, 'createIntervention']);
 
 
 //Notification
