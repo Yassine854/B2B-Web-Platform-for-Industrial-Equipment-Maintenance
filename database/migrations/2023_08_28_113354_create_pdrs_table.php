@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pdrs', function (Blueprint $table) {
-            $table->id();
+            $table->id()->start_from(0001);
             $table->string('designation');
             $table->string('reference');
             $table->string('quantite');
             $table->unsignedBigInteger('intervention_id');
             $table->foreign('intervention_id')
-            ->references('id')->on('interventions')->onDelete('restrict');
+            ->references('id')->on('interventions')->onDelete('cascade');
             $table->timestamps();
         });
     }

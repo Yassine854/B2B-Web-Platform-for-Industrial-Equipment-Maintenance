@@ -6,15 +6,12 @@
     >
     <div class="row">
         <div class="d-flex justify-content-between">
-      <a
-        :href="$router.resolve({ name: 'parc_clients' }).href"
-        class="nav-link"
-      >
-        <i
-          id="crudBtn"
-          class="fa-solid fa-circle-arrow-left fa-2xl text-primary"
-        ></i>
-      </a>
+            <a
+  :href="$router.resolve({ name: 'parc_clients' }).href"
+  class="nav-link"
+>
+<i class="fa-regular fa-circle-left fa-2xl"></i>
+</a>
       <button
         type="button"
         class="btn btn-primary text-end"
@@ -454,12 +451,9 @@
                         <div
                           class="d-flex align-items-center justify-content-center h-100"
                         >
-                          <div class="border border-secondary image">
-                            <img
-                              :src="'/storage/img/pompes/' + imageShow"
-                              class="centered-image"
-                            />
-                          </div>
+                        <div class="image shadow">
+                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid" />
+                </div>
                         </div>
                       </div>
                     </div>
@@ -918,5 +912,8 @@ export default {
 /* Add your custom styles here if needed */
 #crudBtn {
   cursor: pointer;
+}
+i.fa-regular.fa-circle-left:hover {
+  color: #36b9cc;
 }
 </style>

@@ -1,10 +1,15 @@
 <template>
+
+
   <!-- Admin Dashboard -->
   <layout v-if="checkLoginAdmin()">
     <div>welcome to your dashboard admin</div>
   </layout>
 
-  <!-- Client Dashboard submitted -->
+
+  <!-- End Admin Dashboard -->
+
+  <!-- Client Dashboard verified -->
   <layout v-else>
     <div v-if="checkClientVerification()">
       <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -29,15 +34,15 @@
                   class="bg-white rounded shadow-sm d-flex flex-column align-items-center justify-content-center " @click="openShowModal(assignment)" style="cursor: pointer;"
                 >
                   <img
-                    :src="'/storage/img/pompes/' + assignment.product.image"
+                    :src="'/storage/img/pompes/' + assignment.product[0].image"
                     alt=""
                     class="img-fluid card-img-top"
                     style="height: 150px; width: 150px"
                   />
                   <div class="p-4">
-                    <h5 class="text-dark">{{ assignment.product.name }}</h5>
+                    <h5 class="text-dark">{{ assignment.product[0].name }}</h5>
                     <p class="small text-muted mb-0">
-                      {{ assignment.product.id }}
+                      Code GSI :<b>{{ assignment.product[0].id }}</b>
                     </p>
                   </div>
                 </div>
@@ -302,12 +307,9 @@
                   <div
                     class="d-flex align-items-center justify-content-center h-100"
                   >
-                    <div class="border border-secondary image">
-                      <img
-                        :src="'/storage/img/pompes/' + imageShow"
-                        class="centered-image"
-                      />
-                    </div>
+                  <div class="image shadow">
+                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid" />
+                </div>
                   </div>
                 </div>
               </div>
@@ -319,6 +321,8 @@
 
     <!----------------------------------------------- End show Assignment------------------------------------------>
   </layout>
+<!-- End client verified -->
+
 </template>
 
 <script setup>
@@ -478,11 +482,11 @@ export default {
 
 openShowModal(assignment) {
   try {
-    this.c_huileShow = assignment.c_huile + " H";
+    this.c_huileShow = assignment.c_huile;
     this.c_filtreShow = assignment.c_filtre;
-    this.c_dehuilShow = assignment.c_dehuil + " H";
-    this.entretienShow = assignment.entretien + " H";
-    this.imageShow = assignment.product.image;
+    this.c_dehuilShow = assignment.c_dehuil;
+    this.entretienShow = assignment.entretien;
+    this.imageShow = assignment.product[0].image;
 
     $("#showAssignment").modal("show");
   } catch (error) {

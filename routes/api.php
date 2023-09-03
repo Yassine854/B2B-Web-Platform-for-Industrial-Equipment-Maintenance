@@ -92,6 +92,9 @@ Route::get('/assignments/search_product', [AssignmentController::class, 'search_
 Route::get('/get_all_interventions',[InterventionController::class,'get_all_interventions']);
 Route::get('/interventions/get_all_assignments',[InterventionController::class,'get_all_assignments']);
 Route::post('/interventions/create', [InterventionController::class, 'createIntervention']);
+Route::put('/interventions/update/{id}', [InterventionController::class, 'updateIntervention']);
+Route::post('/interventions/delete/{id}', [InterventionController::class, 'deleteIntervention']);
+Route::get('/interventions/show/{id}', [InterventionController::class, 'showIntervention']);
 
 
 //Notification

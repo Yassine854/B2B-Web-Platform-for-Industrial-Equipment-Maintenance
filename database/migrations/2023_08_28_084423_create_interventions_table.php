@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->string('description');
             $table->date('date');
+            $table->timestamps();
 
         });
     }

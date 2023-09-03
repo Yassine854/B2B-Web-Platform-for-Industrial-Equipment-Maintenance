@@ -411,56 +411,41 @@
       </div>
       <div class="modal-body">
         <form>
-
-          <div class="row gx-3 mb-3">
+          <div class="row gx-4">
             <div class="col-md-6">
-              <div class="row gx-3 mb-3">
-                <div class="col-md-6">
-                  <label class="small mb-1" for="name" style="float: left">Nom</label>
-                  <input class="form-control" id="name" type="text"  v-model="nameShow" disabled>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="small mb-1" for="type" style="float: left">Type</label>
-                  <input class="form-control" id="type" type="text"  v-model="type_prodShow" disabled>
-                </div>
-
+              <div class="mb-3">
+                <label class="small float-left" for="name">Nom</label>
+                <input class="form-control" id="name" type="text" v-model="nameShow" disabled>
               </div>
-              <div class="row gx-3 mb-3">
-                <div class="col-md-6">
-                  <label class="small mb-1" for="debit" style="float: left">Débit</label>
-                  <input class="form-control" id="debit" type="text"  v-model="debitShow" disabled>
-                </div>
-                <div class="col-md-6">
-                  <label class="small mb-1" for="pression" style="float: left">Pression</label>
-                  <input class="form-control" id="pression" type="text" v-model="pressionShow" disabled>
-                </div>
+              <div class="mb-3">
+                <label class="small float-left" for="type">Type</label>
+                <input class="form-control" id="type" type="text" v-model="type_prodShow" disabled>
               </div>
-              <div class="row gx-3 mb-3">
-                <div class="col-md-6">
-                  <label class="small mb-1" for="annee" style="float: left">Année</label>
-                  <input class="form-control" id="annee" type="text"  v-model="yearShow" disabled>
-                </div>
-                <div class="col-md-6">
-                  <label class="small mb-1" for="time_day" style="float: left">HT/J</label>
-                  <input class="form-control" id="time_day" type="text"  v-model="time_dayShow" disabled>
+              <div class="mb-3">
+                <label class="small float-left" for="debit">Débit</label>
+                <input class="form-control" id="debit" type="text" v-model="debitShow" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="small float-left" for="pression">Pression</label>
+                <input class="form-control" id="pression" type="text" v-model="pressionShow" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="small float-left" for="annee">Année</label>
+                <input class="form-control" id="annee" type="text" v-model="yearShow" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="small float-left" for="time_day">HT/J</label>
+                <input class="form-control" id="time_day" type="text" v-model="time_dayShow" disabled>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-center justify-content-center h-100">
+                <div class="image shadow">
+                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid" />
                 </div>
               </div>
             </div>
-
-
-            <div class="col-md-6">
-  <div class="d-flex align-items-center justify-content-center h-100">
-    <div class="border border-secondary image">
-      <img :src="'/storage/img/pompes/' + imageShow" class="centered-image"/>
-    </div>
-  </div>
-</div>
-
-
-
           </div>
-
         </form>
       </div>
     </div>
@@ -926,8 +911,8 @@ openShowModal(product) {
   }
 
   .image {
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
   overflow: hidden;
   background-color: white;
   display: flex;
@@ -946,8 +931,8 @@ openShowModal(product) {
 
 td img {
   display: block;
-  max-width: 100px;
-  max-height: 100px;
+  max-width: 300px;
+  max-height: 300px;
 }
 
   </style>

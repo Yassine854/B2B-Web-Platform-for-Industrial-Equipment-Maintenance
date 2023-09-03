@@ -13,7 +13,7 @@
                 placeholder="Rechercher"
                 aria-label="Search"
                 aria-describedby="search-addon"
-                v-model="searchType"
+                v-model="searchIntervention"
 
               />
             </div>
@@ -97,33 +97,38 @@
     <!-- Date Input -->
     <div class="col-md-6">
       <label class="small mb-1" for="time_day" style="float: left">Date</label>
-      <input class="form-control" id="time_day" type="date" v-model="date" />
+      <input class="form-control" id="time_day" type="date" v-model="date" required />
     </div>
   </div>
 
 
 
   <!-- Pièces de Rechange -->
+  <label class="small mb-1" style="float: left">Pièces de rechange</label>
+  <br>
   <div class="row gx-3 mb-3" v-for="(piece, index) in pieces" :key="index">
     <div class="col-md-12">
-      <label class="small mb-1" style="float: left">Pièces de rechange</label>
       <div class="input-group">
         <input class="form-control" type="text" placeholder="Désignation" v-model="piece.designation" />
         <input class="form-control" type="text" placeholder="Référence" v-model="piece.reference" />
         <input class="form-control" type="text" placeholder="Quantité" v-model="piece.quantite" />
-        <button class="btn btn-success" @click="removePiece(index)">-</button>
+        <button class="btn btn-success" type="button" @click="removePiece(index)">-</button>
+
       </div>
     </div>
   </div>
 
-  <button class="btn btn-primary" @click="addPiece">+</button>
+  <button class="btn btn-info" type="button" @click="addPiece">
+    <i class="fa-solid fa-plus"></i> Ajouter une pièce
+  </button>
+
 
 
   <!-- Description Textarea -->
   <div class="row gx-3 mb-3">
     <div class="col-md-12">
       <label class="small mb-1" for="description" style="float: left">Description</label>
-      <textarea class="form-control" id="description" rows="4" placeholder="Entrer la description" v-model="description"></textarea>
+      <textarea class="form-control" id="description" rows="4" placeholder="Entrer la description" v-model="description" required></textarea>
     </div>
   </div>
                               <br>
@@ -149,21 +154,20 @@
               </div>
             </div>
 
-            <!----------------------------------------------- End Create type_industrie------------------------------------------>
+            <!----------------------------------------------- End Create Intervention------------------------------------------>
 
-            <!-----------------------------------------------Edit type_industrie------------------------------------------>
+                       <!-----------------------------------------------Edit intervention------------------------------------------>
 
-            <div class="modal fade" id="editTypeIndustry" tabindex="-1">
+            <div class="modal fade" id="editIntervention" tabindex="-1">
               <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <div class="d-flex align-items-center">
-                    <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px;"></i>
-                    <h5 class="modal-title mb-0" id="editTypeIndustryLabel">
-                        Modifier le type d'industrie
+                    <div class="d-flex align-items-center justify-content-center mb-3">
+                    <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
+                    <h5 class="modal-title col-11" id="editInterventionLabel">
+                        Modifier l'intervention
                     </h5>
                     </div>
-
 
                     <button
                       type="button"
@@ -173,48 +177,199 @@
                     ></button>
                   </div>
                   <div class="modal-body">
-                    <form @submit.prevent="updateType(typeEdit)" >
+                    <div>
 
-                        <div class="mb-3">
-                                  <label
-                                    class="small mb-1"
-                                    for="name"
-                                    style="float: left"
-                                    >Nom</label
-                                  >
-                                  <input
-                                    class="form-control"
-                                    id="name"
-                                    rows="4"
-                                    placeholder="Entrer le nom d'industrie"
-                                    v-model="name"
-                                    required
-                                  >
+                    </div>
+                    <form  method="PUT" @submit.prevent="updateIntervention(interventionEdit)">
+
+
+                        <div class="row gx-3 mb-3">
+
+                            <!-- Client Dropdown -->
+                            <div class="col-md-6">
+                            <label class="small mb-1" for="client_select" style="float: left">Clients</label>
+                            <select class="form-select" id="client_select" aria-label="Default select example" v-model="client">
+                                <option value="" selected disabled hidden>Sélectionner un client</option>
+                                <option v-for="client in uniqueClients" :key="client.id" :value="client.id">{{ client.name }}</option>
+                            </select>
                         </div>
 
+
+
+                            <!-- Product Dropdown -->
+                            <div class="col-md-6">
+                            <label class="small mb-1" for="product_select" style="float: left">Pompes</label>
+                                <select class="form-select" id="product_select" aria-label="Default select example" v-model="productEdit">
+                                    <option value="" selected disabled hidden>Sélectionner un produit</option>
+                                    <option v-for="product in productsForSelectedClient" :key="product.product_id" :value="product.product_id">{{ product.product[0].name }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Nature Dropdown -->
+  <div class="row gx-3 mb-3">
+    <div class="col-md-6">
+      <label class="small mb-1" for="type_prod" style="float: left">Nature</label>
+      <select class="form-select" id="type_prod" v-model="nameEdit">
+        <option value="" selected disabled hidden>Sélectionner la nature d'intervention</option>
+        <option value="Entretien">Entretien</option>
+        <option value="Révision">Révision</option>
+        <option value="Réparation">Réparation</option>
+      </select>
+    </div>
+
+    <!-- Date Input -->
+    <div class="col-md-6">
+      <label class="small mb-1" for="time_day" style="float: left">Date</label>
+      <input class="form-control" id="time_day" type="date" v-model="dateEdit"/>
+    </div>
+  </div>
+
+ <!-- Pièces de Rechange -->
+  <label class="small mb-1" style="float: left">Pièces de rechange</label>
+  <br>
+  <div class="row gx-3 mb-3" v-for="(piece, index) in editPieces" :key="index">
+  <div class="col-md-12">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Désignation</span>
+      </div>
+      <input class="form-control" type="text" id="Désignation" placeholder="Désignation" v-model="piece.designation" />
+
+      <div class="input-group-prepend">
+        <span class="input-group-text">Référence</span>
+      </div>
+      <input class="form-control" type="text" id="Référence" placeholder="Référence" v-model="piece.reference" />
+
+      <div class="input-group-prepend">
+        <span class="input-group-text">Quantité</span>
+      </div>
+      <input class="form-control" type="text" id="Quantité" placeholder="Quantité" v-model="piece.quantite" />
+
+      <button class="btn btn-success" type="button" @click="removePieceEdit(index)">-</button>
+    </div>
+  </div>
+</div>
+<button class="btn btn-info" type="button" @click="addPieceEdit">
+    <i class="fa-solid fa-plus"></i> Ajouter une pièce
+  </button>
+
+
+
+
+
+
+  <!-- Description Textarea -->
+  <div class="row gx-3 mb-3">
+    <div class="col-md-12">
+      <label class="small mb-1" for="description" style="float: left">Description</label>
+      <textarea class="form-control" id="description" rows="4" placeholder="Entrer la description" v-model="descriptionEdit"></textarea>
+    </div>
+  </div>
+                              <br>
+
                         <div class="modal-footer">
-                        <button
-                          type="button"
-                          class="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          Annuler
+                            <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                            >
+                            Annuler
+                            </button>
+                            <button
+                            type="submit"
+                            class="btn btn-primary"
+                            >
+                             Modifier
                         </button>
-                        <button
-                          type="submit"
-                          class="btn btn-primary"
-                        >
-                          Modifier</button>
                       </div>
                     </form>
-
-
                   </div>
                 </div>
               </div>
             </div>
 
-            <!----------------------------------------------- End Edit User------------------------------------------>
+            <!----------------------------------------------- End edit intervention------------------------------------------>
+
+
+            <!-----------------------------------------------show intervention------------------------------------------>
+
+            <div class="modal fade" id="showIntervention" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex align-items-center">
+          <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px;"></i>
+          <h5 class="modal-title mb-0" id="showInterventionLabel">
+            Détails de l'intervention
+          </h5>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row gx-4">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="small" for="name" style="float: left;">Société</label>
+                <input class="form-control" id="name" type="text" v-model="clientShow" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="small" for="pompe" style="float: left;">Pompe</label>
+                <input class="form-control" id="pompe" type="text" v-model="productShow" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="small" for="nature" style="float: left;">Nature</label>
+                <input class="form-control" id="nature" type="text" v-model="nameShow" disabled>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="small" for="date" style="float: left;">Date de l'intervention</label>
+                <input class="form-control" id="date" type="text" v-model="dateShow" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="small" for="Description" style="float: left;">Description</label>
+                <textarea class="form-control" rows="4" id="Description" v-model="descriptionShow" disabled></textarea>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <label class="small" for="PiecesDeRechange" style="float: left;">Pièces de rechange</label>
+              <div v-for="(piece, index) in ShowPieces" :key="index" class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">Désignation</span>
+                  <input class="form-control" type="text" v-model="piece.designation" disabled>
+                  <span class="input-group-text">Référence</span>
+                  <input class="form-control" type="text" v-model="piece.reference" disabled>
+                  <span class="input-group-text">Quantité</span>
+                  <input class="form-control" type="text" v-model="piece.quantite" disabled>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <div class="d-flex align-items-center justify-content-center">
+                <div class="image shadow">
+                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+            <!----------------------------------------------- End show Intervention------------------------------------------>
+
 
           </div>
         </div>
@@ -231,33 +386,39 @@
           <thead>
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">Nature</th>
               <th scope="col">Société</th>
               <th scope="col">Pompe</th>
               <th scope="col">CODE GSI</th>
+              <th scope="col">Nature</th>
               <th scope="col">Date d'intervention</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody v-if="interventions.length > 0">
-            <tr v-for="intervention in displayedInterventions" :key="intervention.id">
-              <th scope="row">{{ intervention.id }}</th>
+            <tr v-for="intervention in displayedInterventionsSlice" :key="intervention.id">
+              <th scope="row">#INT{{ intervention.id }}</th>
+              <td>{{ getSocietyName(intervention.client_id) }}</td>
+              <td>{{ getProductName(intervention.product_id) }}</td>
+              <th>#{{ intervention.product_id }}</th>
               <td>{{ intervention.name }}</td>
-              <td>{{ intervention.name }}</td>
-              <td>{{ intervention.name }}</td>
-              <td>{{ intervention.name }}</td>
-              <td>{{ intervention.name }}</td>
-              <td>{{ intervention.name }}</td>
-              <td>{{ intervention.name }}</td>
+              <td>{{ intervention.date }}</td>
+
               <td>
                 <a
+                    id="crudBtn"
+                    class="me-4 text-info"
+                    @click="openShowModal(intervention)"
+                  >
+                    <i class="fa-solid fa-eye"></i>
+                  </a>
+                <a
                   id="crudBtn"
-                  @click="openEditModal(type_ind)"
+                  @click="openEditModal(intervention)"
                   class="me-4 text-warning"
                 >
                   <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a id="crudBtn" @click="deleteType(type_ind.id)" class="text-danger">
+                <a id="crudBtn" @click="deleteIntervention(intervention.id)" class="text-danger">
                   <i class="fa-solid fa-trash"></i>
                 </a>
               </td>
@@ -325,10 +486,10 @@ import layout from "../layouts/layout.vue";
   let interventions = ref([]);
   let assignments= ref([]);
 
-  let searchType = ref([]);
+  let searchIntervention = ref([]);
 
   const currentPage = ref(1);
-  const itemsPerPage = ref(5); // Set the default number of items per page
+  const itemsPerPage = ref(10); // Set the default number of items per page
 
 
   onMounted(async () => {
@@ -356,6 +517,30 @@ import layout from "../layouts/layout.vue";
       console.error(error);
     }
   };
+
+
+  const getSocietyName = (clientId) => {
+  const assignment = assignments.value.find((assignment) => assignment.client_id === clientId);
+  return assignment ? assignment.client[0].society : '';
+};
+
+const getProductName = (productId) => {
+  const assignment = assignments.value.find((assignment) => assignment.product_id === productId);
+  return assignment ? assignment.product[0].name : '';
+};
+
+
+const getProductImage = (productId) => {
+  const assignment = assignments.value.find((assignment) => assignment.product_id === productId);
+  if (assignment && assignment.product.length > 0) {
+    const product = assignment.product[0];
+    // Assuming you have an "image" property in the product object
+    return product.image || ''; // Replace '' with a default image URL if needed
+  } else {
+    return ''; // Handle the case when no assignment is found for the given productId
+  }
+};
+
 
   //Fetch clients
   const uniqueClients = computed(() => {
@@ -394,25 +579,25 @@ const productsForSelectedClient = computed(() => {
 });
 
 
+const displayedInterventions = computed(() => {
+  const search = searchIntervention.value; // Convert search term to lowercase for case-insensitive search
 
-
-  const search = async () => {
-    let response = await axios.get("/api/interventions/search_type?s=" + searchType.value);
-    console.log("response", response);
-    interventions.value = response.data.interventions;
-    interventions.value = response.data.interventions;
-  };
+  return interventions.value.filter((intervention) => {
+    // Convert product_id to a string and check if it contains the search term
+    return intervention.product_id.toString().includes(search);
+  });
+});
 
 
   //Page numbers
-  const displayedInterventions = computed(() => {
+  const displayedInterventionsSlice = computed(() => {
     const startIndex = (currentPage.value - 1) * itemsPerPage.value;
     const endIndex = startIndex + itemsPerPage.value;
-    return interventions.value.slice(startIndex, endIndex);
+    return displayedInterventions.value.slice(startIndex, endIndex);
   });
 
   const totalPages = computed(() =>
-    Math.ceil(interventions.value.length / itemsPerPage.value)
+    Math.ceil(displayedInterventions.value.length / itemsPerPage.value)
   );
 
   const changePage = (page) => {
@@ -442,10 +627,33 @@ const productsForSelectedClient = computed(() => {
         designation: "",
         reference: "",
         quantite: "",
+        date:"",
 
         pieces: [
             { designation: '', reference: '', quantite: '' }
-        ]
+        ],
+
+        //Edit
+        nameEdit: "",
+        clientEdit: "",
+        productEdit: "",
+        descriptionEdit: "",
+        dateEdit:"",
+
+        editPieces: [
+            { designation: '', reference: '', quantite: '' }
+        ],
+
+        //Show
+        nameShow: "",
+        clientShow: "",
+        productShow: "",
+        descriptionShow: "",
+        dateShow:"",
+
+        ShowPieces: [
+            { designation: '', reference: '', quantite: '' }
+        ],
 
       };
     },
@@ -500,10 +708,16 @@ const productsForSelectedClient = computed(() => {
       this.pieces.splice(index, 1);
     },
 
+    addPieceEdit() {
+      this.editPieces.push({ designation: '', reference: '', quantite: '' });
+    },
+    removePieceEdit(index) {
+      this.editPieces.splice(index, 1);
+    },
+
       changePage(page) {
         this.$emit("page-change", page);
       },
-
 
 
       async createIntervention() {
@@ -538,34 +752,47 @@ const productsForSelectedClient = computed(() => {
             icon: "success",
             title: "Intervention ajoutée avec succés !",
           });
-
-          this.$router.push("/interventions");
           this.name = "";
-          this.client_id = "";
-          this.product_id = "";
+          this.client = [];
+          this.product = [];
           this.description = "";
           this.date = "";
           this.pieces = [];
+          $("#addIntervention").modal("hide");
+          this.get_all_interventions();
         } catch (error) {
             console.error('Error creating intervention:', error);
         }
       },
 
 
-      openEditModal(type_ind) {
-        $("#editTypeIndustry").modal("show");
-        this.name = type_ind.name;
-        this.typeEdit=type_ind;
+      openEditModal(intervention) {
+        $("#editIntervention").modal("show");
+        this.interventionEdit=intervention;
+        this.nameEdit = intervention.name;
+        this.client = intervention.client_id;
+        this.productEdit = intervention.product_id;
+        this.descriptionEdit = intervention.description;
+        this.dateEdit = intervention.date;
+        this.editPieces = intervention.pdrs.map((piece) => ({
+    designation: piece.designation,
+    reference: piece.reference,
+    quantite: piece.quantite,
+  }));
+        console.log("intervention:");
+        console.log(this.editPieces);
           },
 
-      updateType(type_ind) {
+    async  updateIntervention(intervention) {
         try {
-          axios.put(`/api/types_industrie/update/${type_ind.id}`, {
-            name: this.name,
-          });
-
-
-
+        await axios.put(`/api/interventions/update/${intervention.id}`,{
+                name: this.nameEdit,
+                client_id: this.client,
+                product_id: this.productEdit,
+                description: this.descriptionEdit,
+                date: this.dateEdit,
+                pieces: this.editPieces,
+        });
           const toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -577,20 +804,25 @@ const productsForSelectedClient = computed(() => {
           });
           toast.fire({
             icon: "success",
-            title: "Element modifié avec succés!",
+            title: "Intervention modifié avec succés!",
           });
 
-          $("#editTypeIndustry").modal("hide");
-          $(".modal-backdrop").hide();
+          $("#editIntervention").modal("hide");
 
-          this.get_all_types();
-          this.typeEdit = {};
+            this.get_all_interventions();
+            this.interventionEdit = {};
+            this.nameEdit = "";
+            this.client = "";
+            this.productEdit = "";
+            this.descriptionEdit = "";
+            this.dateEdit = "";
+            this.editPieces = [];
         } catch (error) {
           console.log(error);
         }
       },
 
-      deleteType(type_id) {
+      deleteIntervention(intervention_id) {
         Swal.fire({
           title: "Êtes-vous sûr(e) ?",
           text: "Vous ne pourrez pas revenir en arrière !",
@@ -603,11 +835,11 @@ const productsForSelectedClient = computed(() => {
         }).then((result) => {
           if (result.isConfirmed) {
               axios
-                .post("/api/types_industrie/delete/" + type_id)
+                .post("/api/interventions/delete/" + intervention_id)
                 .then((response) => {
-                  this.get_all_types();
+                  this.get_all_interventions();
                   console.log(response);
-                  Swal.fire("Supprimé!", "L'élement a été supprimé!", "success");
+                  Swal.fire("Supprimé!", "L'intervention a été supprimé!", "success");
                 })
                 .catch((errors) => {
                   console.log(errors);
@@ -620,6 +852,28 @@ const productsForSelectedClient = computed(() => {
           }
         });
       },
+
+  openShowModal(intervention) {
+  $("#showIntervention").modal("show");
+  try {
+    axios.get(`/api/interventions/show/${intervention.id}`)
+      .then(response => {
+        this.showIntervention = response.data.intervention;
+        this.nameShow=this.showIntervention.name;
+        this.clientShow=this.getSocietyName(this.showIntervention.client_id);
+        this.productShow=this.getProductName(this.showIntervention.product_id);
+        this.dateShow=this.showIntervention.date;
+        this.ShowPieces=this.showIntervention.pdrs;
+        this.descriptionShow=this.showIntervention.description;
+        this.imageShow=this.getProductImage(this.showIntervention.product_id);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  } catch (error) {
+    console.error(error);
+  }
+},
 
     },
   };
