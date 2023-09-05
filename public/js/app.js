@@ -20532,15 +20532,26 @@ var __default__ = {
     openShowModal: function openShowModal(assignment) {
       var _this = this;
       $("#showAssignment").modal("show");
+      var today = new Date();
       try {
         axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/assignments/show/".concat(assignment.id)).then(function (response) {
           _this.assignmentShow = response.data.assignment;
           _this.productShow = _this.assignmentShow.product[0].name;
-          _this.c_huileShow = _this.assignmentShow.c_huile;
-          _this.c_filtreShow = _this.assignmentShow.c_filtre;
-          _this.c_dehuilShow = _this.assignmentShow.c_dehuil;
-          _this.entretienShow = _this.assignmentShow.entretien;
           _this.imageShow = _this.assignmentShow.product[0].image;
+          //updatables
+          var huilDate = _this.assignmentShow.c_huile / _this.assignmentShow.product[0].time_day;
+          var c_huileDate = new Date(today.getTime() + huilDate * 24 * 60 * 60 * 1000);
+          _this.c_huileShow = c_huileDate.toLocaleDateString('fr-FR');
+          var filtreDate = _this.assignmentShow.c_filtre / _this.assignmentShow.product[0].time_day;
+          var c_filtreDate = new Date(today.getTime() + filtreDate * 24 * 60 * 60 * 1000);
+          _this.c_filtreShow = c_filtreDate.toLocaleDateString('fr-FR');
+          var dehuilDate = _this.assignmentShow.c_dehuil / _this.assignmentShow.product[0].time_day;
+          var c_dehuilDate = new Date(today.getTime() + dehuilDate * 24 * 60 * 60 * 1000);
+          _this.c_dehuilShow = c_dehuilDate.toLocaleDateString('fr-FR');
+          var entretienHours = _this.assignmentShow.entretien;
+          var millisecondsInAnHour = 60 * 60 * 1000;
+          var entretienDate = new Date(today.getTime() + entretienHours * millisecondsInAnHour);
+          _this.entretienShow = entretienDate.toLocaleDateString('fr-FR');
         })["catch"](function (error) {
           console.error(error);
         });
@@ -23251,11 +23262,27 @@ var __default__ = {
     },
     openShowModal: function openShowModal(assignment) {
       try {
-        this.c_huileShow = assignment.c_huile;
-        this.c_filtreShow = assignment.c_filtre;
-        this.c_dehuilShow = assignment.c_dehuil;
-        this.entretienShow = assignment.entretien;
         this.imageShow = assignment.product[0].image;
+        var today = new Date();
+        // this.c_huileShow = assignment.c_huile;
+        // this.c_filtreShow = assignment.c_filtre;
+        // this.c_dehuilShow = assignment.c_dehuil;
+        // this.entretienShow = assignment.entretien;
+
+        //updatables
+        var huilDate = assignment.c_huile / assignment.product[0].time_day;
+        var c_huileDate = new Date(today.getTime() + huilDate * 24 * 60 * 60 * 1000);
+        this.c_huileShow = c_huileDate.toLocaleDateString('fr-FR');
+        var filtreDate = assignment.c_filtre / assignment.product[0].time_day;
+        var c_filtreDate = new Date(today.getTime() + filtreDate * 24 * 60 * 60 * 1000);
+        this.c_filtreShow = c_filtreDate.toLocaleDateString('fr-FR');
+        var dehuilDate = assignment.c_dehuil / assignment.product[0].time_day;
+        var c_dehuilDate = new Date(today.getTime() + dehuilDate * 24 * 60 * 60 * 1000);
+        this.c_dehuilShow = c_dehuilDate.toLocaleDateString('fr-FR');
+        var entretienHours = assignment.entretien;
+        var millisecondsInAnHour = 60 * 60 * 1000;
+        var entretienDate = new Date(today.getTime() + entretienHours * millisecondsInAnHour);
+        this.entretienShow = entretienDate.toLocaleDateString('fr-FR');
         $("#showAssignment").modal("show");
       } catch (error) {
         console.error(error);

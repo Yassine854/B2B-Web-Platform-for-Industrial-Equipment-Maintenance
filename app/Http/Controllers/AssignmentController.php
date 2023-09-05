@@ -77,6 +77,16 @@ class AssignmentController extends Controller
     $assignment->c_dehuil = $request->c_dehuil;
     $assignment->entretien = $request->entretien;
 
+    //updatables
+    if($assignment->c_huile)
+        $assignment->updated_c_huile=now();
+    if($assignment->c_filtre)
+        $assignment->updated_c_filtre=now();
+    if($assignment->c_dehuil)
+        $assignment->updated_c_dehuil=now();
+    if($assignment->entretien)
+        $assignment->updated_entretien=now();
+
     $assignment->save();
 
     $assignment->client()->attach($assignment->client_id); // Array of client IDs
@@ -115,7 +125,6 @@ public function updateAssignment(Request $request, $id)
             ], 404);
         }
 
-        $originalCHuile = $assignment->c_huile;
 
         $assignment->client_id = $request->client_id;
         $assignment->product_id = $request->product_id;
@@ -124,10 +133,25 @@ public function updateAssignment(Request $request, $id)
         $assignment->c_dehuil = $request->c_dehuil;
         $assignment->entretien = $request->entretien;
 
+        //updatables
+        $originalCHuile = $assignment->c_huile;
+        $originalCFiltre = $assignment->c_filtre;
+        $originalCDeHuile = $assignment->c_dehuil;
+        $originalCEntretien = $assignment->entretien;
 
         // Check if c_huile was modified
         if ($originalCHuile !== $assignment->c_huile) {
             $assignment->updated_c_huile = now(); // Set the updated_c_huile timestamp
+        }
+
+        if ($originalCFiltre !== $assignment->c_filtre) {
+            $assignment->updated_c_filtre = now(); // Set the updated_c_huile timestamp
+        }
+        if ($originalCDeHuile !== $assignment->c_dehuil) {
+            $assignment->updated_c_dehuil = now(); // Set the updated_c_huile timestamp
+        }
+        if ($originalCEntretien !== $assignment->entretien) {
+            $assignment->updated_entretien = now(); // Set the updated_c_huile timestamp
         }
 
         $assignment->update();

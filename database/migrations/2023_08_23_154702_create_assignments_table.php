@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string('entretien')->nullable();
 
             $table->timestamp('updated_c_huile')->nullable();
+            $table->timestamp('updated_c_filtre')->nullable();
+            $table->timestamp('updated_c_dehuil')->nullable();
+            $table->timestamp('updated_entretien')->nullable();
 
 
             $table->foreign('client_id')
@@ -42,6 +45,9 @@ return new class extends Migration
     {
         Schema::table('assignments', function (Blueprint $table) {
             $table->dropColumn('updated_c_huile');
+            $table->dropColumn('updated_c_filtre');
+            $table->dropColumn('updated_c_dehuil');
+            $table->dropColumn('updated_entretien');
         });
     }
 };

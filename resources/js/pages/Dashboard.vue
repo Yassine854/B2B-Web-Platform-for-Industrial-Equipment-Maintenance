@@ -482,11 +482,30 @@ export default {
 
 openShowModal(assignment) {
   try {
-    this.c_huileShow = assignment.c_huile;
-    this.c_filtreShow = assignment.c_filtre;
-    this.c_dehuilShow = assignment.c_dehuil;
-    this.entretienShow = assignment.entretien;
     this.imageShow = assignment.product[0].image;
+    var today = new Date();
+    // this.c_huileShow = assignment.c_huile;
+    // this.c_filtreShow = assignment.c_filtre;
+    // this.c_dehuilShow = assignment.c_dehuil;
+    // this.entretienShow = assignment.entretien;
+
+    //updatables
+    const huilDate = assignment.c_huile / assignment.product[0].time_day;
+    const c_huileDate = new Date(today.getTime() + (huilDate * 24 * 60 * 60 * 1000));
+    this.c_huileShow = c_huileDate.toLocaleDateString('fr-FR');
+
+    const filtreDate = assignment.c_filtre / assignment.product[0].time_day;
+    const c_filtreDate = new Date(today.getTime() + (filtreDate * 24 * 60 * 60 * 1000));
+    this.c_filtreShow = c_filtreDate.toLocaleDateString('fr-FR');
+
+    const dehuilDate = assignment.c_dehuil / assignment.product[0].time_day;
+    const c_dehuilDate = new Date(today.getTime() + (dehuilDate * 24 * 60 * 60 * 1000));
+    this.c_dehuilShow = c_dehuilDate.toLocaleDateString('fr-FR');
+
+    const entretienHours = assignment.entretien;
+    const millisecondsInAnHour = 60 * 60 * 1000;
+    const entretienDate = new Date(today.getTime() + (entretienHours * millisecondsInAnHour));
+    this.entretienShow = entretienDate.toLocaleDateString('fr-FR');
 
     $("#showAssignment").modal("show");
   } catch (error) {

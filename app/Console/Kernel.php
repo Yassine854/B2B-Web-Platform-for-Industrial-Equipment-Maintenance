@@ -9,7 +9,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-        \App\Console\Commands\UpdateHour::class,
+        \App\Console\Commands\NotifyUsers::class,
     ];
 
     /**
@@ -23,9 +23,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('hour:update')->hourly();
 
-        $schedule->call(function () {
-            DB::table('assignments')->decrement('c_huile');
-        })->everyMinute();
+        $schedule->command('clients:notify')->dailyAt('08:00');
+        $schedule->command('netoyageFiltre:notify')->weeklyOn(1, '8:00');
 
     }
 
