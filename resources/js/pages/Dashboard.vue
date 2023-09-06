@@ -1,11 +1,8 @@
 <template>
-
-
   <!-- Admin Dashboard -->
   <layout v-if="checkLoginAdmin()">
     <div>welcome to your dashboard admin</div>
   </layout>
-
 
   <!-- End Admin Dashboard -->
 
@@ -31,7 +28,9 @@
                 :key="assignment.id"
               >
                 <div
-                  class="bg-white rounded shadow-sm d-flex flex-column align-items-center justify-content-center " @click="openShowModal(assignment)" style="cursor: pointer;"
+                  class="bg-white rounded shadow-sm d-flex flex-column align-items-center justify-content-center"
+                  @click="openShowModal(assignment)"
+                  style="cursor: pointer"
                 >
                   <img
                     :src="'/storage/img/pompes/' + assignment.product[0].image"
@@ -222,107 +221,172 @@
     <!-----------------------------------------------show Assignment------------------------------------------>
 
     <div class="modal fade" id="showAssignment" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <div class="d-flex align-items-center">
-              <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
-              <h5 class="modal-title mb-0" id="showAssignmentLabel">
-                Détails du parc
-              </h5>
-            </div>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="row gx-3 mb-3">
-                <div class="col-md-8">
-
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="debit" style="float: left"
-                        >Changement d'huile</label
-                      >
-                      <input
-                        class="form-control"
-                        id="debit"
-                        type="text"
-                        v-model="c_huileShow"
-                        disabled
-                      />
-                    </div>
-                    <div class="col-md-6">
-                      <label
-                        class="small mb-1"
-                        for="pression"
-                        style="float: left"
-                        >Changement des cartouches de filtres</label
-                      >
-                      <input
-                        class="form-control"
-                        id="pression"
-                        type="text"
-                        v-model="c_filtreShow"
-                        disabled
-                      />
-                    </div>
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="d-flex align-items-center">
+                    <i
+                      class="fa-solid fa-pen fa-xl"
+                      style="margin-right: 10px"
+                    ></i>
+                    <h5 class="modal-title mb-0" id="showAssignmentLabel">
+                      Détails du parc
+                    </h5>
                   </div>
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="annee" style="float: left"
-                        >Changement des déshuileurs</label
-                      >
-                      <input
-                        class="form-control"
-                        id="annee"
-                        type="text"
-                        v-model="c_dehuilShow"
-                        disabled
-                      />
-                    </div>
-                    <div class="col-md-6">
-                      <label
-                        class="small mb-1"
-                        for="time_day"
-                        style="float: left"
-                        >Entretien Génerale</label
-                      >
-                      <input
-                        class="form-control"
-                        id="time_day"
-                        type="text"
-                        v-model="entretienShow"
-                        disabled
-                      />
-                    </div>
-                  </div>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
                 </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label
+                            class="small mb-1"
+                            for="name"
+                            style="float: left"
+                            >Pompe</label
+                          >
+                          <input
+                            class="form-control"
+                            id="name"
+                            type="text"
+                            v-model="productShow"
+                            disabled
+                          />
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label
+                                class="small mb-1"
+                                for="debit"
+                                style="float: left"
+                                >Changement d'huile</label
+                              >
+                              <input
+                                v-if="isDateInPast(c_huileShow)"
+                                class="form-control bg-danger text-white"
+                                id="debit"
+                                type="text"
+                                value="Il faut changer l'huile."
+                                readonly
+                                />
+                              <input v-else
+                                class="form-control"
+                                id="debit"
+                                type="text"
+                                v-model="c_huileShow"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label
+                                class="small mb-1"
+                                for="pression"
+                                style="float: left"
+                                >Changement des cartouches de filtres</label
+                              >
+                              <input
+                                v-if="isDateInPast(c_filtreShow)"
+                                class="form-control bg-danger text-white"
+                                id="debit"
+                                type="text"
+                                value="Il faut changer les cartouches de filtres."
+                                readonly
+                                />
+                              <input v-else
+                                class="form-control"
+                                id="pression"
+                                type="text"
+                                v-model="c_filtreShow"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label
+                                class="small mb-1"
+                                for="annee"
+                                style="float: left"
+                                >Changement des déshuileurs</label
+                              >
+                              <input
+                                v-if="isDateInPast(c_dehuilShow)"
+                                class="form-control bg-danger text-white"
+                                id="debit"
+                                type="text"
+                                value="Il faut changer les déshuilleurs."
+                                readonly
+                                />
+                              <input v-else
+                                class="form-control"
+                                id="annee"
+                                type="text"
+                                v-model="c_dehuilShow"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="mb-3">
+                              <label
+                                class="small mb-1"
+                                for="time_day"
+                                style="float: left"
+                                >Entretien Génerale</label
+                              >
+                              <input
+                                v-if="isDateInPast(c_dehuilShow)"
+                                class="form-control bg-danger text-white"
+                                id="debit"
+                                type="text"
+                                value="Entretien a été dépassé."
+                                readonly
+                                />
+                              <input v-else
+                                class="form-control"
+                                id="time_day"
+                                type="text"
+                                v-model="entretienShow"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-                <div class="col-md-4">
-                  <div
-                    class="d-flex align-items-center justify-content-center h-100"
-                  >
-                  <div class="image shadow">
-                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid" />
-                </div>
-                  </div>
+                      <div class="col-md-4">
+                        <div
+                          class="d-flex align-items-center justify-content-center h-100"
+                        >
+                          <div class="image shadow">
+                            <img
+                              :src="'/storage/img/pompes/' + imageShow"
+                              class="centered-image img-fluid"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
 
     <!----------------------------------------------- End show Assignment------------------------------------------>
   </layout>
-<!-- End client verified -->
-
+  <!-- End client verified -->
 </template>
 
 <script setup>
@@ -394,10 +458,11 @@ export default {
       address: "",
 
       //Show assignment
-      c_huileShow:"",
-      c_filtreShow:"",
-      c_dehuilShow:"",
-      entretienShow:"",
+      c_huileShow: "",
+      c_filtreShow: "",
+      c_dehuilShow: "",
+      entretienShow: "",
+      productShow:"",
     };
   },
   created() {
@@ -480,44 +545,54 @@ export default {
       }
     },
 
-openShowModal(assignment) {
-  try {
-    this.imageShow = assignment.product[0].image;
-    var today = new Date();
-    // this.c_huileShow = assignment.c_huile;
-    // this.c_filtreShow = assignment.c_filtre;
-    // this.c_dehuilShow = assignment.c_dehuil;
-    // this.entretienShow = assignment.entretien;
+    openShowModal(assignment) {
+    this.productShow = "";
+    this.imageShow = "";
+    this.c_huileShow = "";
+    this.c_filtreShow = "";
+    this.c_dehuilShow = "";
+    this.entretienShow = "";
+      try {
+        this.productShow = assignment.product[0].name;
+        this.imageShow = assignment.product[0].image;
+        var today = new Date();
+        // this.c_huileShow = assignment.c_huile;
+        // this.c_filtreShow = assignment.c_filtre;
+        // this.c_dehuilShow = assignment.c_dehuil;
+        // this.entretienShow = assignment.entretien;
 
-    //updatables
-    const huilDate = assignment.c_huile / assignment.product[0].time_day;
-    const c_huileDate = new Date(today.getTime() + (huilDate * 24 * 60 * 60 * 1000));
-    this.c_huileShow = c_huileDate.toLocaleDateString('fr-FR');
+        //updatables
+        if (assignment.c_huile) {
 
-    const filtreDate = assignment.c_filtre / assignment.product[0].time_day;
-    const c_filtreDate = new Date(today.getTime() + (filtreDate * 24 * 60 * 60 * 1000));
-    this.c_filtreShow = c_filtreDate.toLocaleDateString('fr-FR');
+            this.c_huileShow = new Date(assignment.updated_c_huile).toLocaleDateString('fr-FR');
+        }
+        if (assignment.c_filtre) {
+            this.c_filtreShow = new Date(assignment.updated_c_filtre).toLocaleDateString('fr-FR');
+        }
+        if (assignment.c_dehuil) {
+            this.c_dehuilShow = new Date(assignment.updated_c_dehuil).toLocaleDateString('fr-FR');
+        }
+        if (assignment.entretien) {
+            this.entretienShow = new Date(assignment.updated_entretien).toLocaleDateString('fr-FR');
+        }
 
-    const dehuilDate = assignment.c_dehuil / assignment.product[0].time_day;
-    const c_dehuilDate = new Date(today.getTime() + (dehuilDate * 24 * 60 * 60 * 1000));
-    this.c_dehuilShow = c_dehuilDate.toLocaleDateString('fr-FR');
+        $("#showAssignment").modal("show");
+      } catch (error) {
+        console.error(error);
+      }
+    },
 
-    const entretienHours = assignment.entretien;
-    const millisecondsInAnHour = 60 * 60 * 1000;
-    const entretienDate = new Date(today.getTime() + (entretienHours * millisecondsInAnHour));
-    this.entretienShow = entretienDate.toLocaleDateString('fr-FR');
+    isDateInPast(dateString) {
+      // Convert the input date string to a Date object
+      const inputDate = new Date(dateString);
 
-    $("#showAssignment").modal("show");
-  } catch (error) {
-    console.error(error);
-  }
-}
+      // Get the current date
+      const currentDate = new Date();
 
-
-
-},
-
-
+      // Compare the dates
+      return inputDate <= currentDate;
+    },
+  },
 
   props: {
     // country

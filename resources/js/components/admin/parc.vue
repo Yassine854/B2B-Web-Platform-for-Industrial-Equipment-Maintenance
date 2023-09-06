@@ -4,37 +4,35 @@
       class="container shadow p-3"
       style="background-color: white; position: relative"
     >
-    <div class="row">
+      <div class="row">
         <div class="d-flex justify-content-between">
-            <a
-  :href="$router.resolve({ name: 'parc_clients' }).href"
-  class="nav-link"
->
-<i class="fa-regular fa-circle-left fa-2xl"></i>
-</a>
-      <button
-        type="button"
-        class="btn btn-primary text-end"
-        data-bs-toggle="modal"
-        data-bs-target="#addAssignment"
-      >
-        <i class="fa-solid fa-plus"></i>
-      </button>
-    </div>
+          <a
+            :href="$router.resolve({ name: 'parc_clients' }).href"
+            class="nav-link"
+          >
+            <i class="fa-regular fa-circle-left fa-2xl"></i>
+          </a>
+          <button
+            type="button"
+            class="btn btn-primary text-end"
+            data-bs-toggle="modal"
+            data-bs-target="#addAssignment"
+          >
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
 
-  <div class="col-md-4">
-
-    <div class="input-group rounded">
-      <input
-        type="search"
-        class="form-control rounded"
-        placeholder="Rechercher"
-        aria-label="Search"
-        aria-describedby="search-addon"
-        v-model="searchProduct"
-      />
-    </div>
-
+        <div class="col-md-4">
+          <div class="input-group rounded">
+            <input
+              type="search"
+              class="form-control rounded"
+              placeholder="Rechercher"
+              aria-label="Search"
+              aria-describedby="search-addon"
+              v-model="searchProduct"
+            />
+          </div>
 
           <!-----------------------------------------------add assignment------------------------------------------>
 
@@ -335,133 +333,83 @@
           <!-----------------------------------------------show Assignment------------------------------------------>
 
           <div class="modal fade" id="showAssignment" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <div class="d-flex align-items-center">
-                    <i
-                      class="fa-solid fa-pen fa-xl"
-                      style="margin-right: 10px"
-                    ></i>
-                    <h5 class="modal-title mb-0" id="showAssignmentLabel">
-                      Détails du parc
-                    </h5>
-                  </div>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex align-items-center">
+          <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
+          <h5 class="modal-title mb-0" id="showAssignmentLabel">Détails du parc</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label class="small mb-1" for="name">Pompe</label>
+                <div class="input-group">
+                  <input class="form-control" id="name" type="text" v-model="productShow" disabled>
                 </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="row">
-                      <div class="col-md-8">
-                        <div class="mb-3">
-                          <label
-                            class="small mb-1"
-                            for="name"
-                            style="float: left"
-                            >Pompe</label
-                          >
-                          <input
-                            class="form-control"
-                            id="name"
-                            type="text"
-                            v-model="productShow"
-                            disabled
-                          />
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="debit"
-                                style="float: left"
-                                >Changement d'huile</label
-                              >
-                              <input
-                                class="form-control"
-                                id="debit"
-                                type="text"
-                                v-model="c_huileShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="pression"
-                                style="float: left"
-                                >Changement des cartouches de filtres</label
-                              >
-                              <input
-                                class="form-control"
-                                id="pression"
-                                type="text"
-                                v-model="c_filtreShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="annee"
-                                style="float: left"
-                                >Changement des déshuileurs</label
-                              >
-                              <input
-                                class="form-control"
-                                id="annee"
-                                type="text"
-                                v-model="c_dehuilShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="time_day"
-                                style="float: left"
-                                >Entretien Génerale</label
-                              >
-                              <input
-                                class="form-control"
-                                id="time_day"
-                                type="text"
-                                v-model="entretienShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-md-4">
-                        <div
-                          class="d-flex align-items-center justify-content-center h-100"
-                        >
-                        <div class="image shadow">
-                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid" />
-                </div>
-                        </div>
-                      </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="small mb-1" for="debit">Changement d'huile</label>
+                    <div class="input-group">
+                      <input v-if="isDateInPast(c_huileShow)" class="form-control bg-danger text-white" id="debit" type="text" value="Il faut changer l'huile." readonly>
+                      <input v-else class="form-control" id="debit" type="text" v-model="c_huileShow" disabled>
+                      <button class="btn btn-secondary" type="button" @click="changerHuile(assignmentID)">Réinitialiser</button>
                     </div>
-                  </form>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="small mb-1" for="pression">Changement des cartouches de filtres</label>
+                    <div class="input-group">
+                      <input v-if="isDateInPast(c_filtreShow)" class="form-control bg-danger text-white" id="pression" type="text" value="Il faut changer les cartouches de filtres." readonly>
+                      <input v-else class="form-control" id="pression" type="text" v-model="c_filtreShow" disabled>
+                      <button class="btn btn-secondary" type="button"  @click="changerFiltre(assignmentID)">Réinitialiser</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="small mb-1" for="annee">Changement des déshuileurs</label>
+                    <div class="input-group">
+                      <input v-if="isDateInPast(c_dehuilShow)" class="form-control bg-danger text-white" id="annee" type="text" value="Il faut changer les déshuilleurs." readonly>
+                      <input v-else class="form-control" id="annee" type="text" v-model="c_dehuilShow" disabled>
+                      <button class="btn btn-secondary" type="button"  @click="changerDeshuil(assignmentID)">Réinitialiser</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="small mb-1" for="time_day">Entretien Génerale</label>
+                    <div class="input-group">
+                      <input v-if="isDateInPast(c_dehuilShow)" class="form-control bg-danger text-white" id="time_day" type="text" value="Entretien a été dépassé." readonly>
+                      <input v-else class="form-control" id="time_day" type="text" v-model="entretienShow" disabled>
+                      <button class="btn btn-secondary" type="button"  @click="changerEntretien(assignmentID)">Réinitialiser</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="d-flex align-items-center justify-content-center h-100">
+                <div class="image shadow">
+                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid">
                 </div>
               </div>
             </div>
           </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
           <!----------------------------------------------- End show Assignment------------------------------------------>
         </div>
@@ -699,6 +647,7 @@ export default {
       //show
       assignmentShow: {},
       productShow: "",
+      assignmentID:"",
       codeShow: "",
       c_huileShow: "",
       c_filtreShow: "",
@@ -810,34 +759,36 @@ export default {
 
     openShowModal(assignment) {
       $("#showAssignment").modal("show");
+
+  this.productShow = "";
+  this.assignmentID = "";
+  this.imageShow = "";
+  this.c_huileShow = "";
+  this.c_filtreShow = "";
+  this.c_dehuilShow = "";
+  this.entretienShow = "";
       var today = new Date();
       try {
         axios
           .get(`/api/assignments/show/${assignment.id}`)
           .then((response) => {
             this.assignmentShow = response.data.assignment;
+            this.assignmentID=this.assignmentShow.id;
             this.productShow = this.assignmentShow.product[0].name;
             this.imageShow = this.assignmentShow.product[0].image;
             //updatables
-            const huilDate = this.assignmentShow.c_huile / this.assignmentShow.product[0].time_day;
-            const c_huileDate = new Date(today.getTime() + (huilDate * 24 * 60 * 60 * 1000));
-            this.c_huileShow = c_huileDate.toLocaleDateString('fr-FR');
-
-            const filtreDate = this.assignmentShow.c_filtre / this.assignmentShow.product[0].time_day;
-            const c_filtreDate = new Date(today.getTime() + (filtreDate * 24 * 60 * 60 * 1000));
-            this.c_filtreShow = c_filtreDate.toLocaleDateString('fr-FR');
-
-            const dehuilDate = this.assignmentShow.c_dehuil / this.assignmentShow.product[0].time_day;
-            const c_dehuilDate = new Date(today.getTime() + (dehuilDate * 24 * 60 * 60 * 1000));
-            this.c_dehuilShow = c_dehuilDate.toLocaleDateString('fr-FR');
-
-            const entretienHours = this.assignmentShow.entretien;
-            const millisecondsInAnHour = 60 * 60 * 1000;
-            const entretienDate = new Date(today.getTime() + (entretienHours * millisecondsInAnHour));
-            this.entretienShow = entretienDate.toLocaleDateString('fr-FR');
-
-
-
+            if (this.assignmentShow.c_huile) {
+              this.c_huileShow = new Date(this.assignmentShow.updated_c_huile).toLocaleDateString('fr-FR');
+            }
+            if (this.assignmentShow.c_filtre) {
+              this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre).toLocaleDateString('fr-FR');
+            }
+            if (this.assignmentShow.c_dehuil) {
+              this.c_dehuilShow = new Date(this.assignmentShow.updated_c_dehuil).toLocaleDateString('fr-FR');
+            }
+            if (this.assignmentShow.entretien) {
+              this.entretienShow = new Date(this.assignmentShow.updated_entretien).toLocaleDateString('fr-FR');
+            }
           })
           .catch((error) => {
             console.error(error);
@@ -920,6 +871,62 @@ export default {
             });
         }
       });
+    },
+
+   async changerHuile(assignment_id){
+      try {
+        console.log(assignment_id);
+        axios.put(`/api/assignments/updateHuile/${assignment_id}`);
+        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+        this.assignmentShow = response.data.assignment;
+        this.c_huileShow = new Date(this.assignmentShow.updated_c_huile).toLocaleDateString('fr-FR');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async changerFiltre(assignment_id){
+      try {
+        axios.put(`/api/assignments/updateFiltre/${assignment_id}`);
+        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+        this.assignmentShow = response.data.assignment;
+        this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre).toLocaleDateString('fr-FR');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async changerDeshuil(assignment_id){
+      try {
+        axios.put(`/api/assignments/updateDeshuil/${assignment_id}`);
+        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+        this.assignmentShow = response.data.assignment;
+        this.c_dehuilShow = new Date(this.assignmentShow.updated_c_dehuil).toLocaleDateString('fr-FR');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async changerEntretien(assignment_id){
+      try {
+        axios.put(`/api/assignments/updateEntretien/${assignment_id}`);
+        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+        this.assignmentShow = response.data.assignment;
+        this.entretienShow = new Date(this.assignmentShow.updated_entretien).toLocaleDateString('fr-FR');
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    isDateInPast(dateString) {
+      // Convert the input date string to a Date object
+      const inputDate = new Date(dateString);
+
+      // Get the current date
+      const currentDate = new Date();
+
+      // Compare the dates
+      return inputDate <= currentDate;
     },
   },
 };

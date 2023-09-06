@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assignment;
+use Log;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Product;
-use App\Notifications\Notify;
+use App\Models\Assignment;
 use Illuminate\Http\Request;
+use App\Notifications\Notify;
+use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Notification;
-
-
 
 class AssignmentController extends Controller
 {
@@ -77,38 +78,30 @@ class AssignmentController extends Controller
     $assignment->c_dehuil = $request->c_dehuil;
     $assignment->entretien = $request->entretien;
 
+    $product = Product::where('id', $assignment->product_id)->first();
+    $today=Carbon::now();
     //updatables
-    if($assignment->c_huile)
-        $assignment->updated_c_huile=now();
+    if($assignment->c_huile){
+        $huileDaysLeft=(int) $assignment->c_huile / (int) $product->time_day; //result in days
+        $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);
+    }
     if($assignment->c_filtre)
-        $assignment->updated_c_filtre=now();
+        {
+        $filtreDaysLeft=(int) $assignment->c_filtre / (int) $product->time_day; //result in days
+        $assignment->updated_c_filtre = $today->copy()->addDays($filtreDaysLeft);
+        }
     if($assignment->c_dehuil)
-        $assignment->updated_c_dehuil=now();
+        {
+            $DeshuilDaysLeft=(int) $assignment->c_dehuil / (int) $product->time_day; //result in days
+            $assignment->updated_c_dehuil = $today->copy()->addDays($DeshuilDaysLeft);
+        }
     if($assignment->entretien)
-        $assignment->updated_entretien=now();
+    $assignment->updated_entretien = $today->copy()->addHours((int) $assignment->entretien);
 
     $assignment->save();
 
     $assignment->client()->attach($assignment->client_id); // Array of client IDs
     $assignment->product()->attach($assignment->product_id); // Array of product IDs
-
-    // //Client notification
-    // $product = Product::where('id', $assignment->product_id)->first();
-    // $client = User::where('id', $assignment->client_id)->get();
-
-    // $date_huile = intval($assignment->c_huile) / (intval($product->time_day) * 365);
-    // $totalDays_huile = (365/$date_huile);
-
-    // if($date_huile>=1){
-    //     $message="changement de huile dans ".floor($date_huile)." an(s) et " .round(($date_huile-floor($date_huile))*10). " moi(s).";
-    // }
-    // if($date_huile<1)
-    //     $message="changement de huile dans ".round($date_huile*10)." moi(s).";
-    // if($date_huile<0.1)
-    //     $message="changement de huile dans ".round($date_huile/0.0033333)." jour(s).";
-
-    // Notification::send($client,new Notify($message));
-
     return response()->json(['message' => 'Assignment created successfully'], 201);
 }
 
@@ -118,6 +111,8 @@ public function updateAssignment(Request $request, $id)
 {
     try {
         $assignment = Assignment::find($id);
+        $today=Carbon::now();
+        $product = Product::where('id', $assignment->product_id)->first();
 
         if (!$assignment) {
             return response()->json([
@@ -125,6 +120,10 @@ public function updateAssignment(Request $request, $id)
             ], 404);
         }
 
+        $originalCHuile = $assignment->c_huile;
+        $originalCFiltre = $assignment->c_filtre;
+        $originalCDeHuile = $assignment->c_dehuil;
+        $originalCEntretien = $assignment->entretien;
 
         $assignment->client_id = $request->client_id;
         $assignment->product_id = $request->product_id;
@@ -134,25 +133,22 @@ public function updateAssignment(Request $request, $id)
         $assignment->entretien = $request->entretien;
 
         //updatables
-        $originalCHuile = $assignment->c_huile;
-        $originalCFiltre = $assignment->c_filtre;
-        $originalCDeHuile = $assignment->c_dehuil;
-        $originalCEntretien = $assignment->entretien;
 
         // Check if c_huile was modified
         if ($originalCHuile !== $assignment->c_huile) {
-            $assignment->updated_c_huile = now(); // Set the updated_c_huile timestamp
-        }
+            $huileDaysLeft=(int) $assignment->c_huile / (int) $product->time_day; //result in days
+            $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);        }
 
         if ($originalCFiltre !== $assignment->c_filtre) {
-            $assignment->updated_c_filtre = now(); // Set the updated_c_huile timestamp
+            $filtreDaysLeft=(int) $assignment->c_filtre / (int) $product->time_day; //result in days
+            $assignment->updated_c_filtre = $today->copy()->addDays($filtreDaysLeft);
         }
         if ($originalCDeHuile !== $assignment->c_dehuil) {
-            $assignment->updated_c_dehuil = now(); // Set the updated_c_huile timestamp
+            $DeshuilDaysLeft=(int) $assignment->c_dehuil / (int) $product->time_day; //result in days
+            $assignment->updated_c_dehuil = $today->copy()->addDays($DeshuilDaysLeft);
         }
         if ($originalCEntretien !== $assignment->entretien) {
-            $assignment->updated_entretien = now(); // Set the updated_c_huile timestamp
-        }
+            $assignment->updated_entretien = $today->copy()->addHours((int) $assignment->entretien);        }
 
         $assignment->update();
 
@@ -168,6 +164,136 @@ public function updateAssignment(Request $request, $id)
         // Handle exceptions and return an error response
         return response()->json([
             'error' => 'An error occurred while updating the assignment'
+        ], 500);
+    }
+}
+
+
+public function updateHuile($id) {
+    try {
+        $today = Carbon::now();
+        $assignment = Assignment::find($id);
+
+        if (!$assignment) {
+            return response()->json([
+                'error' => 'Assignment not found',
+            ], 404);
+        }
+
+        $product = Product::find($assignment->product_id);
+
+        if (!$product) {
+            return response()->json([
+                'error' => 'Product not found',
+            ], 404);
+        }
+
+        $huileDaysLeft = (int) $assignment->c_huile / (int) $product->time_day; //result in days
+        $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);
+        $assignment->save();
+
+        return response()->json([
+            'message' => 'Assignment updated successfully',
+        ]);
+    } catch (\Exception $e) {
+        // Handle the error and provide an appropriate error message
+        return response()->json([
+            'error' => 'An error occurred while updating the assignment',
+        ], 500);
+    }
+}
+
+
+
+public function updateFiltre($id) {
+    try {
+        $today = Carbon::now();
+        $assignment = Assignment::find($id);
+
+        if (!$assignment) {
+            return response()->json([
+                'error' => 'Assignment not found',
+            ], 404);
+        }
+
+        $product = Product::find($assignment->product_id);
+
+        if (!$product) {
+            return response()->json([
+                'error' => 'Product not found',
+            ], 404);
+        }
+
+        $FiltreDaysLeft = (int) $assignment->c_filtre / (int) $product->time_day; //result in days
+        $assignment->updated_c_filtre = $today->copy()->addDays($FiltreDaysLeft);
+        $assignment->save();
+
+        return response()->json([
+            'message' => 'Assignment updated successfully',
+        ]);
+    } catch (\Exception $e) {
+        // Handle the error and provide an appropriate error message
+        return response()->json([
+            'error' => 'An error occurred while updating the assignment',
+        ], 500);
+    }
+}
+
+public function updateDeshuil($id) {
+    try {
+        $today = Carbon::now();
+        $assignment = Assignment::find($id);
+
+        if (!$assignment) {
+            return response()->json([
+                'error' => 'Assignment not found',
+            ], 404);
+        }
+
+        $product = Product::find($assignment->product_id);
+
+        if (!$product) {
+            return response()->json([
+                'error' => 'Product not found',
+            ], 404);
+        }
+
+        $DehuilDaysLeft = (int) $assignment->c_dehuil / (int) $product->time_day; //result in days
+        $assignment->updated_c_dehuil = $today->copy()->addDays($DehuilDaysLeft);
+        $assignment->save();
+
+        return response()->json([
+            'message' => 'Assignment updated successfully',
+        ]);
+    } catch (\Exception $e) {
+        // Handle the error and provide an appropriate error message
+        return response()->json([
+            'error' => 'An error occurred while updating the assignment',
+        ], 500);
+    }
+}
+
+public function updateEntretien($id) {
+    try {
+        $today = Carbon::now();
+        $assignment = Assignment::find($id);
+
+        if (!$assignment) {
+            return response()->json([
+                'error' => 'Assignment not found',
+            ], 404);
+        }
+
+        $assignment->updated_entretien = $today->copy()->addHours((int) $assignment->entretien);
+        $assignment->save();
+
+        return response()->json([
+            'message' => 'Assignment updated successfully',
+        ]);
+    } catch (\Exception $e) {
+        // Handle the error and provide an appropriate error message
+        return response()->json([
+            'error' => 'An error occurred while updating the assignment',
         ], 500);
     }
 }

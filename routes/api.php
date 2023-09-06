@@ -83,6 +83,11 @@ Route::post('/assignments/delete/{id}', [AssignmentController::class, 'deleteAss
 Route::get('/assignments/search_assignment',[AssignmentController::class,'search_assignment']);
 Route::get('/assignments/search_society',[AssignmentController::class,'search_society']);
 Route::get('/assignments/search_product', [AssignmentController::class, 'search_product']);
+Route::put('/assignments/updateHuile/{id}', [AssignmentController::class, 'updateHuile']);
+Route::put('/assignments/updateFiltre/{id}', [AssignmentController::class, 'updateFiltre']);
+Route::put('/assignments/updateDeshuil/{id}', [AssignmentController::class, 'updateDeshuil']);
+Route::put('/assignments/updateEntretien/{id}', [AssignmentController::class, 'updateEntretien']);
+
 
 
     //Parc
