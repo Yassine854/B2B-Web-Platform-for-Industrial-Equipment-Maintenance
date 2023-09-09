@@ -10,6 +10,7 @@ use App\Models\Intervention;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class InterventionController extends Controller
 {
@@ -68,6 +69,31 @@ public function getProductName($id)
 
     public function createIntervention(Request $request)
     {
+        // Define the validation rules
+        $rules = [
+            'name' => 'required|string',
+            'client_id' => 'required|integer',
+            'product_id' => 'required|integer',
+            'description' => 'nullable|string',
+            'date' => [
+                'required',
+                'date',
+                'after:today', // Ensure the date is strictly greater than today
+            ],
+            'pieces' => 'required|array',
+            'pieces.*.designation' => 'required|string',
+            'pieces.*.reference' => 'required|string',
+            'pieces.*.quantite' => 'required|integer',
+        ];
+
+        // Create a validator instance
+        $validator = Validator::make($request->all(), $rules);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
         // Sample data for the intervention
         $interventionData = [
             'name' => $request->name,
@@ -76,8 +102,8 @@ public function getProductName($id)
             'description' => $request->description,
             'date' => $request->date,
         ];
-        $interventionId = DB::table('interventions')->insertGetId($interventionData);
 
+        $interventionId = DB::table('interventions')->insertGetId($interventionData);
 
         foreach ($request->pieces as $piece) {
             $pieceData = [
@@ -93,8 +119,33 @@ public function getProductName($id)
         return "Intervention created successfully!";
     }
 
+    public function updateIntervention(Request $request, $id)
+    {
+        // Define the validation rules
+        $rules = [
+            'name' => 'required|string',
+            'client_id' => 'required|integer',
+            'product_id' => 'required|integer',
+            'description' => 'nullable|string',
+            'date' => [
+                'required',
+                'date',
+                'after:today', // Ensure the date is strictly greater than today
+            ],
+            'pieces' => 'required|array',
+            'pieces.*.designation' => 'required|string',
+            'pieces.*.reference' => 'required|string',
+            'pieces.*.quantite' => 'required|integer',
+        ];
 
-    public function updateIntervention(Request $request,$id){
+        // Create a validator instance
+        $validator = Validator::make($request->all(), $rules);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
         $interventionData = [
             'name' => $request->name,
             'client_id' => $request->client_id,
@@ -102,6 +153,7 @@ public function getProductName($id)
             'description' => $request->description,
             'date' => $request->date,
         ];
+
         DB::table('interventions')->where('id', $id)->update($interventionData);
 
         DB::table('pdrs')->where('intervention_id', $id)->delete();
@@ -144,5 +196,11 @@ public function getProductName($id)
         ], 200);
     }
 
+    public function getInterventionCount()
+{
+    $interventionCount = Intervention::count();
+
+    return response()->json(['interventionCount' => $interventionCount]);
+}
 
 }

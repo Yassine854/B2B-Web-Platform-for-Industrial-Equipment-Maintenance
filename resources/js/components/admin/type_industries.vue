@@ -64,7 +64,7 @@
                                     class="form-control"
                                     id="name"
                                     rows="4"
-                                    placeholder="Entrer le nom d'industrie"
+                                    placeholder="Entrer le type d'industrie"
                                     v-model="name"
                                     required
                                   >
@@ -127,7 +127,7 @@
                                     class="form-control"
                                     id="name"
                                     rows="4"
-                                    placeholder="Entrer le nom d'industrie"
+                                    placeholder="Entrer le type d'industrie"
                                     v-model="name"
                                     required
                                   >
@@ -163,7 +163,7 @@
 
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center">
-            <i class="fa-solid fa-industry me-2"></i>
+            <i class="fa-solid fa-ticket me-2"></i>
           <h5 class="mb-0">Types d'industrie</h5>
       </div>
 
@@ -395,9 +395,8 @@ import layout from "../layouts/layout.vue";
           // $('#addUserModal').removeClass('show');
 
           $("#addTypeIndustry").modal("hide");
-          $(".modal-backdrop").hide();
 
-          this.$router.push("/types_industrie");
+          this.get_all_types();
           window.location.reload();
         } catch (error) {
           console.log(error);
@@ -434,8 +433,6 @@ import layout from "../layouts/layout.vue";
           });
 
           $("#editTypeIndustry").modal("hide");
-          $(".modal-backdrop").hide();
-
           this.get_all_types();
           this.typeEdit = {};
         } catch (error) {

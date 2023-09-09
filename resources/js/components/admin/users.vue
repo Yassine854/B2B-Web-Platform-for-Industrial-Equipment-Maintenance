@@ -201,7 +201,7 @@
                                     class="small mb-1"
                                     for="inputLastName"
                                     style="float: left"
-                                    >Type industrie</label
+                                    >Type d'industrie</label
                                   >
                                   <select
                                     class="form-select"
@@ -210,6 +210,7 @@
                                     v-model="type_ind"
                                     required
                                   >
+                                  <option value="" disabled selected>Sélectionner le type d'industrie</option>
                                     <option
                                       v-for="industrie in type_industries"
                                       :key="industrie.id"
@@ -267,9 +268,8 @@
                                     v-model="selectedCountry"
                                     @change="fireState()"
                                   >
-                                    <option selected hidden>
-                                      Open this select menu
-                                    </option>
+                                  <option value="" disabled selected>Sélectionner le pays</option>
+
                                     <option
                                       :value="country.id"
                                       v-for="country in countries"
@@ -288,9 +288,8 @@
                                     :disabled="selectedCountry == ''"
                                     v-model="selectedState"
                                   >
-                                    <option hidden selected>
-                                      Open this select menu
-                                    </option>
+                                  <option value="" disabled selected>Sélectionner le gouvernorat</option>
+
                                     <option
                                       :value="state.id"
                                       v-for="state in states"
@@ -570,7 +569,7 @@
                                     class="small mb-1"
                                     for="inputLastName"
                                     style="float: left"
-                                    >Type industrie</label
+                                    >Type d'industrie</label
                                   >
                                   <select
                                     class="form-select"
@@ -806,7 +805,7 @@
                           <div class="row gx-3 mb-3">
                             <!-- Form Group (first name)-->
                             <div class="col-md-6">
-                              <label class="small mb-1" for="inputFirstName"
+                              <label class="small mb-1" for="inputFirstName" style="float: left"
                                 >Société</label
                               >
                               <input
@@ -819,7 +818,7 @@
                             </div>
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
-                              <label class="small mb-1" for="Type_industrie"
+                              <label class="small mb-1" for="Type_industrie" style="float: left"
                                 >Type industrie</label
                               >
                               <input
@@ -835,7 +834,7 @@
                           <div class="row gx-3 mb-3">
                             <!-- Form Group (organization name)-->
                             <div class="col-md-6">
-                              <label class="small mb-1" for="Responsable"
+                              <label class="small mb-1" for="Responsable" style="float: left"
                                 >Responsable</label
                               >
                               <input
@@ -848,7 +847,7 @@
                             </div>
                             <!-- Form Group (location)-->
                             <div class="col-md-6">
-                              <label class="small mb-1" for="N_responsableEdited"
+                              <label class="small mb-1" for="N_responsableEdited" style="float: left"
                                 >Numéro du Responsable</label
                               >
                               <input
@@ -864,7 +863,7 @@
                           <div class="row gx-3 mb-3">
                             <!-- Form Group (organization name)-->
                             <div class="col-md-6">
-                              <label class="small mb-1" for="Pays"
+                              <label class="small mb-1" for="Pays" style="float: left"
                                 >Pays</label
                               >
                               <input
@@ -877,7 +876,7 @@
                             </div>
                             <!-- Form Group (location)-->
                             <div class="col-md-6">
-                              <label class="small mb-1" for="Gouvernorat"
+                              <label class="small mb-1" for="Gouvernorat" style="float: left"
                                 >Gouvernorat</label
                               >
                               <input
@@ -891,7 +890,7 @@
                           </div>
                           <!-- Form Group (username)-->
                           <div class="mb-3">
-                              <label class="small mb-1" for="Adresse"
+                              <label class="small mb-1" for="Adresse" style="float: left"
                                 >Adresse</label
                               >
                               <input
@@ -1067,10 +1066,14 @@ onMounted(async () => {
 });
 
 const getUsers = async () => {
-  let response = await axios.get("/api/get_all_users");
-  users.value = response.data.users;
-  console.log("users are", JSON.stringify(users.value, null, 2));
+    try {
+        let response = await axios.get("/api/get_all_users");
+        users.value = response.data.users;
+  } catch (error) {
+    console.error(error);
+  }
 };
+
 
 const get_all_types = async () => {
   try {
@@ -1266,7 +1269,30 @@ async search() {
         return ele != value;
       });
     },
+
     async createAdmin() {
+        const emailCheckResponse = await this.$axios.post('/api/check-email', {
+            email: this.emailAdmin
+            });
+
+            if (!emailCheckResponse.data.isUnique) {
+                const toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                customClass: {
+                    popup: "colored-toast",
+                },
+                timer: 3000,
+            });
+            toast.fire({
+                icon: "error",
+                title: "L'adresse e-mail est déjà utilisée.",
+            });
+
+            return;
+            }
+    else{
       try {
         await axios.post(`/api/users/create/admin`, {
           name: this.nameAdmin,
@@ -1295,13 +1321,36 @@ async search() {
 
         $("#addUserModal").modal("hide");
 
-        this.$router.push("/users");
+        this.getUsers();
       } catch (error) {
         console.log(error);
       }
+    }
     },
 
     async createClient() {
+        const emailCheckResponse = await this.$axios.post('/api/check-email', {
+            email: this.emailClient
+            });
+
+            if (!emailCheckResponse.data.isUnique) {
+                const toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                customClass: {
+                    popup: "colored-toast",
+                },
+                timer: 3000,
+            });
+            toast.fire({
+                icon: "error",
+                title: "L'adresse e-mail est déjà utilisée.",
+            });
+
+            return;
+            }
+    else{
       try {
         await axios.post(`/api/users/create/client`, {
           name: this.nameClient,
@@ -1341,10 +1390,11 @@ async search() {
         });
         $("#addUserModal").modal("hide");
 
-        this.$router.push("/users");
-      } catch (error) {
+        this.getUsers();
+      }catch (error) {
         console.log(error);
       }
+    }
     },
 
     openEditModal(user) {
@@ -1392,8 +1442,29 @@ async search() {
       this.addressEdited = user.address;
     },
 
-    updateUser(user) {
-      console.log("userID is: " + user.id);
+   async updateUser(user) {
+      const emailCheckResponse = await this.$axios.post('/api/check-email', {
+            email: this.emailEdited
+            });
+
+            if (!emailCheckResponse.data.isUnique && this.emailEdited!=user.email) {
+                const toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                customClass: {
+                    popup: "colored-toast",
+                },
+                timer: 3000,
+            });
+            toast.fire({
+                icon: "error",
+                title: "L'adresse e-mail est déjà utilisée.",
+            });
+
+            return;
+            }
+    else{
       try {
         axios.put(`/api/users/edit/${user.id}`, {
           role: this.selectRole,
@@ -1440,7 +1511,10 @@ async search() {
       } catch (error) {
         console.log(error);
       }
+    }
     },
+
+
     deleteUser(user_id) {
       Swal.fire({
         title: "Êtes-vous sûr(e) ?",

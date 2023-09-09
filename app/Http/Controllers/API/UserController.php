@@ -346,5 +346,14 @@ public function updatePassword(Request $request, $id)
         ]);
     }
 
+    //Admin Dashboard
+
+
+    public function getClientCount()
+{
+    $clientCount = User::where('role', 1)->count();
+
+    return response()->json(['clientCount' => $clientCount]);
+}
 
 }

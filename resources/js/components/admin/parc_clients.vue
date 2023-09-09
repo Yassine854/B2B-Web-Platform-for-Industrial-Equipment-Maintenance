@@ -219,7 +219,7 @@
 
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center">
-            <i class="fa-brands fa-product-hunt me-2"></i>
+            <i class="fa-solid fa-users me-2"></i>
           <h5 class="mb-0">Parc Clients</h5>
           </div>
 
@@ -446,8 +446,6 @@ displayedAssignments() {
             title: "Attribution ajouté avec succés !",
           });
           $("#addProduct").modal("hide");
-          $(".modal-backdrop").hide();
-
           this.$router.push("/parc_clients");
           window.location.reload();
         } catch (error) {

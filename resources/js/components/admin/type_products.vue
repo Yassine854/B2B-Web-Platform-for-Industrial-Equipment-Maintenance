@@ -64,7 +64,7 @@
                                     class="form-control"
                                     id="name"
                                     rows="4"
-                                    placeholder="Entrer le nom d'industrie"
+                                    placeholder="Entrer le type de la pompe"
                                     v-model="name"
                                     required
                                   >
@@ -127,7 +127,7 @@
                                     class="form-control"
                                     id="name"
                                     rows="4"
-                                    placeholder="Entrer le nom du type "
+                                    placeholder="Entrer le type de la pompe"
                                     v-model="name"
                                     required
                                   >
@@ -163,7 +163,7 @@
 
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center">
-            <i class="fa-solid fa-industry me-2"></i>
+            <i class="fa-solid fa-ticket me-2"></i>
           <h5 class="mb-0">Types de produits</h5>
       </div>
 
@@ -196,7 +196,7 @@
             </tr>
           </tbody>
           <tbody v-else>
-            <p>Pas de types de produits</p>
+            <p>Pas de types de pompes</p>
           </tbody>
         </table>
         </div>
@@ -395,10 +395,8 @@ import layout from "../layouts/layout.vue";  import {
           // $('#addUserModal').removeClass('show');
 
           $("#addTypeIndustry").modal("hide");
-          $(".modal-backdrop").hide();
 
-          this.$router.push("/types_product");
-          window.location.reload();
+          this.get_all_types();
         } catch (error) {
           console.log(error);
         }
@@ -431,7 +429,6 @@ import layout from "../layouts/layout.vue";  import {
           });
 
           $("#editTypeProduct").modal("hide");
-          $(".modal-backdrop").hide();
 
           this.get_all_types();
           this.typeEdit = {};

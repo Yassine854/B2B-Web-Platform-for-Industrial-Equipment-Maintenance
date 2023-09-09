@@ -32,10 +32,11 @@ use App\Http\Controllers\InterventionController;
 Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
-
 Route::post('check-email', [UserController::class, 'check_email']);
 
-//USERS
+Route::middleware('auth:sanctum')->group(function () {
+
+// USERS
 Route::get('/get_all_users',[UserController::class,'get_all_users']);
 Route::post('/users/create/admin', [UserController::class, 'createAdmin']);
 Route::post('/users/create/client', [UserController::class, 'createClient']);
@@ -46,8 +47,10 @@ Route::post('/user/verifyOldPassword/{id}', [UserController::class, 'verifyOldPa
 Route::put('/user/updatePassword/{id}', [UserController::class, 'updatePassword']);
 Route::post('/user/delete/{id}', [UserController::class, 'deleteUser']);
 Route::get('/search_user',[UserController::class,'search_user']);
-
 Route::post('/user/verifyEmail/{id}', [UserController::class, 'verifyEmail']);
+Route::get('/get-client-count', [UserController::class, 'getClientCount']);
+
+
 
 //Types_industrie
 Route::get('/get_type_industries',[TypeindustrieController::class,'get_type_industries']);
@@ -92,8 +95,8 @@ Route::put('/assignments/updateEntretien/{id}', [AssignmentController::class, 'u
 
 
 
-    //Parc
-    Route::get('/get_assignments/{id}',[AssignmentController::class,'get_assignments']);
+//Parc
+Route::get('/get_assignments/{id}',[AssignmentController::class,'get_assignments']);
 
 //Interventions
 Route::get('/get_all_interventions',[InterventionController::class,'get_all_interventions']);
@@ -102,13 +105,14 @@ Route::post('/interventions/create', [InterventionController::class, 'createInte
 Route::put('/interventions/update/{id}', [InterventionController::class, 'updateIntervention']);
 Route::post('/interventions/delete/{id}', [InterventionController::class, 'deleteIntervention']);
 Route::get('/interventions/show/{id}', [InterventionController::class, 'showIntervention']);
-
+Route::get('/get-intervention-count', [InterventionController::class, 'getInterventionCount']);
 
 //Notification
 Route::get('/get_all_notifications',[NotificationController::class,'get_all_notifications']);
 Route::post('/notifications/markAsRead/{id}',[NotificationController::class,'markAsRead']);
+Route::get('/get-notification-count', [NotificationController::class, 'getNotificationCount']);
 
-
+});
 // Route::group(['prefix' => 'posts','middleware' => 'auth:sanctum'], function() {
 //     Route::get('/', [PostsController::class,'index']);
 //     Route::post('add', [PostsController::class,'add']);

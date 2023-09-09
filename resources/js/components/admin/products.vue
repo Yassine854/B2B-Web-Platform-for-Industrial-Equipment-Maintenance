@@ -764,9 +764,8 @@
             title: "Pompe ajouté avec succés !",
           });
           $("#addProduct").modal("hide");
-          $(".modal-backdrop").hide();
 
-          this.$router.push("/products");
+          this.get_products();
           window.location.reload();
         } catch (error) {
           console.log(error);
@@ -821,7 +820,6 @@ updateProduct(product) {
       });
 
       $("#editProduct").modal("hide");
-      $(".modal-backdrop").hide();
 
       this.get_products();
     //   this.$router.push("/products");

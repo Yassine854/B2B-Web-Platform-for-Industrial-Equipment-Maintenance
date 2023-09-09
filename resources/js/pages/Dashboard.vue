@@ -1,7 +1,91 @@
 <template>
   <!-- Admin Dashboard -->
   <layout v-if="checkLoginAdmin()">
-    <div>welcome to your dashboard admin</div>
+    <div class="row">
+
+<!-- Earnings (Monthly) Card Example -->
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Clients</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ clientCount }}</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Earnings (Monthly) Card Example -->
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                        Interventions</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ interventionCount }}</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Earnings (Monthly) Card Example -->
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                    </div>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                        </div>
+                        <div class="col">
+                            <div class="progress progress-sm mr-2">
+                                <div class="progress-bar bg-info" role="progressbar"
+                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                    aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pending Requests Card Example -->
+<div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                        Notifications</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ notificationCount }}</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
   </layout>
 
   <!-- End Admin Dashboard -->
@@ -103,6 +187,7 @@
                         v-model="type_ind"
                         required
                       >
+                      <option value="" disabled selected>Sélectionner le type d'industrie</option>
                         <option
                           v-for="industrie in type_industries"
                           :key="industrie.id"
@@ -155,7 +240,8 @@
                         @change="fireState()"
                         required
                       >
-                        <option selected hidden>Open this select menu</option>
+                      <option value="" disabled selected>Sélectionner le pays</option>
+
                         <option
                           :value="country.id"
                           v-for="country in countries"
@@ -175,7 +261,7 @@
                         v-model="selectedState"
                         required
                       >
-                        <option hidden selected>Open this select menu</option>
+                      <option value="" disabled selected>Sélectionner le gouvernorat</option>
                         <option
                           :value="state.id"
                           v-for="state in states"
@@ -456,6 +542,9 @@ export default {
       selectedState: "",
       states: [],
       address: "",
+      clientCount: 0,
+      interventionCount:0,
+      notificationCount:0,
 
       //Show assignment
       c_huileShow: "",
@@ -464,6 +553,11 @@ export default {
       entretienShow: "",
       productShow:"",
     };
+  },
+  mounted(){
+    this.fetchClientCount();
+    this.fetchInterventionCount();
+    this.fetchNotificationCount();
   },
   created() {
     if (window.Laravel.user) {
@@ -592,7 +686,37 @@ export default {
       // Compare the dates
       return inputDate <= currentDate;
     },
+
+    fetchClientCount() {
+      axios.get('/api/get-client-count')
+        .then(response => {
+          this.clientCount = response.data.clientCount;
+        })
+        .catch(error => {
+          console.error('Error fetching client count:', error);
+        });
   },
+
+  fetchInterventionCount() {
+      axios.get('/api/get-intervention-count')
+        .then(response => {
+          this.interventionCount = response.data.interventionCount;
+        })
+        .catch(error => {
+          console.error('Error fetching intervention count:', error);
+        });
+  },
+
+  fetchNotificationCount() {
+      axios.get('/api/get-notification-count')
+        .then(response => {
+          this.notificationCount = response.data.notificationCount;
+        })
+        .catch(error => {
+          console.error('Error fetching notification count:', error);
+        });
+  },
+},
 
   props: {
     // country
