@@ -1,20 +1,23 @@
 <template>
   <layout ref="table">
+    <p></p>
     <div
       class="container shadow p-3"
       style="background-color: white; position: relative"
     >
       <div class="row">
         <div class="col-md-4">
+
           <div class="input-group rounded">
             <input
-              type="search"
+              type="text"
               class="form-control rounded"
               placeholder="Rechercher"
               aria-label="Search"
               aria-describedby="search-addon"
               v-model="searchUser"
               @keyup="search()"
+
             />
           </div>
         </div>
@@ -1043,7 +1046,6 @@ let users = ref([]);
 let type_industries = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = ref(5); // Set the default number of items per page
-let searchUser = ref([]);
 
 let selectRole = ref(1);
 
@@ -1080,12 +1082,6 @@ const get_all_types = async () => {
   }
 };
 
-const search = async () => {
-  let response = await axios.get("/api/search_user?s=" + searchUser.value);
-  console.log("response", response);
-  users.value = response.data.users;
-  users.value = response.data.users;
-};
 
 const startForm = () => {
   if (selectRole.value == 2) {
@@ -1125,6 +1121,7 @@ export default {
   },
   data() {
     return {
+    searchUser:[],
       empty:null,
       countries: listCountries,
       selectedCountry: "",
@@ -1171,11 +1168,19 @@ export default {
       this.id = window.Laravel.user.id;
     }
   },
+  mounted() {
+  if (this.societyValue) {
+    this.searchUser = this.societyValue;
+    this.search();
+  }
+},
+
   props: {
     users: Array,
     itemsPerPage: Number,
     currentPage: Number,
     totalPages: Number,
+    societyValue:String,
   },
   computed: {
     displayedPages() {
@@ -1213,7 +1218,24 @@ export default {
       return pages;
     },
   },
+  watch: {
+  societyValue(newSocietyValue) {
+    if (newSocietyValue) {
+     this.searchUser = newSocietyValue;
+      this.search();
+    }
+  },
+},
+
   methods: {
+
+async search() {
+  let response = await axios.get("/api/search_user?s=" + this.searchUser);
+  console.log("response", response);
+  this.users = response.data.users;
+},
+
+
     selectedCountryName(countryId) {
       const country = this.countries.find(country => country.id === countryId);
       return country ? country.name : '';

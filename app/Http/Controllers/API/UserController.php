@@ -44,23 +44,36 @@ class UserController extends Controller
 
 
     //Notifications
-    $currentDate = Carbon::now();
-    $assignments = Assignment::all();
-    foreach ($assignments as $assignment) {
-        $product = Product::where('id', $assignment->product_id)->first();
-         $huile=intval($assignment->c_huile)/(intval($product->time_day)*365);
-         if ($huile<0.1)
-            if(round($huile/0.0033333)==10){
-                $client = User::where('id', $assignment->client_id)->first();
-                $message="il vous reste 10 jours";
-                Notification::send($client,new Notify($message));
-            }
-    }
+    // $currentDate = Carbon::now();
+    // $assignments = Assignment::all();
+    // foreach ($assignments as $assignment) {
+    //     $product = Product::where('id', $assignment->product_id)->first();
+    //      $huile=intval($assignment->c_huile)/(intval($product->time_day)*365);
+    //      if ($huile<0.1)
+    //         if(round($huile/0.0033333)==10){
+    //             $client = User::where('id', $assignment->client_id)->first();
+    //             $message="il vous reste 10 jours";
+    //             Notification::send($client,new Notify($message,"info"));
+    //         }
+    // }
 
 
         return response()->json($response);
     }
 
+    public function check_email(Request $request)
+    {
+        $email = $request->input('email');
+
+        // Check if the email already exists in the database
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            return response()->json(['isUnique' => false]);
+        } else {
+            return response()->json(['isUnique' => true]);
+        }
+    }
 
     public function register(Request $request)
     {
@@ -250,7 +263,7 @@ class UserController extends Controller
 
         $admins = User::where('role', 2)->get();
         $message="La société ".$user->society." a demandé la vérification de son adresse E-mail.";
-        Notification::send($admins,new Notify($message));
+        Notification::send($admins,new Notify($message,"info",$user->society));
         return response()->json([
             'message'=>'User updated successfully'
         ]);

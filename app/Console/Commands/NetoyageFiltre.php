@@ -36,7 +36,7 @@ class NetoyageFiltre extends Command
             $client = User::where('id', $assignment->client_id)->where('role', 1)->first();
             if ($client) {
                 $message = "N'oubliez pas de nettoyer le filtre de la pompe ".$assignment->product[0]->name; // Change this to your desired message.
-                Notification::send($client, new ClientNotification($message));
+                Notification::send($client, new ClientNotification($message,"warning"));
             }
         }
     }

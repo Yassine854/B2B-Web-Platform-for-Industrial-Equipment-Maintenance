@@ -8,7 +8,7 @@
           <div class="col-md-4">
             <div class="input-group rounded">
               <input
-                type="search"
+                type="text"
                 class="form-control rounded"
                 placeholder="Rechercher"
                 aria-label="Search"
@@ -883,9 +883,9 @@ openShowModal(product) {
               axios
                 .post("/api/products/delete/" + prod_id)
                 .then((response) => {
+                Swal.fire("Supprimé!", "Pompe a été supprimé!", "success");
                   this.get_products();
                   console.log(response);
-                  Swal.fire("Supprimé!", "Pompe a été supprimé!", "success");
                 })
                 .catch((errors) => {
                   console.log(errors);

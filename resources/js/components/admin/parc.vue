@@ -25,7 +25,7 @@
         <div class="col-md-4">
           <div class="input-group rounded">
             <input
-              type="search"
+              type="text"
               class="form-control rounded"
               placeholder="Rechercher"
               aria-label="Search"
@@ -389,7 +389,7 @@
                   <div class="mb-3">
                     <label class="small mb-1" for="time_day">Entretien Génerale</label>
                     <div class="input-group">
-                      <input v-if="isDateInPast(c_dehuilShow)" class="form-control bg-danger text-white" id="time_day" type="text" value="Entretien a été dépassé." readonly>
+                      <input v-if="isDateInPast(entretienShow)" class="form-control bg-danger text-white" id="time_day" type="text" value="Entretien a été dépassé." readonly>
                       <input v-else class="form-control" id="time_day" type="text" v-model="entretienShow" disabled>
                       <button class="btn btn-secondary" type="button"  @click="changerEntretien(assignmentID)">Réinitialiser</button>
                     </div>

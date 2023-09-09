@@ -33,6 +33,8 @@ Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
+Route::post('check-email', [UserController::class, 'check_email']);
+
 //USERS
 Route::get('/get_all_users',[UserController::class,'get_all_users']);
 Route::post('/users/create/admin', [UserController::class, 'createAdmin']);
@@ -104,6 +106,7 @@ Route::get('/interventions/show/{id}', [InterventionController::class, 'showInte
 
 //Notification
 Route::get('/get_all_notifications',[NotificationController::class,'get_all_notifications']);
+Route::post('/notifications/markAsRead/{id}',[NotificationController::class,'markAsRead']);
 
 
 // Route::group(['prefix' => 'posts','middleware' => 'auth:sanctum'], function() {

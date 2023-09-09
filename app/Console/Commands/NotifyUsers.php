@@ -42,7 +42,7 @@ class NotifyUsers extends Command
                     $diffInDays = $now->diffInDays(Carbon::parse($assignment->updated_c_huile));
                     if ($diffInDays == 10){
                         $message = "Changement de huile pour la pompe ".$assignment->product[0]->name." dans 10 jours !"; // Change this to your desired message.
-                        Notification::send($client, new ClientNotification($message));
+                        Notification::send($client, new ClientNotification($message,"warning"));
                     }
                  }
                  //Changement de filtre
@@ -51,7 +51,7 @@ class NotifyUsers extends Command
                     $diffInDays = $now->diffInDays(Carbon::parse($assignment->updated_c_filtre));
                     if ($diffInDays == 10){
                         $message = "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->name." dans 10 jours !"; // Change this to your desired message.
-                        Notification::send($client, new ClientNotification($message));
+                        Notification::send($client, new ClientNotification($message,"warning"));
                     }
                  }
                  //Changement des déshuilleurs
@@ -60,7 +60,7 @@ class NotifyUsers extends Command
                     $diffInDays = $now->diffInDays(Carbon::parse($assignment->updated_c_dehuil));
                     if ($diffInDays == 10){
                         $message = "Changement des déshuileurs pour la pompe ".$assignment->product[0]->name." dans 10 jours !"; // Change this to your desired message.
-                        Notification::send($client, new ClientNotification($message));
+                        Notification::send($client, new ClientNotification($message,"warning"));
                     }
                  }
                  //Entretien génerale
@@ -69,7 +69,7 @@ class NotifyUsers extends Command
                     $diffInDays = $now->diffInDays(Carbon::parse($assignment->updated_entretien));
                     if ($diffInDays == 10){
                         $message = "Entretien génerale pour la pompe ".$assignment->product[0]->name." dans 10 jours !"; // Change this to your desired message.
-                        Notification::send($client, new ClientNotification($message));
+                        Notification::send($client, new ClientNotification($message,"warning"));
                     }
                  }
             }

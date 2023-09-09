@@ -8,7 +8,7 @@
           <div class="col-md-4">
             <div class="input-group rounded">
               <input
-                type="search"
+                type="text"
                 class="form-control rounded"
                 placeholder="Rechercher"
                 aria-label="Search"

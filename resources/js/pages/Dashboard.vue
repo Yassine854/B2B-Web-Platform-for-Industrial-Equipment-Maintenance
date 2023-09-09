@@ -346,7 +346,7 @@
                                 >Entretien Génerale</label
                               >
                               <input
-                                v-if="isDateInPast(c_dehuilShow)"
+                                v-if="isDateInPast(entretienShow)"
                                 class="form-control bg-danger text-white"
                                 id="debit"
                                 type="text"

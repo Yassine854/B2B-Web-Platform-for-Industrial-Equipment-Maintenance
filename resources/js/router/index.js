@@ -5,7 +5,7 @@ import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
-import Profile from '../components/client/Profile'
+import Profile from '../pages/Profile'
 
 
 import Users from '../components/admin/users'
@@ -15,7 +15,7 @@ import products from '../components/admin/products'
 import parc_clients from '../components/admin/parc_clients'
 import parc from '../components/admin/parc'
 import interventions from '../components/admin/interventions'
-
+import PageNotFound from '../pages/PageNotFound';
 
 
 // import Dashboard from '../components/layouts/navvv.vue';
@@ -47,10 +47,13 @@ export const routes = [
     },
     //users
     {
-        name: 'users',
-        path: '/users',
-        component: Users
+    name: 'users',
+    path: '/users/:societyValue?',
+    component: Users,
+    props:true,
+    props: route => ({ societyValue: route.params.societyValue }), // Pass 'societyValue' parameter as a prop
     },
+
     //Profile
     {
         name: 'profile',
@@ -93,6 +96,12 @@ export const routes = [
         path: '/interventions',
         component: interventions
     },
+    {
+        name: 'notFound',
+        path: '/:pathMatch(.*)*',
+        component: PageNotFound,
+      },
+
 
 ];
 

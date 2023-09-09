@@ -367,15 +367,15 @@
 </template>
 
 <script setup>
-import layout from "../layouts/layout.vue";
+import layout from "../components/layouts/layout";
 import { onMounted, ref, computed } from "vue";
 import {
   checkLoginStatus,
   checkLoginAdmin,
   checkClientVerification,
-} from "../../auth";
-import listCountries from "../../../json/country.json";
-import listStates from "../../../json/state.json";
+} from "../auth";
+import listCountries from "../../json/country.json";
+import listStates from "../../json/state.json";
 import Swal from "sweetalert2";
 
 let type_industries = ref([]);
@@ -502,54 +502,93 @@ export default {
     },
 
     async updatePassword(user) {
-      try {
-        // Perform an API call to check if the old password is correct
-        const response = await this.$axios.post(
-          `/api/user/verifyOldPassword/${user.id}`,
-          {
-            old_password: this.old_password,
-          }
-        );
-
-        if (response.data.success) {
-          console.log("Old password is correct.");
-          if (this.new_password == this.password_confirmation) {
-            try {
-              axios.put(`/api/user/updatePassword/${user.id}`, {
-                new_password: this.new_password,
-              });
-              this.old_password = "";
-              this.new_password = "";
-              this.password_confirmation = "";
-
-              // this.$router.push("/profile");
-              // window.location.reload();
-
-              const toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                customClass: {
-                  popup: "colored-toast",
-                },
-                timer: 3000,
-              });
-              toast.fire({
-                icon: "success",
-                title: " Mot de passe mis à jour avec succès!",
-              });
-            } catch (error) {
-              console.log("rewrite password");
-            }
-          }
-        } else {
-          console.log("NO  Old password is incorrect.");
-        }
-      } catch (error) {
-        console.error(error);
-        this.error = "Mot de passe incorrect.";
+  try {
+    // Perform an API call to check if the old password is correct
+    const response = await this.$axios.post(
+      `/api/user/verifyOldPassword/${user.id}`,
+      {
+        old_password: this.old_password,
       }
-    },
+    );
+
+    if (response.data.success) {
+      console.log("Old password is correct.");
+      if (this.new_password == this.password_confirmation) {
+        try {
+          await axios.put(`/api/user/updatePassword/${user.id}`, {
+            new_password: this.new_password,
+          });
+          this.old_password = "";
+          this.new_password = "";
+          this.password_confirmation = "";
+
+          // this.$router.push("/profile");
+          // window.location.reload();
+
+          const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            customClass: {
+              popup: "colored-toast",
+            },
+            timer: 3000,
+          });
+          toast.fire({
+            icon: "success",
+            title: "Mot de passe mis à jour avec succès!",
+          });
+        } catch (error) {
+          console.error("Error updating password:", error);
+          const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            customClass: {
+              popup: "colored-toast",
+            },
+            timer: 3000,
+          });
+          toast.fire({
+            icon: "error",
+            title: "Une erreur s'est produite lors de la mise à jour du mot de passe.",
+          });
+        }
+      } else {
+        const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            customClass: {
+              popup: "colored-toast",
+            },
+            timer: 3000,
+          });
+          toast.fire({
+            icon: "error",
+            title: "Une erreur s'est produite lors de la mise à jour du mot de passe.",
+          });
+      }
+    } else {
+      console.log("Old password is incorrect.");
+    }
+  } catch (error) {
+    const toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            customClass: {
+              popup: "colored-toast",
+            },
+            timer: 3000,
+          });
+          toast.fire({
+            icon: "error",
+            title: "Ancien mot de passe ne correspond pas!",
+          });
+  }
+},
+
   },
 };
 </script>
