@@ -69,13 +69,11 @@
                         <select
                           class="form-select"
                           id="client_select"
-                          aria-label="Default select example"
                           v-model="client"
                           required
                         >
-                          <option value="" selected disabled hidden>
-                            Sélectionner un client
-                          </option>
+                        <option value="" disabled>Sélectionner un client</option>
+
                           <option
                             v-for="client in uniqueClients"
                             :key="client.id"
@@ -101,9 +99,8 @@
                           v-model="product"
                           required
                         >
-                          <option value="" selected disabled hidden>
-                            Sélectionner un produit
-                          </option>
+                        <option value="" disabled>Sélectionner une pompe</option>
+
                           <option
                             v-for="product in productsForSelectedClient"
                             :key="product.product_id"
@@ -183,7 +180,8 @@
                           />
                           <input
                             class="form-control"
-                            type="text"
+                            type="number"
+                            min="0"
                             placeholder="Quantité"
                             v-model="piece.quantite"
                           />
@@ -283,15 +281,13 @@
                       <div class="col-md-6">
                         <label
                           class="small mb-1"
-                          for="client_select"
+                          for="client"
                           style="float: left"
                           >Clients</label
                         >
                         <select
                           class="form-select"
-                          id="client_select"
-                          aria-label="Default select example"
-                          v-model="client"
+                          id="client" v-model="client"
                         >
                           <option value="" selected disabled hidden>
                             Sélectionner un client
@@ -413,7 +409,8 @@
                           </div>
                           <input
                             class="form-control"
-                            type="text"
+                            type="number"
+                            min="0"
                             id="Quantité"
                             placeholder="Quantité"
                             v-model="piece.quantite"
@@ -731,6 +728,7 @@
   </layout>
 </template>
 
+
     <script setup>
 import layout from "../layouts/layout.vue";
 import {
@@ -745,7 +743,6 @@ import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import axios from "axios";
 window.Swal = Swal;
-
 let interventions = ref([]);
 let assignments = ref([]);
 

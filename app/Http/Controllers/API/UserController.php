@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\Assignment;
+use Illuminate\Http\Request;
 use App\Models\Typeindustrie;
 use App\Notifications\Notify;
-use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Notification;
-use App\Models\Assignment;
-use Illuminate\Support\Carbon;
-use App\Models\Product;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -76,30 +77,39 @@ class UserController extends Controller
     }
 
     public function register(Request $request)
-    {
-        try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->save();
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => [
+            'required',
+            'email',
+            'max:255',
+            Rule::unique('users'),
+        ],
+        'password' => 'required|string|min:8',
+    ]);
 
-            $success = true;
-            $message = "User register successfully";
+    try {
+        $user = new User();
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->password = Hash::make($validatedData['password']);
+        $user->save();
 
-        } catch (\Illuminate\Database\QueryException $ex) {
-            $success = false;
-            $message = $ex->getMessage();
-        }
-
-        $response = [
-            'success' => $success,
-            'message' => $message
-        ];
-
-        return response()->json($response);
-
+        $success = true;
+        $message = "User registered successfully";
+    } catch (\Illuminate\Database\QueryException $ex) {
+        $success = false;
+        $message = $ex->getMessage();
     }
+
+    $response = [
+        'success' => $success,
+        'message' => $message
+    ];
+
+    return response()->json($response);
+}
 
 
     public function logout()
@@ -133,9 +143,9 @@ class UserController extends Controller
     public function createAdmin(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required',
-            'password'=>'required',
+            'name'=>'required|string',
+            'email'=>'required|email',
+            'password'=>'required|string|min:8',
         ]);
 
 
@@ -156,9 +166,9 @@ class UserController extends Controller
     public function createClient(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required',
-            'password'=>'required',
+            'name'=>'required|string',
+            'email'=>'required|email',
+            'password'=>'required|string|min:8',
             'society'=>'required',
             'type_ind'=>'required',
             'responsable'=>'required',
@@ -192,8 +202,8 @@ class UserController extends Controller
     public function updateUser(Request $request, $id)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required',
+            'name'=>'required|string',
+            'email'=>'required|email',
         ]);
         $user=User::find($id);
         $user->role = $request->role;
@@ -335,7 +345,7 @@ public function verifyOldPassword( Request $request,$id)
 public function updatePassword(Request $request, $id)
     {
         $request->validate([
-            'new_password'=>'required',
+            'new_password'=>'required|string|min:8',
         ]);
 
         $user=User::find($id);

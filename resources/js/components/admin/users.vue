@@ -131,7 +131,7 @@
                                 <input
                                   class="form-control"
                                   id="inputLocation"
-                                  type="text"
+                                  type="email"
                                   placeholder="Entrer l'adresse E-mail"
                                   v-model="emailClient"
                                   required
@@ -149,7 +149,7 @@
                                   id="inputLocation"
                                   type="password"
                                   placeholder="Entrer le mot de passe"
-                                  v-model="passwordClient"
+                                  v-model="passwordClient" minlength="8"
                                   required
                                 />
                               </div>
@@ -267,6 +267,7 @@
                                     class="form-select"
                                     v-model="selectedCountry"
                                     @change="fireState()"
+                                    required
                                   >
                                   <option value="" disabled selected>Sélectionner le pays</option>
 
@@ -287,6 +288,7 @@
                                     class="form-select"
                                     :disabled="selectedCountry == ''"
                                     v-model="selectedState"
+                                    required
                                   >
                                   <option value="" disabled selected>Sélectionner le gouvernorat</option>
 
@@ -370,7 +372,7 @@
                       <input
                         class="form-control"
                         id="inputLocation"
-                        type="text"
+                        type="email"
                         placeholder="Entrer l'adresse E-mail"
                         v-model="emailAdmin"
                         required
@@ -388,7 +390,7 @@
                         id="inputLocation"
                         type="password"
                         placeholder="Entrer le mot de passe"
-                        v-model="passwordAdmin"
+                        v-model="passwordAdmin" minlength="8"
                         required
                       />
                     </div>
@@ -515,7 +517,7 @@
                                 <input
                                   class="form-control"
                                   id="inputLocation"
-                                  type="text"
+                                  type="email"
                                   placeholder="Entrer l'adresse E-mail"
                                   v-model="emailEdited"
                                   required
@@ -578,6 +580,8 @@
                                     v-model="type_indEdited"
                                     required
                                   >
+                                  <option :value="''" disabled selected>Sélectionner le type d'industrie</option>
+
                                     <option
                                       v-for="industrie in type_industries"
                                       :key="industrie.id"
@@ -637,9 +641,8 @@
                                     v-model="selectedCountry"
                                     @change="fireState()"
                                   >
-                                    <option selected hidden>
-                                      Open this select menu
-                                    </option>
+                                  <option value="" disabled selected>Sélectionner le pays</option>
+
                                     <option
                                       :value="country.id"
                                       v-for="country in countries"
@@ -741,7 +744,7 @@
                       <input
                         class="form-control"
                         id="inputLocation"
-                        type="text"
+                        type="email"
                         placeholder="Entrer l'adresse E-mail"
                         v-model="emailEdited"
                         required
@@ -1581,7 +1584,6 @@ async search() {
         }
         axios.get("/notifications/" + user_id)
              .then((response) => {
-              this.getUsers();
               console.log("notification sent !");
             })
             .catch((errors) => {

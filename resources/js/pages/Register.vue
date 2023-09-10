@@ -93,10 +93,17 @@
     if (this.email.trim() === "") {
       this.errors.push("Veuillez remplir le champ d'adresse e-mail.");
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.email)) {
+      this.errors.push("L'adresse e-mail n'est pas valide.");
+    }
     if (this.password.trim() === "") {
       this.errors.push("Veuillez remplir le champ du mot de passe.");
     }
-    if (this.password.length > 0) {
+    if (this.password.trim().length < 8) {
+    this.errors.push("Le mot de passe doit contenir au moins 8 caractères.");
+  }
+    if (this.password.length >=8) {
       this.$axios.get('/sanctum/csrf-cookie').then(async (response) => {
         try {
           // Check email uniqueness

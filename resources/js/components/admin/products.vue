@@ -87,6 +87,8 @@
                                     v-model="type_prod"
                                     required
                                   >
+                                  <option :value="''" disabled selected>Sélectionner le type de la pompe</option>
+
                                         <option
                                         v-for="types in type_products"
                                         :key="types.id"

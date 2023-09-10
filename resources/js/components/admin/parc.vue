@@ -72,6 +72,7 @@
                           v-model="product"
                           required
                         >
+                        <option value="" disabled selected>Sélectionner une pompe</option>
                           <option
                             v-for="product in products"
                             :key="product.id"
@@ -332,84 +333,174 @@
 
           <!-----------------------------------------------show Assignment------------------------------------------>
 
-          <div class="modal fade" id="showAssignment" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="d-flex align-items-center">
-          <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
-          <h5 class="modal-title mb-0" id="showAssignmentLabel">Détails du parc</h5>
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="row">
-            <div class="col-md-8">
-              <div class="mb-3">
-                <label class="small mb-1" for="name">Pompe</label>
-                <div class="input-group">
-                  <input class="form-control" id="name" type="text" v-model="productShow" disabled>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="small mb-1" for="debit">Changement d'huile</label>
-                    <div class="input-group">
-                      <input v-if="isDateInPast(c_huileShow)" class="form-control bg-danger text-white" id="debit" type="text" value="Il faut changer l'huile." readonly>
-                      <input v-else class="form-control" id="debit" type="text" v-model="c_huileShow" disabled>
-                      <button class="btn btn-secondary" type="button" @click="changerHuile(assignmentID)">Réinitialiser</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="small mb-1" for="pression">Changement des cartouches de filtres</label>
-                    <div class="input-group">
-                      <input v-if="isDateInPast(c_filtreShow)" class="form-control bg-danger text-white" id="pression" type="text" value="Il faut changer les cartouches de filtres." readonly>
-                      <input v-else class="form-control" id="pression" type="text" v-model="c_filtreShow" disabled>
-                      <button class="btn btn-secondary" type="button"  @click="changerFiltre(assignmentID)">Réinitialiser</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="small mb-1" for="annee">Changement des déshuileurs</label>
-                    <div class="input-group">
-                      <input v-if="isDateInPast(c_dehuilShow)" class="form-control bg-danger text-white" id="annee" type="text" value="Il faut changer les déshuilleurs." readonly>
-                      <input v-else class="form-control" id="annee" type="text" v-model="c_dehuilShow" disabled>
-                      <button class="btn btn-secondary" type="button"  @click="changerDeshuil(assignmentID)">Réinitialiser</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="small mb-1" for="time_day">Entretien Génerale</label>
-                    <div class="input-group">
-                      <input v-if="isDateInPast(entretienShow)" class="form-control bg-danger text-white" id="time_day" type="text" value="Entretien a été dépassé." readonly>
-                      <input v-else class="form-control" id="time_day" type="text" v-model="entretienShow" disabled>
-                      <button class="btn btn-secondary" type="button"  @click="changerEntretien(assignmentID)">Réinitialiser</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
+    <div class="modal fade" id="showAssignment" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex align-items-center">
+              <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
+              <h5 class="modal-title mb-0" id="showAssignmentLabel">
+                Détails du parc
+              </h5>
             </div>
-            <div class="col-md-4">
-              <div class="d-flex align-items-center justify-content-center h-100">
-                <div class="image shadow">
-                  <img :src="'/storage/img/pompes/' + imageShow" class="centered-image img-fluid">
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
-        </form>
+          <div class="modal-body">
+            <form>
+              <div class="row">
+                <div class="col-md-8">
+                  <!-- Pump Information -->
+                  <div class="mb-3">
+                    <label class="small mb-1" for="name">Pompe</label>
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        id="name"
+                        type="text"
+                        v-model="productShow"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <!-- Maintenance Sections -->
+                  <div class="row">
+                    <div class="col-md-6" v-if="c_huileShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="c_huileShow"
+                          >Changement d'huile</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(c_huileShow)"
+                            class="form-control bg-danger text-white"
+                            id="debit"
+                            type="text"
+                            value="Il faut changer l'huile."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="c_huileShow"
+                            type="text"
+                            :value="formatDateToFrench(c_huileShow)"
+                            disabled
+                          />
+                          <button class="btn btn-secondary" type="button" @click="changerHuile(assignmentID)">Réinitialiser</button>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6" v-if="c_filtreShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="c_filtreShow"
+                          >Changement des cartouches de filtres</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(c_filtreShow)"
+                            class="form-control bg-danger text-white"
+                            id="pression"
+                            type="text"
+                            value="Il faut changer les cartouches de filtres."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="c_filtreShow"
+                            type="text"
+                            :value="formatDateToFrench(c_filtreShow)"
+                            disabled
+                          />
+                          <button class="btn btn-secondary" type="button" @click="changerFiltre(assignmentID)">Réinitialiser</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6" v-if="c_dehuilShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="c_dehuilShow"
+                          >Changement des déshuileurs</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(c_dehuilShow)"
+                            class="form-control bg-danger text-white"
+                            id="annee"
+                            type="text"
+                            value="Il faut changer les déshuileurs."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="c_dehuilShow"
+                            type="text"
+                            :value="formatDateToFrench(c_dehuilShow)"
+                            disabled
+                          />
+                          <button class="btn btn-secondary" type="button" @click="changerDeshuil(assignmentID)">Réinitialiser</button>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6" v-if="entretienShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="entretienShow"
+                          >Entretien Génerale</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(entretienShow)"
+                            class="form-control bg-danger text-white"
+                            id="time_day"
+                            type="text"
+                            value="Entretien a été dépassé."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="entretienShow"
+                            type="text"
+                            :value="formatDateToFrench(entretienShow)"
+                            disabled
+                          />
+                          <button class="btn btn-secondary" type="button" @click="changerEntretien(assignmentID)">Réinitialiser</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <!-- Pump Image -->
+                  <div
+                    class="d-flex align-items-center justify-content-center h-100"
+                  >
+                    <div class="image shadow">
+                      <img
+                        :src="'/storage/img/pompes/' + imageShow"
+                        class="centered-image img-fluid"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
           <!----------------------------------------------- End show Assignment------------------------------------------>
         </div>
@@ -775,17 +866,17 @@ export default {
             this.productShow = this.assignmentShow.product[0].name;
             this.imageShow = this.assignmentShow.product[0].image;
             //updatables
-            if (this.assignmentShow.c_huile) {
-              this.c_huileShow = new Date(this.assignmentShow.updated_c_huile).toLocaleDateString('fr-FR');
+            if (assignment.c_huile) {
+            this.c_huileShow = new Date(assignment.updated_c_huile);
             }
-            if (this.assignmentShow.c_filtre) {
-              this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre).toLocaleDateString('fr-FR');
+            if (assignment.c_filtre) {
+            this.c_filtreShow = new Date(assignment.updated_c_filtre);
             }
-            if (this.assignmentShow.c_dehuil) {
-              this.c_dehuilShow = new Date(this.assignmentShow.updated_c_dehuil).toLocaleDateString('fr-FR');
+            if (assignment.c_dehuil) {
+            this.c_dehuilShow = new Date(assignment.updated_c_dehuil);
             }
-            if (this.assignmentShow.entretien) {
-              this.entretienShow = new Date(this.assignmentShow.updated_entretien).toLocaleDateString('fr-FR');
+            if (assignment.entretien) {
+            this.entretienShow = new Date(assignment.updated_entretien);
             }
           })
           .catch((error) => {
@@ -877,7 +968,8 @@ export default {
         axios.put(`/api/assignments/updateHuile/${assignment_id}`);
         const response = await axios.get(`/api/assignments/show/${assignment_id}`);
         this.assignmentShow = response.data.assignment;
-        this.c_huileShow = new Date(this.assignmentShow.updated_c_huile).toLocaleDateString('fr-FR');
+        this.c_huileShow = new Date(this.assignmentShow.updated_c_huile);
+        this.get_assignments();
       } catch (error) {
         console.log(error);
       }
@@ -888,7 +980,8 @@ export default {
         axios.put(`/api/assignments/updateFiltre/${assignment_id}`);
         const response = await axios.get(`/api/assignments/show/${assignment_id}`);
         this.assignmentShow = response.data.assignment;
-        this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre).toLocaleDateString('fr-FR');
+        this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre);
+        this.get_assignments();
       } catch (error) {
         console.log(error);
       }
@@ -899,7 +992,8 @@ export default {
         axios.put(`/api/assignments/updateDeshuil/${assignment_id}`);
         const response = await axios.get(`/api/assignments/show/${assignment_id}`);
         this.assignmentShow = response.data.assignment;
-        this.c_dehuilShow = new Date(this.assignmentShow.updated_c_dehuil).toLocaleDateString('fr-FR');
+        this.c_dehuilShow = new Date(this.assignmentShow.updated_c_dehuil);
+        this.get_assignments();
       } catch (error) {
         console.log(error);
       }
@@ -910,10 +1004,19 @@ export default {
         axios.put(`/api/assignments/updateEntretien/${assignment_id}`);
         const response = await axios.get(`/api/assignments/show/${assignment_id}`);
         this.assignmentShow = response.data.assignment;
-        this.entretienShow = new Date(this.assignmentShow.updated_entretien).toLocaleDateString('fr-FR');
+        this.entretienShow = new Date(this.assignmentShow.updated_entretien);
+        this.get_assignments();
       } catch (error) {
         console.log(error);
       }
+    },
+
+    formatDateToFrench(date) {
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+
+      return `${day}/${month}/${year}`;
     },
 
     isDateInPast(dateString) {

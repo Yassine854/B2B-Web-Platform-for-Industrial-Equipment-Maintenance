@@ -2,90 +2,114 @@
   <!-- Admin Dashboard -->
   <layout v-if="checkLoginAdmin()">
     <div class="row">
-
-<!-- Earnings (Monthly) Card Example -->
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-        <div class="card-body">
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
             <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                        Clients</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ clientCount }}</div>
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                >
+                  Clients
                 </div>
-                <div class="col-auto">
-                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ clientCount }}
                 </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
 
-<!-- Earnings (Monthly) Card Example -->
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-success shadow h-100 py-2">
-        <div class="card-body">
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
             <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                        Interventions</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ interventionCount }}</div>
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                >
+                  Interventions
                 </div>
-                <div class="col-auto">
-                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ interventionCount }}
                 </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
 
-<!-- Earnings (Monthly) Card Example -->
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-info shadow h-100 py-2">
-        <div class="card-body">
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="card-body">
             <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-info text-uppercase mb-1"
+                >
+                  Tasks
+                </div>
+                <div class="row no-gutters align-items-center">
+                  <div class="col-auto">
+                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                      50%
                     </div>
-                    <div class="row no-gutters align-items-center">
-                        <div class="col-auto">
-                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                        </div>
-                        <div class="col">
-                            <div class="progress progress-sm mr-2">
-                                <div class="progress-bar bg-info" role="progressbar"
-                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                    aria-valuemax="100"></div>
-                            </div>
-                        </div>
+                  </div>
+                  <div class="col">
+                    <div class="progress progress-sm mr-2">
+                      <div
+                        class="progress-bar bg-info"
+                        role="progressbar"
+                        style="width: 50%"
+                        aria-valuenow="50"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
                     </div>
+                  </div>
                 </div>
-                <div class="col-auto">
-                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
 
-<!-- Pending Requests Card Example -->
-<div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-warning shadow h-100 py-2">
-        <div class="card-body">
+      <!-- Pending Requests Card Example -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+          <div class="card-body">
             <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                        Notifications</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ notificationCount }}</div>
+              <div class="col mr-2">
+                <div
+                  class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                >
+                  Notifications
                 </div>
-                <div class="col-auto">
-                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{ notificationCount }}
                 </div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-comments fa-2x text-gray-300"></i>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</div>
   </layout>
 
   <!-- End Admin Dashboard -->
@@ -183,11 +207,12 @@
                       <select
                         class="form-select"
                         id="inputLastName"
-                        aria-label="Default select example"
                         v-model="type_ind"
                         required
                       >
-                      <option value="" disabled selected>Sélectionner le type d'industrie</option>
+                        <option value="" disabled selected>
+                          Sélectionner le type d'industrie
+                        </option>
                         <option
                           v-for="industrie in type_industries"
                           :key="industrie.id"
@@ -240,7 +265,9 @@
                         @change="fireState()"
                         required
                       >
-                      <option value="" disabled selected>Sélectionner le pays</option>
+                        <option value="" disabled selected>
+                          Sélectionner le pays
+                        </option>
 
                         <option
                           :value="country.id"
@@ -261,7 +288,9 @@
                         v-model="selectedState"
                         required
                       >
-                      <option value="" disabled selected>Sélectionner le gouvernorat</option>
+                        <option value="" disabled selected>
+                          Sélectionner le gouvernorat
+                        </option>
                         <option
                           :value="state.id"
                           v-for="state in states"
@@ -307,168 +336,164 @@
     <!-----------------------------------------------show Assignment------------------------------------------>
 
     <div class="modal fade" id="showAssignment" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <div class="d-flex align-items-center">
-                    <i
-                      class="fa-solid fa-pen fa-xl"
-                      style="margin-right: 10px"
-                    ></i>
-                    <h5 class="modal-title mb-0" id="showAssignmentLabel">
-                      Détails du parc
-                    </h5>
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="d-flex align-items-center">
+              <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
+              <h5 class="modal-title mb-0" id="showAssignmentLabel">
+                Détails du parc
+              </h5>
+            </div>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row">
+                <div class="col-md-8">
+                  <!-- Pump Information -->
+                  <div class="mb-3">
+                    <label class="small mb-1" for="name">Pompe</label>
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        id="name"
+                        type="text"
+                        v-model="productShow"
+                        disabled
+                      />
+                    </div>
                   </div>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="row">
-                      <div class="col-md-8">
-                        <div class="mb-3">
-                          <label
-                            class="small mb-1"
-                            for="name"
-                            style="float: left"
-                            >Pompe</label
-                          >
+                  <!-- Maintenance Sections -->
+                  <div class="row">
+                    <div class="col-md-6" v-if="c_huileShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="c_huileShow"
+                          >Changement d'huile</label
+                        >
+                        <div class="input-group">
                           <input
-                            class="form-control"
-                            id="name"
+                            v-if="isDateInPast(c_huileShow)"
+                            class="form-control bg-danger text-white"
+                            id="debit"
                             type="text"
-                            v-model="productShow"
+                            value="Il faut changer l'huile."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="c_huileShow"
+                            type="text"
+                            :value="formatDateToFrench(c_huileShow)"
                             disabled
                           />
                         </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="debit"
-                                style="float: left"
-                                >Changement d'huile</label
-                              >
-                              <input
-                                v-if="isDateInPast(c_huileShow)"
-                                class="form-control bg-danger text-white"
-                                id="debit"
-                                type="text"
-                                value="Il faut changer l'huile."
-                                readonly
-                                />
-                              <input v-else
-                                class="form-control"
-                                id="debit"
-                                type="text"
-                                v-model="c_huileShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="pression"
-                                style="float: left"
-                                >Changement des cartouches de filtres</label
-                              >
-                              <input
-                                v-if="isDateInPast(c_filtreShow)"
-                                class="form-control bg-danger text-white"
-                                id="debit"
-                                type="text"
-                                value="Il faut changer les cartouches de filtres."
-                                readonly
-                                />
-                              <input v-else
-                                class="form-control"
-                                id="pression"
-                                type="text"
-                                v-model="c_filtreShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="annee"
-                                style="float: left"
-                                >Changement des déshuileurs</label
-                              >
-                              <input
-                                v-if="isDateInPast(c_dehuilShow)"
-                                class="form-control bg-danger text-white"
-                                id="debit"
-                                type="text"
-                                value="Il faut changer les déshuilleurs."
-                                readonly
-                                />
-                              <input v-else
-                                class="form-control"
-                                id="annee"
-                                type="text"
-                                v-model="c_dehuilShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="mb-3">
-                              <label
-                                class="small mb-1"
-                                for="time_day"
-                                style="float: left"
-                                >Entretien Génerale</label
-                              >
-                              <input
-                                v-if="isDateInPast(entretienShow)"
-                                class="form-control bg-danger text-white"
-                                id="debit"
-                                type="text"
-                                value="Entretien a été dépassé."
-                                readonly
-                                />
-                              <input v-else
-                                class="form-control"
-                                id="time_day"
-                                type="text"
-                                v-model="entretienShow"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                        </div>
                       </div>
-
-                      <div class="col-md-4">
-                        <div
-                          class="d-flex align-items-center justify-content-center h-100"
+                    </div>
+                    <div class="col-md-6" v-if="c_filtreShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="c_filtreShow"
+                          >Changement des cartouches de filtres</label
                         >
-                          <div class="image shadow">
-                            <img
-                              :src="'/storage/img/pompes/' + imageShow"
-                              class="centered-image img-fluid"
-                            />
-                          </div>
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(c_filtreShow)"
+                            class="form-control bg-danger text-white"
+                            id="pression"
+                            type="text"
+                            value="Il faut changer les cartouches de filtres."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="c_filtreShow"
+                            type="text"
+                            :value="formatDateToFrench(c_filtreShow)"
+                            disabled
+                          />
                         </div>
                       </div>
                     </div>
-                  </form>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6" v-if="c_dehuilShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="c_dehuilShow"
+                          >Changement des déshuileurs</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(c_dehuilShow)"
+                            class="form-control bg-danger text-white"
+                            id="annee"
+                            type="text"
+                            value="Il faut changer les déshuileurs."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="c_dehuilShow"
+                            type="text"
+                            :value="formatDateToFrench(c_dehuilShow)"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6" v-if="entretienShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="entretienShow"
+                          >Entretien Génerale</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(entretienShow)"
+                            class="form-control bg-danger text-white"
+                            id="time_day"
+                            type="text"
+                            value="Entretien a été dépassé."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="entretienShow"
+                            type="text"
+                            :value="formatDateToFrench(entretienShow)"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <!-- Pump Image -->
+                  <div
+                    class="d-flex align-items-center justify-content-center h-100"
+                  >
+                    <div class="image shadow">
+                      <img
+                        :src="'/storage/img/pompes/' + imageShow"
+                        class="centered-image img-fluid"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
+        </div>
+      </div>
+    </div>
 
     <!----------------------------------------------- End show Assignment------------------------------------------>
   </layout>
@@ -543,18 +568,18 @@ export default {
       states: [],
       address: "",
       clientCount: 0,
-      interventionCount:0,
-      notificationCount:0,
+      interventionCount: 0,
+      notificationCount: 0,
 
       //Show assignment
       c_huileShow: "",
       c_filtreShow: "",
       c_dehuilShow: "",
       entretienShow: "",
-      productShow:"",
+      productShow: "",
     };
   },
-  mounted(){
+  mounted() {
     this.fetchClientCount();
     this.fetchInterventionCount();
     this.fetchNotificationCount();
@@ -640,12 +665,12 @@ export default {
     },
 
     openShowModal(assignment) {
-    this.productShow = "";
-    this.imageShow = "";
-    this.c_huileShow = "";
-    this.c_filtreShow = "";
-    this.c_dehuilShow = "";
-    this.entretienShow = "";
+      this.productShow = "";
+      this.imageShow = "";
+      this.c_huileShow = "";
+      this.c_filtreShow = "";
+      this.c_dehuilShow = "";
+      this.entretienShow = "";
       try {
         this.productShow = assignment.product[0].name;
         this.imageShow = assignment.product[0].image;
@@ -657,23 +682,29 @@ export default {
 
         //updatables
         if (assignment.c_huile) {
-
-            this.c_huileShow = new Date(assignment.updated_c_huile).toLocaleDateString('fr-FR');
+          this.c_huileShow = new Date(assignment.updated_c_huile);
         }
         if (assignment.c_filtre) {
-            this.c_filtreShow = new Date(assignment.updated_c_filtre).toLocaleDateString('fr-FR');
+          this.c_filtreShow = new Date(assignment.updated_c_filtre);
         }
         if (assignment.c_dehuil) {
-            this.c_dehuilShow = new Date(assignment.updated_c_dehuil).toLocaleDateString('fr-FR');
+          this.c_dehuilShow = new Date(assignment.updated_c_dehuil);
         }
         if (assignment.entretien) {
-            this.entretienShow = new Date(assignment.updated_entretien).toLocaleDateString('fr-FR');
+          this.entretienShow = new Date(assignment.updated_entretien);
         }
 
         $("#showAssignment").modal("show");
       } catch (error) {
         console.error(error);
       }
+    },
+    formatDateToFrench(date) {
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear();
+
+      return `${day}/${month}/${year}`;
     },
 
     isDateInPast(dateString) {
@@ -688,35 +719,38 @@ export default {
     },
 
     fetchClientCount() {
-      axios.get('/api/get-client-count')
-        .then(response => {
+      axios
+        .get("/api/get-client-count")
+        .then((response) => {
           this.clientCount = response.data.clientCount;
         })
-        .catch(error => {
-          console.error('Error fetching client count:', error);
+        .catch((error) => {
+          console.error("Error fetching client count:", error);
         });
-  },
+    },
 
-  fetchInterventionCount() {
-      axios.get('/api/get-intervention-count')
-        .then(response => {
+    fetchInterventionCount() {
+      axios
+        .get("/api/get-intervention-count")
+        .then((response) => {
           this.interventionCount = response.data.interventionCount;
         })
-        .catch(error => {
-          console.error('Error fetching intervention count:', error);
+        .catch((error) => {
+          console.error("Error fetching intervention count:", error);
         });
-  },
+    },
 
-  fetchNotificationCount() {
-      axios.get('/api/get-notification-count')
-        .then(response => {
+    fetchNotificationCount() {
+      axios
+        .get("/api/get-notification-count")
+        .then((response) => {
           this.notificationCount = response.data.notificationCount;
         })
-        .catch(error => {
-          console.error('Error fetching notification count:', error);
+        .catch((error) => {
+          console.error("Error fetching notification count:", error);
         });
+    },
   },
-},
 
   props: {
     // country
