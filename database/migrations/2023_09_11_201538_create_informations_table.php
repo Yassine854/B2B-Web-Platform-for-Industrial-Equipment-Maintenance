@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pdrs', function (Blueprint $table) {
-            $table->id()->start_from(0001);
-            $table->string('designation');
-            $table->string('reference');
-            $table->string('quantite');
-            $table->unsignedBigInteger('intervention_id')->nullable();
-            $table->unsignedBigInteger('diagnostic_id')->nullable();
-            $table->foreign('intervention_id')
-            ->references('id')->on('interventions')->onDelete('cascade');
+        Schema::create('informations', function (Blueprint $table) {
+            $table->id();
+            $table->string('def');
+            $table->string('description')->nullable();
+            $table->string('image')->nullable();
+            $table->unsignedBigInteger('diagnostic_id');
             $table->foreign('diagnostic_id')
             ->references('id')->on('diagnostics')->onDelete('cascade');
             $table->timestamps();
@@ -35,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pdrs');
+        Schema::dropIfExists('informations');
     }
 };

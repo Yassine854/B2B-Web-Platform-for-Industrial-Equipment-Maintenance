@@ -127,36 +127,38 @@
         </div>
 
         <div class="card-body">
-          <div class="px-lg-5">
-            <div class="row">
-              <!-- v-for loop to iterate over assignments -->
-              <div
-                class="col-xl-3 col-lg-4 col-md-6 mb-4"
-                v-for="assignment in ClientAssignments"
-                :key="assignment.id"
-              >
-                <div
-                  class="bg-white rounded shadow-sm d-flex flex-column align-items-center justify-content-center"
-                  @click="openShowModal(assignment)"
-                  style="cursor: pointer"
-                >
-                  <img
-                    :src="'/storage/img/pompes/' + assignment.product[0].image"
-                    alt=""
-                    class="img-fluid card-img-top"
-                    style="height: 150px; width: 150px"
-                  />
-                  <div class="p-4">
-                    <h5 class="text-dark">{{ assignment.product[0].name }}</h5>
-                    <p class="small text-muted mb-0">
-                      Code GSI :<b>{{ assignment.product[0].id }}</b>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+  <div class="px-lg-5">
+    <div class="row">
+      <!-- v-for loop to iterate over assignments -->
+      <div
+        class="col-xl-3 col-lg-4 col-md-6 mb-4"
+        v-for="assignment in ClientAssignments"
+        :key="assignment.id"
+      >
+        <div
+          class="bg-white rounded shadow-sm d-flex flex-column align-items-center justify-content-center"
+          @click="openShowModal(assignment)"
+          style="cursor: pointer"
+        >
+          <img
+            :src="'/storage/img/pompes/' + assignment.product[0].image"
+            alt=""
+            class="img-fluid card-img-top"
+            style="height: 150px; width: 150px"
+          />
+          <div class="p-4">
+            <!-- Use the text-truncate class to handle long product names -->
+            <h5 class="text-dark text-truncate">{{ assignment.product[0].name }}</h5>
+            <p class="small text-muted mb-0">
+              Code GSI :<b>{{ assignment.product[0].id }}</b>
+            </p>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
       </div>
     </div>
 

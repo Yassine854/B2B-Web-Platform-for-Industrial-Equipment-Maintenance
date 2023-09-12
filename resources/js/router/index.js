@@ -1,22 +1,26 @@
 
 import {createWebHistory, createRouter} from "vue-router";
 
+
 import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile'
 
-
+//Admin
 import Users from '../components/admin/users'
 import types_industrie from '../components/admin/type_industries'
 import types_product from '../components/admin/type_products'
 import products from '../components/admin/products'
 import parc_clients from '../components/admin/parc_clients'
 import parc from '../components/admin/parc'
+import diagnostics from '../components/admin/diagnostics'
 import interventions from '../components/admin/interventions'
-import PageNotFound from '../pages/PageNotFound';
+import PageNotFound from '../pages/PageNotFound'
 
+//Client
+import client_interventions from '../components/client/intervention'
 
 // import Dashboard from '../components/layouts/navvv.vue';
 // import Posts from '../components/Posts';
@@ -92,9 +96,19 @@ export const routes = [
         props: true
     },
     {
+        name: 'diagnostics',
+        path: '/diagnostics',
+        component: diagnostics
+    },
+    {
         name: 'interventions',
         path: '/interventions',
         component: interventions
+    },
+    {
+        name: 'client_interventions',
+        path: '/client_interventions',
+        component: client_interventions
     },
     {
         name: 'notFound',

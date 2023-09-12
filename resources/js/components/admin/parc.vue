@@ -528,13 +528,13 @@
                 v-for="(assignment, index) in displayedAssignmentsSlice"
                 :key="index"
               >
-                <th v-if="assignment.product[0].id">
+                <th>
                   #{{ assignment.product[0].id }}
                 </th>
-                <td v-if="assignment.product[0].name">
+                <td>
                   {{ assignment.product[0].name }}
                 </td>
-                <td v-if="assignment.product[0].image">
+                <td>
                   <img
                     :src="'/storage/img/pompes/' + assignment.product[0].image"
                     width="100"
@@ -617,12 +617,13 @@ import {
   checkClientNotVerified,
 } from "../../auth";
 import { onMounted, ref, computed, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter,useRoute } from "vue-router";
 import Swal from "sweetalert2";
 import axios from "axios";
 window.Swal = Swal;
 
-const route = useRoute();
+const router = useRouter();
+const route =useRoute();
 const assignmentId = route.params.id;
 let currentPage = ref(1);
 let itemsPerPage = ref(5);
@@ -649,7 +650,8 @@ const get_assignments = async () => {
 
     console.log(assignmentsValue.value);
   } catch (error) {
-    route.push("/parc_clients");
+    console.log("error here");
+    router.push({ path: '/parc_clients' })
   }
 };
 
@@ -664,16 +666,19 @@ const get_all_products = async () => {
 };
 
 const displayedAssignments = computed(() => {
-  // Filter assignments based on the search input
+  // Convert the search input to lowercase for case-insensitive search if it's a string
+  const searchProductLower = typeof searchProduct.value === 'string' ? searchProduct.value.toLowerCase() : '';
+
   return assignmentsValue.value.filter((assignment) => {
-    const productName = assignment.product[0]?.name || "";
-    const productId = assignment.product[0]?.id || "";
-    return (
-      productName.includes(searchProduct.value) ||
-      productId.toString().includes(searchProduct.value)
-    );
+    const productName = (assignment.product[0]?.name || "").toLowerCase();
+    const productId = (assignment.product[0]?.id || "").toString().toLowerCase();
+
+    // Perform case-insensitive search for both name and ID
+    return productName.includes(searchProductLower) || productId.includes(searchProductLower);
   });
 });
+
+
 
 //Page numbers
 const displayedAssignmentsSlice = computed(() => {
@@ -951,6 +956,7 @@ export default {
                   "success"
                 );
               } else {
+                console.log("heyyy");
                 this.$router.push("/parc_clients");
               }
               console.log(response);

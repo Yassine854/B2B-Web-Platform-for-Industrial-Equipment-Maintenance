@@ -11,6 +11,7 @@ use App\Http\Controllers\TypeproductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\DiagnosticController;
 use App\Http\Controllers\InterventionController;
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,14 @@ Route::put('/assignments/updateEntretien/{id}', [AssignmentController::class, 'u
 
 //Parc
 Route::get('/get_assignments/{id}',[AssignmentController::class,'get_assignments']);
+
+//Diagnostic
+Route::get('/get_all_diagnostics', [DiagnosticController::class, 'get_all_diagnostics']);
+Route::post('/diagnostics/create', [DiagnosticController::class, 'createDiagnostic']);
+Route::put('/diagnostics/update/{id}', [DiagnosticController::class, 'updateDiagnostic']);
+Route::post('/diagnostics/delete/{id}', [DiagnosticController::class, 'deleteDiagnostic']);
+
+
 
 //Interventions
 Route::get('/get_all_interventions',[InterventionController::class,'get_all_interventions']);

@@ -39,7 +39,7 @@
                     <div class="d-flex align-items-center justify-content-center mb-3">
                     <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
                     <h5 class="modal-title col-11" id="addTypeIndustryLabel">
-                        Ajouter un nouvel type de produit
+                        Ajouter un nouvel type de pompe
                     </h5>
                     </div>
 
@@ -101,7 +101,7 @@
                     <div class="d-flex align-items-center">
                     <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px;"></i>
                     <h5 class="modal-title mb-0" id="editTypeProductLabel">
-                        Modifier le type de produit
+                        Modifier le type de la pompe
                     </h5>
                     </div>
 
@@ -164,7 +164,7 @@
         <div class="card mb-4">
           <div class="card-header d-flex align-items-center">
             <i class="fa-solid fa-ticket me-2"></i>
-          <h5 class="mb-0">Types de produits</h5>
+          <h5 class="mb-0">Types de pompes</h5>
       </div>
 
 

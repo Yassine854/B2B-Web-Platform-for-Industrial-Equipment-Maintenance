@@ -80,7 +80,24 @@
         <!-- Divider -->
         <hr class="sidebar-divider" />
 
-        <!-- Nav Item - Users -->
+        <!-- Nav Item - interventions -->
+        <li
+          class="nav-item"
+          :class="{ active: $route.name === 'diagnostics' }"
+        >
+          <a
+            :href="$router.resolve({ name: 'diagnostics' }).href"
+            class="nav-link"
+          >
+          <i class="fa-brands fa-searchengin"></i>
+            <span>Diagnostics</span></a
+          >
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider" />
+
+        <!-- Nav Item - interventions -->
         <li
           class="nav-item"
           :class="{ active: $route.name === 'interventions' }"
@@ -148,7 +165,7 @@
                 :href="$router.resolve({ name: 'types_product' }).href"
                 class="collapse-item"
               >
-                Types de produits
+                Types de pompes
               </a>
             </div>
           </div>
@@ -334,7 +351,7 @@
 
 
 
-  <!-- Client SideBar -->
+  <!------------------------------- Client SideBar ------------------------------->
   <body id="page-top" v-else>
     <div id="wrapper">
       <!-- Sidebar -->
@@ -373,6 +390,24 @@
           >
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a
+          >
+        </li>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider" />
+
+        <!-- Nav Item - interventions -->
+        <li
+          class="nav-item"
+          :class="{ active: $route.name === 'client_interventions' }"
+        >
+          <a
+            :href="$router.resolve({ name: 'client_interventions' }).href"
+            class="nav-link"
+          >
+            <i class="fa-brands fa-servicestack"></i>
+            <span>Interventions</span></a
           >
         </li>
 

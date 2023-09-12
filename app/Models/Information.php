@@ -5,21 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pdr extends Model
+class Information extends Model
 {
+    protected $table='informations';
     use HasFactory;
-
     protected $fillable = [
-        'designation',
-        'reference',
-        'quantite',
+        'def',
+        'description',
+        'image',
     ];
 
-
-    public function intervention()
-    {
-        return $this->belongsTo(Intervention::class);
-    }
 
     public function diagnostic()
     {

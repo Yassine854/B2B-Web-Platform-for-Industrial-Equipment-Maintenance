@@ -364,13 +364,18 @@ import layout from "../layouts/layout";
 
 
     computed: {
-displayedAssignments() {
-      // Filter assignments based on the search input
-      return this.assignments.filter(assignment => {
-        const societyName = assignment.client[0]?.society || '';
-        return societyName.includes(this.searchSociety);
-      });
-    },
+        displayedAssignments() {
+  // Ensure that this.searchSociety is a string
+  const searchSocietyLower = typeof this.searchSociety === 'string' ? this.searchSociety.toLowerCase() : '';
+
+  return this.assignments.filter(assignment => {
+    const societyName = (assignment.client[0]?.society || '').toLowerCase();
+
+    // Perform case-insensitive search
+    return societyName.includes(searchSocietyLower);
+  });
+},
+
 
 
     displayedPages() {

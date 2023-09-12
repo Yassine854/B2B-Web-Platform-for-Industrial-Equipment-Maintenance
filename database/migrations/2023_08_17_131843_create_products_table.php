@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('type_prod');
             $table->double('debit');
             $table->string('unity_debit');
-            $table->double('pression');
+            $table->string('pression');
             $table->string('year');
             $table->string('time_day');
             $table->foreign('type_prod')
