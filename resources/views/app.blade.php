@@ -54,6 +54,5 @@
 <!-- Page level custom scripts -->
 <script src="{{ asset('js/plugins/chart-area-demo.js') }}"></script>
 <script src="{{ asset('js/plugins/chart-pie-demo.js') }}"></script> --}}
-
 </body>
 </html>

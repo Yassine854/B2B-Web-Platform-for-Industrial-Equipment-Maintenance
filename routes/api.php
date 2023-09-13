@@ -102,7 +102,8 @@ Route::get('/get_assignments/{id}',[AssignmentController::class,'get_assignments
 //Diagnostic
 Route::get('/get_all_diagnostics', [DiagnosticController::class, 'get_all_diagnostics']);
 Route::post('/diagnostics/create', [DiagnosticController::class, 'createDiagnostic']);
-Route::put('/diagnostics/update/{id}', [DiagnosticController::class, 'updateDiagnostic']);
+Route::post('/diagnostics/update/{id}', [DiagnosticController::class, 'updateDiagnostic']);
+Route::get('/diagnostics/show/{id}', [DiagnosticController::class, 'showDiagnostic']);
 Route::post('/diagnostics/delete/{id}', [DiagnosticController::class, 'deleteDiagnostic']);
 
 

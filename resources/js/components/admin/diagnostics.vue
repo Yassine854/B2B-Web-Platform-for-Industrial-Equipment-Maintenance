@@ -43,7 +43,7 @@
                         style="margin-right: 10px"
                       ></i>
                       <h5 class="modal-title col-11" id="addInterventionLabel">
-                        Créer un nouvel diagnostic
+                        Créer un nouveu diagnostic
                       </h5>
                     </div>
 
@@ -402,7 +402,7 @@
                     <input
                         class="form-control"
                         type="file"
-                        ref="informationImages"
+                        ref="informationImagesEdit"
                         id="image"
                         />
                 </div>
@@ -515,7 +515,7 @@
 
             <!-----------------------------------------------show Diagnostic------------------------------------------>
 
-            <div class="modal fade" id="showIntervention" tabindex="-1">
+            <div class="modal fade" id="showDiagnostic" tabindex="-1">
               <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -525,7 +525,7 @@
                         style="margin-right: 10px"
                       ></i>
                       <h5 class="modal-title mb-0" id="showInterventionLabel">
-                        Détails de l'intervention
+                        Rapport du Diagnostic
                       </h5>
                     </div>
                     <button
@@ -535,133 +535,80 @@
                       aria-label="Close"
                     ></button>
                   </div>
-                  <div class="modal-body">
-                    <form>
-                      <div class="row gx-4">
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label class="small" for="name" style="float: left"
-                              >Société</label
-                            >
-                            <input
-                              class="form-control"
-                              id="name"
-                              type="text"
-                              v-model="clientShow"
-                              disabled
-                            />
-                          </div>
-                          <div class="mb-3">
-                            <label class="small" for="pompe" style="float: left"
-                              >Pompe</label
-                            >
-                            <input
-                              class="form-control"
-                              id="pompe"
-                              type="text"
-                              v-model="productShow"
-                              disabled
-                            />
-                          </div>
-                          <div class="mb-3">
-                            <label class="small" for="nature" style="float: left"
-                              >Nature</label
-                            >
-                            <input
-                              class="form-control"
-                              id="nature"
-                              type="text"
-                              v-model="nameShow"
-                              disabled
-                            />
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="mb-3">
-                            <label class="small" for="date" style="float: left"
-                              >Date de l'intervention</label
-                            >
-                            <input
-                              class="form-control"
-                              id="date"
-                              type="text"
-                              v-model="dateShow"
-                              disabled
-                            />
-                          </div>
-                          <div class="mb-3">
-                            <label
-                              class="small"
-                              for="Description"
-                              style="float: left"
-                              >Description</label
-                            >
-                            <textarea
-                              class="form-control"
-                              rows="4"
-                              id="Description"
-                              v-model="descriptionShow"
-                              disabled
-                            ></textarea>
-                          </div>
-                        </div>
-                        <div class="col-md-12 mt-3">
-                          <label
-                            class="small"
-                            for="PiecesDeRechange"
-                            style="float: left"
-                            >Pièces de rechange</label
-                          >
-                          <div
-                            v-for="(piece, index) in ShowPieces"
-                            :key="index"
-                            class="mb-3"
-                          >
-                            <div class="input-group">
-                              <span class="input-group-text">Désignation</span>
-                              <input
-                                class="form-control"
-                                type="text"
-                                v-model="piece.designation"
-                                disabled
-                              />
-                              <span class="input-group-text">Référence</span>
-                              <input
-                                class="form-control"
-                                type="text"
-                                v-model="piece.reference"
-                                disabled
-                              />
-                              <span class="input-group-text">Quantité</span>
-                              <input
-                                class="form-control"
-                                type="text"
-                                v-model="piece.quantite"
-                                disabled
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-12 mt-3">
-                          <div
-                            class="d-flex align-items-center justify-content-center"
-                          >
-                            <div class="image shadow">
-                              <img
-                                :src="'/storage/img/pompes/' + imageShow"
-                                class="centered-image img-fluid"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
+                  <div class="modal-body" ref="modalBodyRef" style="color: black;">
+
+                    <div class="d-flex justify-content-center">
+                <img :src="'../storage/img/GSI-logo-PNG.png'" style="max-width:390px">
+                </div>
+                <br>
+        <table class="bordered-table">
+            <thead>
+                <tr>
+                    <th id="thead" colspan="4" class="text-center text-white">Rapport Technique</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="titles" class="font-weight-bold">Société</td>
+                    <td >{{ clientShow }}</td>
+                    <td id="titles" class="font-weight-bold">Modèle</td>
+                    <td >{{ getProductName(productShow) }}</td>
+                </tr>
+                <tr>
+                    <td id="titles" class="font-weight-bold">Date Diagnostic</td>
+                    <td >{{ dateShow }}</td>
+                    <td id="titles" class="font-weight-bold">Code GSI</td>
+                    <td >{{ productShow }}</td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th id="thead" colspan="4" class="text-center text-white">Diagnostic</th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr class="diagnostic-table">
+                    <th id="titles" class="font-weight-bold">Défaut</th>
+                    <th id="titles" colspan="2" class="font-weight-bold">Description</th>
+                    <th id="titles" class="font-weight-bold">Image</th>
+                </tr>
+                <tr v-for="(information, index) in ShowInformations" :key="index">
+                    <td >{{ information.def }}</td>
+                    <td colspan="2" >{{ information.description }}</td>
+                    <td style="text-align: center; vertical-align: middle;">
+                        <img :src="'/storage/img/diagnostics/'+information.image" alt="" style="max-width: 50px; max-height: 50px; display: block; margin: 0 auto;">
+                    </td>
+                </tr>
+            </tbody>
+            <thead>
+                <tr>
+                    <th id="thead" colspan="4" class="text-center text-white">Pièces de Rechange Nécessaires</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="pieces-table">
+                    <th id="titles" class="font-weight-bold">Désignation</th>
+                    <th id="titles" colspan="2" class="font-weight-bold">Référence</th>
+                    <th id="titles"  class="font-weight-bold">Quantité</th>
+                </tr>
+                <tr v-for="(piece, index) in ShowPieces" :key="index">
+                    <td >{{ piece.designation }}</td>
+                    <td colspan="2" >{{ piece.reference }}</td>
+                    <td >{{ piece.quantite }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+
                   </div>
+            <div>
+            <button class="btn btn-danger mb-4 mt-1" @click="downloadPdf(diagnosticId)">Télécharger PDF</button>
+          </div>
                 </div>
               </div>
             </div>
 
-            <!----------------------------------------------- End show Intervention------------------------------------------>
+            <!----------------------------------------------- End show Diagnostic------------------------------------------>
           </div>
         </div>
         <br />
@@ -778,6 +725,9 @@ import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { jsPDF } from "jspdf";
+import html2pdf from 'html2pdf.js';
+
 window.Swal = Swal;
 let diagnostics = ref([]);
 let assignments = ref([]);
@@ -826,18 +776,7 @@ const getProductName = (productId) => {
   return assignment ? assignment.product[0].name : "";
 };
 
-const getProductImage = (productId) => {
-  const assignment = assignments.value.find(
-    (assignment) => assignment.product_id === productId
-  );
-  if (assignment && assignment.product.length > 0) {
-    const product = assignment.product[0];
-    // Assuming you have an "image" property in the product object
-    return product.image || ""; // Replace '' with a default image URL if needed
-  } else {
-    return ""; // Handle the case when no assignment is found for the given productId
-  }
-};
+
 
 //Fetch clients
 const uniqueClients = computed(() => {
@@ -928,12 +867,12 @@ const changePage = (page) => {
         editPieces: [{ designation: "", reference: "", quantite: "" }],
 
         //Show
-        nameShow: "",
+        diagnosticShow:{},
+        diagnosticId:"",
         clientShow: "",
         productShow: "",
-        descriptionShow: "",
         dateShow: "",
-
+        ShowInformations: [{ def: "", description: "", image: "" }],
         ShowPieces: [{ designation: "", reference: "", quantite: "" }],
       };
     },
@@ -1014,12 +953,27 @@ const changePage = (page) => {
         this.image=e.target.files[0];
       },
 
+
+
+async downloadPdf(diagnostic_id) {
+  var doc = new jsPDF();
+// Source HTMLElement or a string containing HTML.
+var elementHTML = this.$refs.modalBodyRef;
+
+doc.html(elementHTML, {
+    callback: function(doc) {
+        // Save the PDF
+        doc.save('rapport-diagnostic D'+diagnostic_id+'.pdf');
+    },
+    x: 15,
+    y: 15,
+    width: 170, //target width in the PDF document
+    windowWidth: 1000 //window width in CSS pixels
+});
+    },
+
+
       async createDiagnostic() {
-        console.log(this.client);
-        console.log(this.product);
-        console.log(this.date);
-        console.log(this.informations);
-        console.log(this.pieces);
         try {
     const formData = new FormData();
     formData.append("client_id", this.client);
@@ -1094,40 +1048,69 @@ const changePage = (page) => {
       },
 
       async updateDiagnostic(diagnostic) {
-        try {
-          await axios.put(`/api/diagnostics/update/${diagnostic.id}`, {
-            client_id: this.client,
-            product_id: this.productEdit,
-            date: this.dateEdit,
-            informations: this.editInformations,
-            pieces: this.editPieces,
-          });
-          const toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            customClass: {
-              popup: "colored-toast",
-            },
-            timer: 3000,
-          });
-          toast.fire({
-            icon: "success",
-            title: "Diagnostic modifié avec succés!",
-          });
+  try {
+    const formData = new FormData();
+    formData.append("client_id", this.client);
+    formData.append("product_id", this.productEdit);
+    formData.append("date", this.dateEdit);
 
-          $("#editDiagnostic").modal("hide");
-          this.get_all_diagnostics();
+    // Append the pieces data
+    this.editPieces.forEach((piece, index) => {
+      formData.append(`pieces[${index}][designation]`, piece.designation);
+      formData.append(`pieces[${index}][reference]`, piece.reference);
+      formData.append(`pieces[${index}][quantite]`, piece.quantite);
+    });
 
-          this.client = [];
-          this.productEdit = [];
-          this.editInformations = [];
-          this.editPieces = [];
-          this.date = "";
-        } catch (error) {
-          console.log(error);
-        }
+    // Append the informations data with images
+    this.editInformations.forEach((info, index) => {
+      formData.append(`informations[${index}][def]`, info.def);
+      formData.append(`informations[${index}][description]`, info.description);
+
+      // Check if an image is present for this information item
+      const imageInput = this.$refs.informationImagesEdit[index];
+      if (imageInput.files[0]) {
+        formData.append(`informations[${index}][image]`, imageInput.files[0]);
+        console.log(imageInput.files[0]);
+      }
+      else if (info.image)
+        formData.append(`informations[${index}][Currentimage]`, info.image);
+        console.log(info.image);
+
+    });
+
+    const response = await axios.post(
+      `/api/diagnostics/update/${diagnostic.id}`,
+      formData
+    );
+
+    console.log(response.data.message);
+    const toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      customClass: {
+        popup: "colored-toast",
       },
+      timer: 3000,
+    });
+    toast.fire({
+      icon: "success",
+      title: "Diagnostic modifié avec succès!",
+    });
+
+    $("#editDiagnostic").modal("hide");
+    this.get_all_diagnostics();
+
+    this.client = "";
+    this.productEdit = "";
+    this.editInformations = [];
+    this.editPieces = [];
+    this.dateEdit = "";
+  } catch (error) {
+    console.error("Error updating diagnostic:", error);
+  }
+},
+
 
       deleteDiagnostic(diagnostic_id) {
         Swal.fire({
@@ -1164,26 +1147,21 @@ const changePage = (page) => {
         });
       },
 
-      openShowModal(intervention) {
-        $("#showIntervention").modal("show");
+      openShowModal(diagnostic) {
+        $("#showDiagnostic").modal("show");
         try {
           axios
-            .get(`/api/interventions/show/${intervention.id}`)
+            .get(`/api/diagnostics/show/${diagnostic.id}`)
             .then((response) => {
-              this.showIntervention = response.data.intervention;
-              this.nameShow = this.showIntervention.name;
+              this.showDiagnostic = response.data.diagnostic;
               this.clientShow = this.getSocietyName(
-                this.showIntervention.client_id
+              this.showDiagnostic.client_id
               );
-              this.productShow = this.getProductName(
-                this.showIntervention.product_id
-              );
-              this.dateShow = this.showIntervention.date;
-              this.ShowPieces = this.showIntervention.pdrs;
-              this.descriptionShow = this.showIntervention.description;
-              this.imageShow = this.getProductImage(
-                this.showIntervention.product_id
-              );
+              this.diagnosticId=this.showDiagnostic.id;
+              this.productShow =this.showDiagnostic.product_id;
+              this.dateShow = this.showDiagnostic.date;
+              this.ShowInformations = this.showDiagnostic.informations;
+              this.ShowPieces = this.showDiagnostic.pdrs;
             })
             .catch((error) => {
               console.error(error);
@@ -1192,14 +1170,49 @@ const changePage = (page) => {
           console.error(error);
         }
       },
+
     },
   };
   </script>
 
       <style>
-  /* Add your custom styles here if needed */
   #crudBtn {
     cursor: pointer;
+  }
+  .bordered-table {
+    border-collapse: collapse; /* Collapse table borders */
+    width: 100%; /* Set table width to 100% */
+    border: 2px solid black; /* Set border color and width for the table */
+}
+#printable-content img {
+          max-width: 100%;
+          height: auto;
+        }
+
+.bordered-table th,
+.bordered-table td {
+    border: 2px solid black; /* Set border color and width for table cells */
+    padding: 8px; /* Add padding for better spacing */
+}
+
+/* Optional: Center-align text in table cells */
+.bordered-table th,
+.bordered-table td {
+    text-align: center;
+}
+  #thead{
+    background-color: #248996;
+  }
+#titles{
+    background-color: #e0f5f8; /* A very, very light shade of blue */
+}
+  #showDiagnostic .modal-dialog {
+            text-align: center;
+        }
+
+  #showDiagnostic .modal-body {
+      text-align: center;
+      color: black;
   }
 
   </style>

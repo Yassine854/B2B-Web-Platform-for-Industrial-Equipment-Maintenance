@@ -93,7 +93,7 @@ class DiagnosticController extends Controller
 
                 // Store the image with the unique name
                 $image->storeAs('public/img/diagnostics', $imageName);
-                $infoData['image'] = $imageName; // Update image with unique name
+                $infoData['image'] = $imageName;
             }
 
             // Insert diagnostic information
@@ -159,10 +159,10 @@ class DiagnosticController extends Controller
             $infoData = [
                 'def' => $information['def'],
                 'description' => $information['description'],
-                'image' => null, // Initialize with null
                 'diagnostic_id' => $id,
             ];
 
+            // Check if there's an image and it's valid
             if (isset($information['image']) && $information['image']->isValid()) {
                 $image = $information['image'];
 
@@ -171,12 +171,19 @@ class DiagnosticController extends Controller
 
                 // Store the image with the unique name
                 $image->storeAs('public/img/diagnostics', $imageName);
-                $infoData['image'] = $imageName; // Update image with unique name
+
+                // Add the image path to the infoData array
+                $infoData['image'] = $imageName;
+            } elseif (isset($information['Currentimage']) && !empty($information['Currentimage'])) {
+                // Use the existing image path if it exists
+                $infoData['image'] = $information['Currentimage'];
             }
 
             // Insert diagnostic information
             DB::table('informations')->insert($infoData);
         }
+
+
 
         foreach ($request->pieces as $piece) {
             $pieceData = [
@@ -190,11 +197,24 @@ class DiagnosticController extends Controller
             DB::table('pdrs')->insert($pieceData);
         }
 
-        return "Diagnostic updated successfully!";
+        return response()->json(['message' => 'Diagnostic updated successfully'], 200);
     }
 
 
+    public function showDiagnostic($id)
+    {
+        $diagnostic = Diagnostic::with(['pdrs', 'informations'])->find($id);
 
+        if (!$diagnostic) {
+            return response()->json([
+                'message' => 'diagnostic not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'diagnostic' => $diagnostic
+        ], 200);
+    }
 
     public function deleteDiagnostic($id){
         $diagnostic=Diagnostic::find($id);
