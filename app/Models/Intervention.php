@@ -23,4 +23,9 @@ class Intervention extends Model
     {
         return $this->hasMany(Pdr::class);
     }
+
+    public function diagnostic()
+    {
+        return $this->belongsTo(Diagnostic::class);
+    }
 }

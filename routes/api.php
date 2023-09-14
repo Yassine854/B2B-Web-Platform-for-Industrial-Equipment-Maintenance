@@ -105,6 +105,7 @@ Route::post('/diagnostics/create', [DiagnosticController::class, 'createDiagnost
 Route::post('/diagnostics/update/{id}', [DiagnosticController::class, 'updateDiagnostic']);
 Route::get('/diagnostics/show/{id}', [DiagnosticController::class, 'showDiagnostic']);
 Route::post('/diagnostics/delete/{id}', [DiagnosticController::class, 'deleteDiagnostic']);
+Route::get('/get-diagnostic-count', [DiagnosticController::class, 'getDiagnosticCount']);
 
 
 

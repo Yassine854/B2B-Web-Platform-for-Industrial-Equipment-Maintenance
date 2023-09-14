@@ -476,7 +476,7 @@
             </div>
           </div>
           <div class="mr-3" v-if="notification.data.type == 'info'">
-            <div class="icon-circle bg-warning">
+            <div class="icon-circle bg-primary">
               <i class="fas fa-bell fa-fw text-white"></i>
             </div>
           </div>

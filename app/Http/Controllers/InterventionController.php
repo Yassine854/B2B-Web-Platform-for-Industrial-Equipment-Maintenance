@@ -11,12 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use App\Notifications\ClientNotification;
+use Illuminate\Support\Facades\Notification;
 
 class InterventionController extends Controller
 {
     public function get_all_interventions()
 {
-    $interventions = Intervention::with('pdrs')->get();
+    $interventions = Intervention::with(['pdrs','diagnostic'])->get();
 
     return response()->json([
         'interventions' => $interventions
@@ -78,7 +80,6 @@ public function getProductName($id)
             'date' => [
                 'required',
                 'date',
-                'after:today', // Ensure the date is strictly greater than today
             ],
             'pieces' => 'required|array',
             'pieces.*.designation' => 'required|string',
@@ -99,6 +100,7 @@ public function getProductName($id)
             'name' => $request->name,
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
+            'diagnostic_id' => $request->diagnostic_id,
             'description' => $request->description,
             'date' => $request->date,
         ];
@@ -115,6 +117,11 @@ public function getProductName($id)
 
             DB::table('pdrs')->insert($pieceData);
         }
+        $client = User::where('id', $interventionData['client_id'])->where('role', 1)->first();
+        $product = Product::where('id', $interventionData['product_id'])->first();
+        $message="Une intervention pour la pompe ".$product->id."-".$product->name." a été effectué.";
+        Notification::send($client,new ClientNotification($message,"info"));
+
 
         return "Intervention created successfully!";
     }
@@ -130,7 +137,6 @@ public function getProductName($id)
             'date' => [
                 'required',
                 'date',
-                'after:today', // Ensure the date is strictly greater than today
             ],
             'pieces' => 'required|array',
             'pieces.*.designation' => 'required|string',
@@ -150,6 +156,7 @@ public function getProductName($id)
             'name' => $request->name,
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
+            'diagnostic_id' => $request->diagnostic_id,
             'description' => $request->description,
             'date' => $request->date,
         ];
@@ -183,7 +190,7 @@ public function getProductName($id)
 
     public function showIntervention($id)
     {
-        $intervention = Intervention::with('pdrs')->find($id);
+        $intervention = Intervention::with(['pdrs','diagnostic'])->find($id);
 
         if (!$intervention) {
             return response()->json([

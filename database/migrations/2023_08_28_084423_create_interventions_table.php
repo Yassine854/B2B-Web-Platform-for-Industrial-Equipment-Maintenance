@@ -18,8 +18,10 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('diagnostic_id')->nullable();
             $table->string('description')->nullable();
             $table->date('date');
+            $table->foreign('diagnostic_id')->references('id')->on('diagnostics')->onDelete('cascade');
             $table->timestamps();
 
         });

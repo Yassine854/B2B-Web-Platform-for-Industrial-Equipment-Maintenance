@@ -32,216 +32,115 @@
           <!-----------------------------------------------Create intervention------------------------------------------>
 
           <div class="modal fade" id="addIntervention" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <div
-                    class="d-flex align-items-center justify-content-center mb-3"
-                  >
-                    <i
-                      class="fa-sharp fa-solid fa-plus fa-xl"
-                      style="margin-right: 10px"
-                    ></i>
-                    <h5 class="modal-title col-11" id="addInterventionLabel">
-                      Créer une nouvelle intervention
-                    </h5>
-                  </div>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex align-items-center justify-content-center mb-3">
+          <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px"></i>
+          <h5 class="modal-title col-11" id="addInterventionLabel">Créer une nouvelle intervention</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form @submit.prevent="createIntervention()">
+          <!-- Client and Product Selection -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="small mb-1" for="client_select" style="float: left;">Clients</label>
+              <select class="form-select" id="client_select" v-model="client" required>
+                <option value="" disabled>Sélectionner un client</option>
+                <option v-for="client in uniqueClients" :key="client.id" :value="client.id">{{ client.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="small mb-1" for="product_select" style="float: left;">Pompes</label>
+              <select class="form-select" id="product_select" v-model="product" required>
+                <option value="" disabled>Sélectionner une pompe</option>
+                <option v-for="product in productsForSelectedClient" :key="product.product_id" :value="product.product_id">{{ product.product[0].name }}</option>
+              </select>
+            </div>
+          </div>
 
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
+          <!-- Nature and Date Inputs -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="small mb-1" for="type_prod" style="float: left;">Nature</label>
+              <select class="form-select" id="type_prod" v-model="name" required>
+                <option value="" selected disabled hidden>Sélectionner la nature d'intervention</option>
+                <option value="Entretien">Entretien</option>
+                <option value="Révision">Révision</option>
+                <option value="Réparation">Réparation</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="small mb-1" for="time_day" style="float: left;">Date</label>
+              <input class="form-control" id="time_day" type="date" v-model="date" required />
+            </div>
+          </div>
+
+          <!-- Diagnostic Selection -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="small mb-1" for="diagnostic_select" style="float: left;">Diagnostic</label>
+              <select class="form-select" id="diagnostic_select" v-model="diagnostic">
+                <option value="" disabled>Sélectionner un diagnostic</option>
+                <option v-for="diagnostic in diagnostics" :key="diagnostic.id" :value="diagnostic.id">D{{ diagnostic.id }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Pièces de Rechange -->
+          <label class="small mb-1" style="float: left;">Pièces de rechange</label>
+          <br />
+          <div class="container border p-3 mb-3">
+            <!-- Pieces Input Section (Repeatable) -->
+            <div v-for="(piece, index) in pieces" :key="index" class="border p-3 mb-3">
+              <div class="row gx-3 mb-3 align-items-center">
+                <div class="col-md-4">
+                  <label class="small mb-1" for="designation" style="float: left;">Désignation</label>
+                  <input class="form-control" type="text" id="designation" placeholder="Désignation" v-model="piece.designation" required />
                 </div>
-                <div class="modal-body">
-                  <div></div>
-                  <form @submit.prevent="createIntervention()">
-                    <div class="row gx-3 mb-3">
-                      <!-- Client Dropdown -->
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="client_select"
-                          style="float: left"
-                          >Clients</label
-                        >
-                        <select
-                          class="form-select"
-                          id="client_select"
-                          v-model="client"
-                          required
-                        >
-                        <option value="" disabled>Sélectionner un client</option>
-
-                          <option
-                            v-for="client in uniqueClients"
-                            :key="client.id"
-                            :value="client.id"
-                          >
-                            {{ client.name }}
-                          </option>
-                        </select>
-                      </div>
-
-                      <!-- Product Dropdown -->
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="product_select"
-                          style="float: left"
-                          >Pompes</label
-                        >
-                        <select
-                          class="form-select"
-                          id="product_select"
-                          aria-label="Default select example"
-                          v-model="product"
-                          required
-                        >
-                        <option value="" disabled>Sélectionner une pompe</option>
-
-                          <option
-                            v-for="product in productsForSelectedClient"
-                            :key="product.product_id"
-                            :value="product.product_id"
-                          >
-                            {{ product.product[0].name }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <!-- Nature Dropdown -->
-                    <div class="row gx-3 mb-3">
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="type_prod"
-                          style="float: left"
-                          >Nature</label
-                        >
-                        <select
-                          class="form-select"
-                          id="type_prod"
-                          v-model="name"
-                          required
-                        >
-                          <option value="" selected disabled hidden>
-                            Sélectionner la nature d'intervention
-                          </option>
-                          <option value="Entretien">Entretien</option>
-                          <option value="Révision">Révision</option>
-                          <option value="Réparation">Réparation</option>
-                        </select>
-                      </div>
-
-                      <!-- Date Input -->
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="time_day"
-                          style="float: left"
-                          >Date</label
-                        >
-                        <input
-                          class="form-control"
-                          id="time_day"
-                          type="date"
-                          v-model="date"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <!-- Pièces de Rechange -->
-                    <label class="small mb-1" style="float: left"
-                      >Pièces de rechange</label
-                    >
-                    <br />
-                    <div
-                      class="row gx-3 mb-3"
-                      v-for="(piece, index) in pieces"
-                      :key="index"
-                    >
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <input
-                            class="form-control"
-                            type="text"
-                            placeholder="Désignation"
-                            v-model="piece.designation"
-                          />
-                          <input
-                            class="form-control"
-                            type="text"
-                            placeholder="Référence"
-                            v-model="piece.reference"
-                          />
-                          <input
-                            class="form-control"
-                            type="number"
-                            min="0"
-                            placeholder="Quantité"
-                            v-model="piece.quantite"
-                          />
-                          <button
-                            class="btn btn-success"
-                            type="button"
-                            @click="removePiece(index)"
-                          >
-                            -
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <button
-                      class="btn btn-info"
-                      type="button"
-                      @click="addPiece"
-                    >
-                      <i class="fa-solid fa-plus"></i> Ajouter une pièce
-                    </button>
-
-                    <!-- Description Textarea -->
-                    <div class="row gx-3 mb-3">
-                      <div class="col-md-12">
-                        <label
-                          class="small mb-1"
-                          for="description"
-                          style="float: left"
-                          >Description</label
-                        >
-                        <textarea
-                          class="form-control"
-                          id="description"
-                          rows="4"
-                          placeholder="Entrer la description"
-                          v-model="description"
-                          required
-                        ></textarea>
-                      </div>
-                    </div>
-                    <br />
-
-                    <div class="modal-footer">
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        Annuler
-                      </button>
-                      <button type="submit" class="btn btn-primary">
-                        Ajouter
-                      </button>
-                    </div>
-                  </form>
+                <div class="col-md-4">
+                  <label class="small mb-1" for="reference" style="float: left;">Référence</label>
+                  <input class="form-control" type="text" id="reference" placeholder="Référence" v-model="piece.reference" required />
+                </div>
+                <div class="col-md-3">
+                  <label class="small mb-1" for="quantite" style="float: left;">Quantité</label>
+                  <input class="form-control" type="number" id="quantite" min="0" placeholder="Quantité" v-model="piece.quantite" required />
+                </div>
+                <div class="col-md-1 d-flex align-items-start mt-4 mb-md-0">
+                  <button class="btn btn-danger" type="button" @click="removePiece(index)">-</button>
                 </div>
               </div>
             </div>
+
+            <!-- Plus Button to Add More Pieces -->
+            <div class="text-center">
+              <button class="btn btn-info" type="button" @click="addPiece"><i class="fa-solid fa-plus"></i> Ajouter une pièce</button>
+            </div>
           </div>
+
+          <!-- Description Textarea -->
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label class="small mb-1" for="description" style="float: left;">Description</label>
+              <textarea class="form-control" id="description" rows="4" placeholder="Entrer la description" v-model="description" required></textarea>
+            </div>
+          </div>
+          <br />
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
           <!----------------------------------------------- End Create Intervention------------------------------------------>
 
@@ -370,69 +269,82 @@
                       </div>
                     </div>
 
+            <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="small mb-1" for="diagnostic_select" style="float: left;">Diagnostic</label>
+              <select class="form-select" id="diagnostic_select" v-model="diagnosticEdit">
+                <option v-for="diagnostic in diagnostics" :key="diagnostic.id" :value="diagnostic.id">D{{ diagnostic.id }}</option>
+              </select>
+            </div>
+          </div>
+
                     <!-- Pièces de Rechange -->
-                    <label class="small mb-1" style="float: left"
-                      >Pièces de rechange</label
-                    >
-                    <br />
-                    <div
-                      class="row gx-3 mb-3"
-                      v-for="(piece, index) in editPieces"
-                      :key="index"
-                    >
-                      <div class="col-md-12">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">Désignation</span>
-                          </div>
-                          <input
+                    <label class="small mb-1" style="float: left">Pièces de rechange</label>
+<br>
+<div class="container">
+    <form class="border p-3 mb-3">
+        <div
+            v-for="(piece, index) in editPieces"
+            :key="index"
+        >
+            <!-- Each piece is enclosed in a border -->
+            <div class="border p-3 mb-3">
+                <div class="row gx-3 mb-3 align-items-center">
+                    <div class="col-md-4">
+                        <label class="small mb-1" for="designation">Désignation</label>
+                        <input
                             class="form-control"
                             type="text"
-                            id="Désignation"
+                            id="designation"
                             placeholder="Désignation"
                             v-model="piece.designation"
-                          />
-
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">Référence</span>
-                          </div>
-                          <input
+                            required
+                        />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="small mb-1" for="reference">Référence</label>
+                        <input
                             class="form-control"
                             type="text"
-                            id="Référence"
+                            id="reference"
                             placeholder="Référence"
                             v-model="piece.reference"
-                          />
-
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">Quantité</span>
-                          </div>
-                          <input
+                            required
+                        />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small mb-1" for="quantite">Quantité</label>
+                        <input
                             class="form-control"
                             type="number"
+                            id="quantite"
                             min="0"
-                            id="Quantité"
                             placeholder="Quantité"
                             v-model="piece.quantite"
-                          />
-
-                          <button
-                            class="btn btn-success"
+                            required
+                        />
+                    </div>
+                    <div class="col-md-1 d-flex align-items-start mt-4 mb-md-0">
+                        <button
+                            class="btn btn-danger"
                             type="button"
                             @click="removePieceEdit(index)"
-                          >
+                        >
                             -
-                          </button>
-                        </div>
-                      </div>
+                        </button>
                     </div>
-                    <button
-                      class="btn btn-info"
-                      type="button"
-                      @click="addPieceEdit"
-                    >
-                      <i class="fa-solid fa-plus"></i> Ajouter une pièce
-                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plus button to add more pieces -->
+        <div class="text-center">
+            <button class="btn btn-info" type="button" @click="addPieceEdit">
+                <i class="fa-solid fa-plus"></i> Ajouter une pièce
+            </button>
+        </div>
+    </form>
+</div>
 
                     <!-- Description Textarea -->
                     <div class="row gx-3 mb-3">
@@ -536,6 +448,19 @@
                             disabled
                           />
                         </div>
+                        <div class="mb-3">
+                          <label class="small" for="nature" style="float: left"
+                            >Diagnostic</label
+                          >
+                          <input
+                            class="form-control"
+                            id="nature"
+                            type="text"
+                            :value="'D' + diagnosticShow"
+                            disabled
+                            />
+
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <div class="mb-3">
@@ -559,7 +484,7 @@
                           >
                           <textarea
                             class="form-control"
-                            rows="4"
+                            rows="8"
                             id="Description"
                             v-model="descriptionShow"
                             disabled
@@ -745,6 +670,7 @@ import axios from "axios";
 window.Swal = Swal;
 let interventions = ref([]);
 let assignments = ref([]);
+let diagnostics = ref([]);
 
 let searchIntervention = ref([]);
 
@@ -754,6 +680,7 @@ const itemsPerPage = ref(10); // Set the default number of items per page
 onMounted(async () => {
   get_all_interventions();
   get_all_assignments();
+  get_all_diagnostics();
 });
 
 const get_all_interventions = async () => {
@@ -771,6 +698,16 @@ const get_all_assignments = async () => {
     let response = await axios.get("/api/interventions/get_all_assignments");
     console.log(response.data); // Log the response data
     assignments.value = response.data.assignments;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const get_all_diagnostics = async () => {
+  try {
+    let response = await axios.get("/api/get_all_diagnostics");
+    console.log(response.data);
+    diagnostics.value = response.data.diagnostics;
   } catch (error) {
     console.error(error);
   }
@@ -842,8 +779,13 @@ const displayedInterventions = computed(() => {
   const search = searchIntervention.value; // Convert search term to lowercase for case-insensitive search
 
   return interventions.value.filter((intervention) => {
-    // Convert product_id to a string and check if it contains the search term
-    return intervention.product_id.toString().includes(search);
+    const productId=intervention.product_id.toString().includes(search);
+    const societyName = getSocietyName(intervention.client_id).toString().toLowerCase();
+    const societyNameContainsSearch = societyName.includes(search.toString().toLowerCase());
+
+    const cleanedSearch = (search[0] === 'i' || search[0] === 'I') && (search[1] === 'n' || search[1] === 'N' && search[2] === 't' || search[2] === 'T') ? search.substring(3) : search;
+    const interventionId = intervention.id.toString().includes(cleanedSearch);
+    return productId ||interventionId || societyNameContainsSearch
   });
 });
 
@@ -881,6 +823,7 @@ export default {
       name: "",
       client: "",
       product: "",
+      diagnostic:"",
       description: "",
       designation: "",
       reference: "",
@@ -894,6 +837,7 @@ export default {
       clientEdit: "",
       productEdit: "",
       descriptionEdit: "",
+      diagnosticEdit:"",
       dateEdit: "",
 
       editPieces: [{ designation: "", reference: "", quantite: "" }],
@@ -902,6 +846,7 @@ export default {
       nameShow: "",
       clientShow: "",
       productShow: "",
+      diagnosticShow:"",
       descriptionShow: "",
       dateShow: "",
 
@@ -975,28 +920,11 @@ export default {
           name: this.name,
           client_id: this.client,
           product_id: this.product,
+          diagnostic_id:this.diagnostic,
           description: this.description,
           date: this.date,
           pieces: this.pieces,
         };
-        //Validation
-        const today = new Date().toISOString().slice(0, 10);
-        if (this.date <= today) {
-          const toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            customClass: {
-              popup: "colored-toast",
-            },
-            timer: 3000,
-          });
-          toast.fire({
-            icon: "error",
-            title: "La date doit être ultérieure à aujourd'hui !",
-          });
-          return;
-        }
         const response = await axios.post(
           "/api/interventions/create",
           formData
@@ -1035,6 +963,7 @@ export default {
       this.nameEdit = intervention.name;
       this.client = intervention.client_id;
       this.productEdit = intervention.product_id;
+      this.diagnosticEdit = intervention.diagnostic_id;
       this.descriptionEdit = intervention.description;
       this.dateEdit = intervention.date;
       this.editPieces = intervention.pdrs.map((piece) => ({
@@ -1048,29 +977,12 @@ export default {
 
     async updateIntervention(intervention) {
       try {
-        //Validation
-        const today = new Date().toISOString().slice(0, 10);
-        if (this.dateEdit <= today) {
-          const toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            customClass: {
-              popup: "colored-toast",
-            },
-            timer: 3000,
-          });
-          toast.fire({
-            icon: "error",
-            title: "La date doit être ultérieure à aujourd'hui !",
-          });
-          return;
-        }
 
         await axios.put(`/api/interventions/update/${intervention.id}`, {
           name: this.nameEdit,
           client_id: this.client,
           product_id: this.productEdit,
+          diagnostic_id:this.diagnosticEdit,
           description: this.descriptionEdit,
           date: this.dateEdit,
           pieces: this.editPieces,
@@ -1153,6 +1065,7 @@ export default {
             this.productShow = this.getProductName(
               this.showIntervention.product_id
             );
+            this.diagnosticShow = this.showIntervention.diagnostic_id;
             this.dateShow = this.showIntervention.date;
             this.ShowPieces = this.showIntervention.pdrs;
             this.descriptionShow = this.showIntervention.description;

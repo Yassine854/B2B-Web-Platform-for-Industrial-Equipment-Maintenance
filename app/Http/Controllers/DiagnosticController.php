@@ -222,4 +222,11 @@ class DiagnosticController extends Controller
         return response()->json('diagnostic deleted');
     }
 
+    public function getDiagnosticCount()
+{
+    $diagnosticCount = Diagnostic::count();
+
+    return response()->json(['diagnosticCount' => $diagnosticCount]);
+}
+
 }

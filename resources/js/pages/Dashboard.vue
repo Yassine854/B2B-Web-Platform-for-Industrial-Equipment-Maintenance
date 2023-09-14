@@ -57,26 +57,15 @@
                 <div
                   class="text-xs font-weight-bold text-info text-uppercase mb-1"
                 >
-                  Tasks
+                  Diagnostics
                 </div>
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                      50%
+                      {{ diagnosticCount }}
                     </div>
                   </div>
-                  <div class="col">
-                    <div class="progress progress-sm mr-2">
-                      <div
-                        class="progress-bar bg-info"
-                        role="progressbar"
-                        style="width: 50%"
-                        aria-valuenow="50"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
               <div class="col-auto">
@@ -571,6 +560,7 @@ export default {
       address: "",
       clientCount: 0,
       interventionCount: 0,
+      diagnosticCount:0,
       notificationCount: 0,
 
       //Show assignment
@@ -584,7 +574,9 @@ export default {
   mounted() {
     this.fetchClientCount();
     this.fetchInterventionCount();
+    this.fetchDiagnosticCount();
     this.fetchNotificationCount();
+
   },
   created() {
     if (window.Laravel.user) {
@@ -739,6 +731,17 @@ export default {
         })
         .catch((error) => {
           console.error("Error fetching intervention count:", error);
+        });
+    },
+
+    fetchDiagnosticCount() {
+      axios
+        .get("/api/get-diagnostic-count")
+        .then((response) => {
+          this.diagnosticCount = response.data.diagnosticCount;
+        })
+        .catch((error) => {
+          console.error("Error fetching diagnostic count:", error);
         });
     },
 

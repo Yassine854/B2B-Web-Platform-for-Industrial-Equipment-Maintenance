@@ -13,7 +13,7 @@
                 placeholder="Rechercher"
                 aria-label="Search"
                 aria-describedby="search-addon"
-                v-model="searchSiagnostic"
+                v-model="searchDiagnostic"
               />
             </div>
           </div>
@@ -140,8 +140,8 @@
 
       <label class="small mb-1" style="float: left">Informations de Diagnostic</label>
         <br />
-      <div class="container">
-    <form class="border p-3 mb-3">
+      <div class="container border p-3 mb-3">
+
         <div class="border p-3 mb-3" v-for="(information, index) in informations" :key="index">
             <!-- Diagnostic row -->
             <div class="row gx-3 mb-3 align-items-center">
@@ -153,7 +153,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="small mb-1" for="description" style="float: left">Description</label>
-                    <textarea class="form-control" rows="1" placeholder="Entrer la description" v-model="information.description" required></textarea>
+                    <textarea class="form-control" rows="1" placeholder="Entrer la description" v-model="information.description"></textarea>
                 </div>
                 <div class="col-md-3">
                     <label for="image" class="small mb-1" style="float: left">Image</label>
@@ -182,14 +182,14 @@
                 <i class="fa-solid fa-plus"></i> Ajouter un diagnostic
             </button>
         </div>
-    </form>
+
 </div>
 
 
 <label class="small mb-1" style="float: left">Pièces de rechange</label>
 <br>
-<div class="container">
-    <form class="border p-3 mb-3">
+<div class="container border p-3 mb-3">
+
         <div
             v-for="(piece, index) in pieces"
             :key="index"
@@ -205,6 +205,7 @@
                             id="designation"
                             placeholder="Désignation"
                             v-model="piece.designation"
+                            required
                         />
                     </div>
                     <div class="col-md-4">
@@ -215,6 +216,7 @@
                             id="reference"
                             placeholder="Référence"
                             v-model="piece.reference"
+                            required
                         />
                     </div>
                     <div class="col-md-3">
@@ -226,6 +228,7 @@
                             min="0"
                             placeholder="Quantité"
                             v-model="piece.quantite"
+                            required
                         />
                     </div>
                     <div class="col-md-1 d-flex align-items-start mt-4 mb-md-0">
@@ -247,7 +250,6 @@
                 <i class="fa-solid fa-plus"></i> Ajouter une pièce
             </button>
         </div>
-    </form>
 </div>
 
         <br />
@@ -395,7 +397,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="small mb-1" for="description" style="float: left">Description</label>
-                    <textarea class="form-control" rows="1" placeholder="Entrer la description" v-model="information.description" required></textarea>
+                    <textarea class="form-control" rows="1" placeholder="Entrer la description" v-model="information.description"></textarea>
                 </div>
                 <div class="col-md-3">
                     <label for="image" class="small mb-1" style="float: left">Image</label>
@@ -447,6 +449,7 @@
                             id="designation"
                             placeholder="Désignation"
                             v-model="piece.designation"
+                            required
                         />
                     </div>
                     <div class="col-md-4">
@@ -457,6 +460,7 @@
                             id="reference"
                             placeholder="Référence"
                             v-model="piece.reference"
+                            required
                         />
                     </div>
                     <div class="col-md-3">
@@ -468,6 +472,7 @@
                             min="0"
                             placeholder="Quantité"
                             v-model="piece.quantite"
+                            required
                         />
                     </div>
                     <div class="col-md-1 d-flex align-items-start mt-4 mb-md-0">
@@ -806,19 +811,22 @@ const productsForSelectedClient = computed(() => {
 
     if (selectedAssignments.length > 0) {
       console.log(selectedAssignments);
-      return selectedAssignments; // Assuming you want the product of the first selected assignment
+      return selectedAssignments;
     }
   }
 
-  return null; // Return a default value if no products are found
+  return null;
 });
 
 const displayedDiagnostics = computed(() => {
-  const search = searchDiagnostic.value; // Convert search term to lowercase for case-insensitive search
+  const search = searchDiagnostic.value;
 
   return diagnostics.value.filter((diagnostic) => {
-    // Convert product_id to a string and check if it contains the search term
-    return diagnostic.product_id.toString().includes(search);
+    const productId = diagnostic.product_id.toString().includes(search);
+    const societyName = getSocietyName(diagnostic.client_id).toString().toLowerCase();
+    const societyNameContainsSearch = societyName.includes(search.toString().toLowerCase());
+    const cleanedSearch = (search[0] === 'd' || search[0] === 'D') ? search.substring(1) : search;    const DiagnosticId = diagnostic.id.toString().includes(cleanedSearch);
+        return productId || DiagnosticId|| societyNameContainsSearch;
   });
 });
 
@@ -1047,7 +1055,7 @@ doc.html(elementHTML, {
         }));
       },
 
-      async updateDiagnostic(diagnostic) {
+async updateDiagnostic(diagnostic) {
   try {
     const formData = new FormData();
     formData.append("client_id", this.client);
