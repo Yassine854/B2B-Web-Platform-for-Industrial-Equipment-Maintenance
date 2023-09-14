@@ -10,23 +10,16 @@
         id="accordionSidebar"
       >
         <!-- Sidebar - Brand -->
-        <a
+        <a  style="background:rgb(163, 163, 163)"
         class="sidebar-brand d-flex align-items-center justify-content-center"
         href="https://www.generale-services.com.tn/"
         target="_blank"
         >
         <div class="sidebar-brand-icon">
-            <i><img :src="'../storage/img/GS.png'" /></i>
+            <img :src="'https://www.generale-services.com.tn/front/images/GSI-logo-PNG.png'" style="max-width: 195px;"/>
         </div>
 
-        <div class="sidebar-brand-text mx-3">
-            <span class="d-block font-weight-bold" style="font-size: 1.25rem"
-            >Génerale</span
-            >
-            <span class="d-block" style="font-size: 0.48rem"
-            >Services Industriels</span
-            >
-        </div>
+
         </a>
 
 
@@ -383,14 +376,17 @@
         <hr class="sidebar-divider my-0" />
 
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        <li
+          class="nav-item"
+          :class="{ active: $route.name === 'dashboard' || !$route.name }"
+        >
           <a
             :href="$router.resolve({ name: 'dashboard' }).href"
             class="nav-link"
           >
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a
-          >
+            <span>Dashboard</span>
+          </a>
         </li>
 
 
@@ -398,7 +394,7 @@
         <hr class="sidebar-divider" />
 
         <!-- Nav Item - interventions -->
-        <li
+        <li v-if="checkClientVerification()"
           class="nav-item"
           :class="{ active: $route.name === 'client_interventions' }"
         >
@@ -437,7 +433,7 @@
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
               <!-- Nav Item - Alerts -->
-    <li class="nav-item dropdown no-arrow mx-1">
+              <li class="nav-item dropdown no-arrow mx-1">
     <a
       class="nav-link dropdown-toggle"
       href="#"
@@ -461,23 +457,40 @@
       <span v-if="notifications.length === 0" class="font-weight-bold ml-4">
         Aucune Notification disponible.
       </span>
-      <div class="overflow-auto" v-else style="max-height: 300px;"> <!-- Adjust max-height as needed -->
+      <div class="overflow-auto" v-else style="max-height: 300px;">
         <a
           class="dropdown-item d-flex align-items-center"
           href="#"
-          v-for="notification in notifications"
+          v-for="notification in WarningNotifications"
           :key="notification.id"
           :style="{ backgroundColor: notification.read_at === null ? '#d3e3fc' : '' }"
           @click="markAsRead(notification.id)"
         >
-          <div class="mr-3" v-if="notification.data.type == 'warning'">
+          <div class="mr-3">
             <div class="icon-circle bg-warning">
               <i class="fas fa-exclamation-triangle text-white"></i>
             </div>
           </div>
-          <div class="mr-3" v-if="notification.data.type == 'info'">
+          <div>
+            <span class="font-weight-bold">
+              {{ notification.data.message }}
+            </span>
+            <div class="font-weight-bold small text-primary">
+              Il y a {{ timeSince(notification.created_at) }}
+            </div>
+          </div>
+        </a>
+        <a
+          class="dropdown-item d-flex align-items-center"
+          :href="$router.resolve({ name: 'client_interventions' }).href"
+          v-for="notification in InfoNotifications"
+          :key="notification.id"
+          :style="{ backgroundColor: notification.read_at === null ? '#d3e3fc' : '' }"
+          @click="markAsRead(notification.id)"
+        >
+          <div class="mr-3">
             <div class="icon-circle bg-primary">
-              <i class="fas fa-bell fa-fw text-white"></i>
+              <i class="fas fa-exclamation-triangle text-white"></i>
             </div>
           </div>
           <div>
@@ -633,6 +646,16 @@ export default {
   computed: {
     unreadNotificationsCount() {
       return this.notifications.filter(notification => notification.read_at === null).length;
+    },
+
+    WarningNotifications() {
+      // Replace 'notifications' with your actual notifications array
+      return this.notifications.filter(notification => notification.data.type === 'warning');
+    },
+
+    InfoNotifications() {
+      // Replace 'notifications' with your actual notifications array
+      return this.notifications.filter(notification => notification.data.type === 'info');
     },
   },
   beforeRouteEnter(to, from, next) {

@@ -25,6 +25,16 @@ class InterventionController extends Controller
     ], 200);
 }
 
+public function getClientInterventions($id)
+{
+    $interventions = Intervention::with(['pdrs', 'diagnostic'])
+    ->where('client_id', $id)
+    ->get();
+    return response()->json([
+        'interventions' => $interventions
+    ], 200);
+}
+
 
 public function getSocietyName($id)
 {

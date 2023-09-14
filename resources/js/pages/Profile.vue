@@ -11,7 +11,7 @@
           <div class="card mb-4">
             <div class="card-header">
               <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                <li class="nav-item" role="presentation" v-if="!isAdmin()">
+                <li class="nav-item" role="presentation" v-if="!isAdmin() && checkClientVerification()">
                   <button
                     class="nav-link active"
                     id="pills-home-tab"
@@ -35,7 +35,7 @@
                     role="tab"
                     aria-controls="pills-profile"
                     aria-selected="true"
-                    v-if="isAdmin()"
+                    v-if="isAdmin() || !checkClientVerification()"
                   >
                     Sécurité
                   </button>
@@ -62,7 +62,7 @@
                   id="pills-home"
                   role="tabpanel"
                   aria-labelledby="pills-home-tab"
-                  v-if="!isAdmin()"
+                  v-if="!isAdmin() && checkClientVerification()"
                 >
                   <form @submit.prevent="updateClientDetails(user)">
                     <!-- Form Group (username)-->
@@ -210,7 +210,7 @@
                   id="pills-profile"
                   role="tabpanel"
                   aria-labelledby="pills-profile-tab"
-                  v-if="isAdmin()"
+                  v-if="isAdmin() || !checkClientVerification()"
                 >
                   <form @submit.prevent="updatePassword(user)">
                     <div class="mb-3">

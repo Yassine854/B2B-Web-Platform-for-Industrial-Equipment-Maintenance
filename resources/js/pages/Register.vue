@@ -18,7 +18,7 @@
                         <form>
 
                             <div class="form-group row">
-                                <label for="name" class="col-sm-4 col-form-label text-md-right">Nom d'utilisateur</label>
+                                <label for="name" class="col-sm-4 col-form-label text-md-right">Nom d'utilisateur/Responsable</label>
                                 <div class="col-md-8">
                                     <input id="name" type="text" class="form-control" v-model="name" required
                                            autofocus autocomplete="off"  placeholder="Entrer votre nom">
