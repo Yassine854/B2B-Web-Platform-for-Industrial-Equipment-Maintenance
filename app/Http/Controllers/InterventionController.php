@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Pdr;
 use App\Models\User;
 use App\Models\Product;
+use App\Mail\MailNotify;
 use App\Models\Assignment;
 use App\Models\Intervention;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use App\Notifications\ClientNotification;
+use Illuminate\Support\Facades\Validator;
+use App\Notifications\SendEmailNotification;
 use Illuminate\Support\Facades\Notification;
 
 class InterventionController extends Controller
@@ -127,10 +130,22 @@ public function getProductName($id)
 
             DB::table('pdrs')->insert($pieceData);
         }
+
+        //App notification
         $client = User::where('id', $interventionData['client_id'])->where('role', 1)->first();
         $product = Product::where('id', $interventionData['product_id'])->first();
         $message="Une intervention pour la pompe ".$product->id."-".$product->name." a été effectué.";
         Notification::send($client,new ClientNotification($message,"info"));
+
+        //Email notification
+        $details = new SendEmailNotification([
+            'greeting' => 'Cher(e) '.$client->society,
+            'body' => 'Une intervention pour la pompe '.$product->id.'-'.$product->name. ' a été effectuée!',
+            'actiontext' => 'Cliquez',
+            'actionurl' => url(route('client_interventions')),
+        ]);
+
+        Notification::send($client,$details);
 
 
         return "Intervention created successfully!";

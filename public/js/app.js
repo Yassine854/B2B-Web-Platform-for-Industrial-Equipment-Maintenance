@@ -33044,7 +33044,7 @@ var _hoisted_12 = {
 var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "name",
   "class": "col-sm-4 col-form-label text-md-right"
-}, "Nom d'utilisateur/Responsable", -1 /* HOISTED */);
+}, "Nom du Responsable", -1 /* HOISTED */);
 var _hoisted_14 = {
   "class": "col-md-8"
 };

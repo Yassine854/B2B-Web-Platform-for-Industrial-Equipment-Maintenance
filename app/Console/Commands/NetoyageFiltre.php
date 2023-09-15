@@ -7,6 +7,7 @@ use App\Models\Assignment;
 use Illuminate\Console\Command;
 use App\Notifications\ClientNotification;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendEmailNotification;
 
 class NetoyageFiltre extends Command
 {
@@ -35,8 +36,17 @@ class NetoyageFiltre extends Command
         foreach ($assignments as $assignment) {
             $client = User::where('id', $assignment->client_id)->where('role', 1)->first();
             if ($client) {
+                //App notification
                 $message = "N'oubliez pas de nettoyer le filtre de la pompe ".$assignment->product[0]->name; // Change this to your desired message.
                 Notification::send($client, new ClientNotification($message,"warning"));
+
+                //Email notification
+                $details = new SendEmailNotification([
+                    'greeting' => 'Cher(e) '.$client->society,
+                    'body' => "N'oubliez pas de nettoyer le filtre de la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name,
+                ]);
+
+                Notification::send($client,$details);
             }
         }
     }
