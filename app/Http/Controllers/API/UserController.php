@@ -14,8 +14,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -142,12 +142,32 @@ class UserController extends Controller
 
     public function createAdmin(Request $request)
     {
-        $request->validate([
-            'name'=>'required|string',
-            'email'=>'required|email',
-            'password'=>'required|string|min:8',
-        ]);
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users'),
+            ],
+            'password' => 'required|string|min:8',
+        ];
 
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'email' => 'L\'adresse email n\'est pas valide.',
+            'unique' => 'Cet email est déjà utilisé.',
+            'min' => 'Le mot de passe doit avoir au moins :min caractères.',
+        ];
+
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
 
         $user = new User();
             $user->name = $request->name;
@@ -165,18 +185,38 @@ class UserController extends Controller
 
     public function createClient(Request $request)
     {
-        $request->validate([
-            'name'=>'required|string',
-            'email'=>'required|email',
-            'password'=>'required|string|min:8',
-            'society'=>'required',
-            'type_ind'=>'required',
-            'responsable'=>'required',
-            'N_responsable'=>'required',
-            'country'=>'required',
-            'city'=>'required',
-            'address'=>'required',
-        ]);
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users'),
+            ],
+            'password' => 'required|string|min:8',
+            'society' => 'required|string|max:255',
+            'type_ind' => 'required|integer',
+            'responsable' => 'required|string|max:255',
+            'N_responsable' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ];
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'email' => 'L\'adresse email n\'est pas valide.',
+            'unique' => 'Cet email est déjà utilisé.',
+            'min' => 'Le mot de passe doit avoir au moins :min caractères.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
 
 
         $user = new User();
@@ -201,11 +241,42 @@ class UserController extends Controller
 
     public function updateUser(Request $request, $id)
     {
-        $request->validate([
-            'name'=>'required|string',
-            'email'=>'required|email',
-        ]);
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($id),
+            ],
+        ];
+
+        if ($request->role == 1) {
+            $rules['society'] = 'required|string|max:255';
+            $rules['type_ind'] = 'required|integer';
+            $rules['responsable'] = 'required|string|max:255';
+            $rules['N_responsable'] = 'required|string|max:255';
+            $rules['country'] = 'required|string|max:255';
+            $rules['city'] = 'required|string|max:255';
+            $rules['address'] = 'required|string|max:255';
+        }
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'email' => 'L\'adresse email n\'est pas valide.',
+            'unique' => 'Cet email est déjà utilisé.',
+        ];
+
+
         $user=User::find($id);
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
         $user->role = $request->role;
         $user->name = $request->name;
         $user->email = $request->email;
@@ -225,17 +296,33 @@ class UserController extends Controller
 
     public function updateClientDetails(Request $request, $id)
     {
-        $request->validate([
-            'society'=>'required',
-            'type_ind'=>'required',
-            'responsable'=>'required',
-            'N_responsable'=>'required',
-            'country'=>'required',
-            'city'=>'required',
-            'address'=>'required',
-        ]);
+        $rules = [
+            'society' =>'required|string|max:255',
+            'type_ind'=>'required|integer',
+            'responsable' => 'required|string|max:255',
+            'N_responsable' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ];
+
+
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+        ];
+
 
         $user=User::find($id);
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
         $user->society = $request->society;
         $user->type_ind = $request->type_ind;
         $user->responsable = $request->responsable;
@@ -251,17 +338,31 @@ class UserController extends Controller
 
     public function requestVerification(Request $request, $id)
     {
-        $request->validate([
-            'society'=>'required',
-            'type_ind'=>'required',
-            'responsable'=>'required',
-            'N_responsable'=>'required',
-            'country'=>'required',
-            'city'=>'required',
-            'address'=>'required',
-        ]);
+        $rules = [
+            'society' =>'required|string|max:255',
+            'type_ind'=>'required|integer',
+            'responsable' => 'required|string|max:255',
+            'N_responsable' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ];
+
+
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+        ];
+
 
         $user=User::find($id);
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
         $user->society = $request->society;
         $user->type_ind = $request->type_ind;
         $user->responsable = $request->responsable;

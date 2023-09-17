@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Typeindustrie;
 use Illuminate\Http\Request;
+use App\Models\Typeindustrie;
+use Illuminate\Support\Facades\Validator;
+
 class TypeindustrieController extends Controller
 {
     public function get_type_industries(){
@@ -17,6 +19,24 @@ class TypeindustrieController extends Controller
 
     public function createType(Request $request)
     {
+        $rules = [
+            'name' => 'required|string|max:255',
+        ];
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
         $request->validate([
             'name'=>'required',
         ]);
@@ -34,11 +54,25 @@ class TypeindustrieController extends Controller
 
     public function updateType(Request $request, $id)
     {
-        $request->validate([
-            'name'=>'required',
-        ]);
+        $rules = [
+            'name' => 'required|string|max:255',
+        ];
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+
+        ];
+
 
         $type_industrie=Typeindustrie::find($id);
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
         $type_industrie->name = $request->name;
         $type_industrie->update();
         return response()->json([

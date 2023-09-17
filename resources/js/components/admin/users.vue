@@ -76,7 +76,7 @@
                   </form>
 
                   <!-- Client form -->
-                  <form v-if="startForm() == false">
+                  <form v-if="startForm() == false" @submit.prevent="createClient()">
                     <div class="mb-3">
                       <div
                         class="accordion"
@@ -112,12 +112,12 @@
                                   >Nom d'utilisateur</label
                                 >
                                 <input
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': ClientvalidationErrors.name}]"
                                   id="inputOrgName"
                                   type="text"
                                   placeholder="Entrer le nom d'utilisateur"
                                   v-model="nameClient"
-                                  required
+
                                 />
                               </div>
                               <!-- Form Group (location)-->
@@ -129,13 +129,14 @@
                                   >Adresse E-mail</label
                                 >
                                 <input
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': ClientvalidationErrors.email}]"
                                   id="inputLocation"
                                   type="email"
                                   placeholder="Entrer l'adresse E-mail"
                                   v-model="emailClient"
-                                  required
+
                                 />
+                                <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.email" :key="index">{{ err }}<br></span>
                               </div>
                               <div class="col-md-12">
                                 <label
@@ -145,13 +146,14 @@
                                   >Mot de passe</label
                                 >
                                 <input
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': ClientvalidationErrors.password}]"
                                   id="inputLocation"
                                   type="password"
                                   placeholder="Entrer le mot de passe"
-                                  v-model="passwordClient" minlength="8"
-                                  required
+                                  v-model="passwordClient"
                                 />
+                                <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.password" :key="index">{{ err }}<br></span>
+
                               </div>
                             </div>
                           </div>
@@ -187,13 +189,15 @@
                                     >Société</label
                                   >
                                   <input
-                                    class="form-control"
+                                  :class="['form-control', {'is-invalid': ClientvalidationErrors.society}]"
                                     id="inputFirstName"
                                     type="text"
                                     placeholder="Entrer le nom de votre société"
                                     v-model="society"
-                                    required
+
                                   />
+                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.society" :key="index">{{ err }}<br></span>
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -204,13 +208,13 @@
                                     >Type d'industrie</label
                                   >
                                   <select
-                                    class="form-select"
+                                  :class="['form-select', {'is-invalid': ClientvalidationErrors.type_ind}]"
                                     id="inputLastName"
                                     aria-label="Default select example"
                                     v-model="type_ind"
-                                    required
+
                                   >
-                                  <option value="" disabled selected>Sélectionner le type d'industrie</option>
+                                  <option value="" disabled selected hidden>Sélectionner le type d'industrie</option>
                                     <option
                                       v-for="industrie in type_industries"
                                       :key="industrie.id"
@@ -219,6 +223,8 @@
                                       {{ industrie.name }}
                                     </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.type_ind" :key="index">{{ err }}<br></span>
+
                                 </div>
                               </div>
 
@@ -231,13 +237,15 @@
                                     >Résponsable</label
                                   >
                                   <input
-                                    class="form-control"
+                                  :class="['form-control', {'is-invalid': ClientvalidationErrors.responsable}]"
                                     id="inputOrgName"
                                     type="text"
                                     placeholder="Entrer le nom du répsponsable"
                                     v-model="responsable"
-                                    required
+
                                   />
+                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.responsable" :key="index">{{ err }}<br></span>
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -248,13 +256,15 @@
                                     >Numéro du résponsable</label
                                   >
                                   <input
-                                    class="form-control"
+                                  :class="['form-control', {'is-invalid': ClientvalidationErrors.N_responsable}]"
                                     id="inputLocation"
                                     type="text"
                                     placeholder="Entrer le numéro du répsponsable"
                                     v-model="N_responsable"
-                                    required
+
                                   />
+                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.N_responsable" :key="index">{{ err }}<br></span>
+
                                 </div>
                               </div>
                               <!-- Country & state Add  -->
@@ -264,33 +274,33 @@
                                     >Pays</label
                                   >
                                   <select
-                                    class="form-select"
-                                    v-model="selectedCountry"
-                                    @change="fireState()"
-                                    required
-                                  >
-                                  <option value="" disabled selected>Sélectionner le pays</option>
+                                :class="['form-select', {'is-invalid': ClientvalidationErrors.country}]"
+                                v-model="selectedCountry"
+                                @change="fireState()"
+                            >
+                            <option value="" selected hidden>Sélectionner le pays</option>
 
-                                    <option
-                                      :value="country.id"
-                                      v-for="country in countries"
-                                      :key="country.id"
-                                    >
-                                      {{ country.name }}
-                                    </option>
-                                  </select>
+                                <option
+                                    :value="country.id"
+                                    v-for="country in countries"
+                                    :key="country.id"
+                                >
+                                    {{ country.name }}
+                                </option>
+                            </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.country" :key="index">{{ err }}<br></span>
+
                                 </div>
                                 <div class="col-md-6">
                                   <label for="country" style="float: left"
                                     >Gouvernorat</label
                                   >
                                   <select
-                                    class="form-select"
+                                  :class="['form-select', {'is-invalid': ClientvalidationErrors.city}]"
                                     :disabled="selectedCountry == ''"
                                     v-model="selectedState"
-                                    required
                                   >
-                                  <option value="" disabled selected>Sélectionner le gouvernorat</option>
+                                  <option value="" selected hidden>Sélectionner le gouvernorat</option>
 
                                     <option
                                       :value="state.id"
@@ -300,23 +310,27 @@
                                       {{ state.name }}
                                     </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.city" :key="index">{{ err }}<br></span>
+
                                 </div>
                               </div>
                               <div class="mb-3">
                                 <label
-                                  class="small mb-1"
+
                                   for="inputUsername"
                                   style="float: left"
                                   >Adresse</label
                                 >
                                 <textarea
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': ClientvalidationErrors.address}]"
                                   id="inputUsername"
                                   rows="4"
                                   placeholder="Entrer votre adresse"
                                   v-model="address"
-                                  required
+
                                 ></textarea>
+                                <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.address" :key="index">{{ err }}<br></span>
+
                               </div>
                             </div>
                           </div>
@@ -334,7 +348,6 @@
                         <button
                           type="submit"
                           class="btn btn-primary"
-                          @click="createClient"
                         >
                           Ajouter
                         </button>
@@ -343,7 +356,7 @@
                     </div>
                   </form>
                   <!-- Admin form -->
-                  <form v-if="startForm() == true">
+                  <form v-if="startForm() == true"  @submit.prevent="createAdmin()" >
                     <!-- Form Group (organization name)-->
                     <div class="col-md-12">
                       <label
@@ -353,13 +366,15 @@
                         >Nom d'utilisateur</label
                       >
                       <input
-                        class="form-control"
+                      :class="['form-control', {'is-invalid': AdminvalidationErrors.name}]"
                         id="inputOrgName"
                         type="text"
                         placeholder="Entrer le nom d'utilisateur"
                         v-model="nameAdmin"
-                        required
+
                       />
+                      <span class="invalid-feedback" v-for="(err, index) in AdminvalidationErrors.name" :key="index">{{ err }}<br></span>
+
                     </div>
                     <!-- Form Group (location)-->
                     <div class="col-md-12">
@@ -370,13 +385,14 @@
                         >Adresse E-mail</label
                       >
                       <input
-                        class="form-control"
+                      :class="['form-control', {'is-invalid': AdminvalidationErrors.email}]"
                         id="inputLocation"
                         type="email"
                         placeholder="Entrer l'adresse E-mail"
                         v-model="emailAdmin"
-                        required
                       />
+                      <span class="invalid-feedback" v-for="(err, index) in AdminvalidationErrors.email" :key="index">{{ err }}<br></span>
+
                     </div>
                     <div class="col-md-12">
                       <label
@@ -386,13 +402,15 @@
                         >Mot de passe</label
                       >
                       <input
-                        class="form-control"
+                      :class="['form-control', {'is-invalid': AdminvalidationErrors.password}]"
                         id="inputLocation"
                         type="password"
                         placeholder="Entrer le mot de passe"
-                        v-model="passwordAdmin" minlength="8"
-                        required
+                        v-model="passwordAdmin"
+
                       />
+                      <span class="invalid-feedback" v-for="(err, index) in AdminvalidationErrors.password" :key="index">{{ err }}<br></span>
+
                     </div>
                     <div class="modal-footer">
                       <button
@@ -405,7 +423,6 @@
                       <button
                         type="submit"
                         class="btn btn-primary"
-                        @click="createAdmin()"
                       >
                         Ajouter
                       </button>
@@ -498,13 +515,15 @@
                                   style="float: left"
                                 >Nom d'utilisateur</label>
                                 <input
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrorsEdit.name}]"
                                   id="inputOrgName"
                                   type="text"
                                   placeholder="Entrer le nom d'utilisateur"
                                   v-model="nameEdited"
-                                  required
+
                                 />
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.name" :key="index">{{ err }}<br></span>
+
                               </div>
                               <!-- Form Group (location)-->
                               <div class="col-md-12">
@@ -515,13 +534,15 @@
                                   >Adresse E-mail</label
                                 >
                                 <input
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrorsEdit.email}]"
                                   id="inputLocation"
                                   type="email"
                                   placeholder="Entrer l'adresse E-mail"
                                   v-model="emailEdited"
-                                  required
+
                                 />
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.email" :key="index">{{ err }}<br></span>
+
                               </div>
                             </div>
                           </div>
@@ -557,13 +578,14 @@
                                     >Société</label
                                   >
                                   <input
-                                    class="form-control"
+                                  :class="['form-control', {'is-invalid': validationErrorsEdit.society}]"
                                     id="inputFirstName"
                                     type="text"
                                     placeholder="Entrer le nom de votre société"
                                     v-model="societyEdited"
-                                    required
                                   />
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.society" :key="index">{{ err }}<br></span>
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -574,14 +596,12 @@
                                     >Type d'industrie</label
                                   >
                                   <select
-                                    class="form-select"
+                                  :class="['form-select', {'is-invalid': validationErrorsEdit.type_ind}]"
                                     id="inputLastName"
                                     aria-label="Default select example"
                                     v-model="type_indEdited"
-                                    required
-                                  >
-                                  <option :value="''" disabled selected>Sélectionner le type d'industrie</option>
 
+                                  >
                                     <option
                                       v-for="industrie in type_industries"
                                       :key="industrie.id"
@@ -590,6 +610,8 @@
                                       {{ industrie.name }}
                                     </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.type_ind" :key="index">{{ err }}<br></span>
+
                                 </div>
                               </div>
 
@@ -602,13 +624,15 @@
                                     >Résponsable</label
                                   >
                                   <input
-                                    class="form-control"
+                                  :class="['form-control', {'is-invalid': validationErrorsEdit.responsable}]"
                                     id="inputOrgName"
                                     type="text"
                                     placeholder="Entrer le nom du répsponsable"
                                     v-model="responsableEdited"
-                                    required
+
                                   />
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.responsable" :key="index">{{ err }}<br></span>
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -619,13 +643,15 @@
                                     >Numéro du résponsable</label
                                   >
                                   <input
-                                    class="form-control"
+                                  :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
                                     id="inputLocation"
                                     type="text"
                                     placeholder="Entrer le numéro du répsponsable"
                                     v-model="N_responsableEdited"
-                                    required
+
                                   />
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
+
                                 </div>
                               </div>
 
@@ -637,12 +663,10 @@
                                   >
                                   <select
                                     id="selectCountry"
-                                    class="form-select"
+                                    :class="['form-select', {'is-invalid': validationErrorsEdit.country}]"
                                     v-model="selectedCountry"
                                     @change="fireState()"
                                   >
-                                  <option value="" disabled selected>Sélectionner le pays</option>
-
                                     <option
                                       :value="country.id"
                                       v-for="country in countries"
@@ -651,13 +675,15 @@
                                       {{ country.name }}
                                     </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.country" :key="index">{{ err }}<br></span>
+
                                 </div>
                                 <div class="col-md-6">
                                   <label for="country" style="float: left"
                                     >Gouvernorat</label
                                   >
                                   <select
-                                    class="form-select"
+                                  :class="['form-select', {'is-invalid': validationErrorsEdit.city}]"
                                     :disabled="selectedCountry == ''"
                                     v-model="selectedState"
                                   >
@@ -672,6 +698,8 @@
                                       {{ state.name }}
                                     </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.city" :key="index">{{ err }}<br></span>
+
                                 </div>
                               </div>
 
@@ -683,13 +711,15 @@
                                   >Adresse</label
                                 >
                                 <textarea
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrorsEdit.address}]"
                                   id="inputUsername"
                                   rows="4"
                                   placeholder="Entrer votre adresse"
                                   v-model="addressEdited"
-                                  required
+
                                 ></textarea>
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.address" :key="index">{{ err }}<br></span>
+
                               </div>
                             </div>
                           </div>
@@ -725,13 +755,15 @@
                         >Nom d'utilisateur</label
                       >
                       <input
-                        class="form-control"
+                      :class="['form-control', {'is-invalid': validationErrorsEdit.name}]"
                         id="inputOrgName"
                         type="text"
                         placeholder="Entrer le nom d'utilisateur"
                         v-model="nameEdited"
-                        required
+
                       />
+                      <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.name" :key="index">{{ err }}<br></span>
+
                     </div>
                     <!-- Form Group (location)-->
                     <div class="col-md-12">
@@ -742,13 +774,13 @@
                         >Adresse E-mail</label
                       >
                       <input
-                        class="form-control"
+                      :class="['form-control', {'is-invalid': validationErrorsEdit.email}]"
                         id="inputLocation"
                         type="email"
                         placeholder="Entrer l'adresse E-mail"
                         v-model="emailEdited"
-                        required
                       />
+                      <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.email" :key="index">{{ err }}<br></span>
                     </div>
 
                     <div class="modal-footer">
@@ -1130,7 +1162,7 @@ export default {
     searchUser:[],
       empty:null,
       countries: listCountries,
-      selectedCountry: "",
+      selectedCountry: '222',
       selectedState: "",
       states: [],
       cities:listStates,
@@ -1166,6 +1198,12 @@ export default {
       //show
       SelectedCountryShow:"",
       SelectedStateShow:"",
+
+
+      AdminvalidationErrors : {},
+      ClientvalidationErrors : {},
+      validationErrorsEdit:{},
+
     };
   },
 
@@ -1173,6 +1211,9 @@ export default {
     if (window.Laravel.user) {
       this.id = window.Laravel.user.id;
     }
+    this.$nextTick(() => {
+        this.fireState();
+      });
   },
   mounted() {
   if (this.societyValue) {
@@ -1274,28 +1315,7 @@ async search() {
     },
 
     async createAdmin() {
-        const emailCheckResponse = await this.$axios.post('/api/check-email', {
-            email: this.emailAdmin
-            });
 
-            if (!emailCheckResponse.data.isUnique) {
-                const toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                customClass: {
-                    popup: "colored-toast",
-                },
-                timer: 3000,
-            });
-            toast.fire({
-                icon: "error",
-                title: "L'adresse e-mail est déjà utilisée.",
-            });
-
-            return;
-            }
-    else{
       try {
         await axios.post(`/api/users/create/admin`, {
           name: this.nameAdmin,
@@ -1326,34 +1346,20 @@ async search() {
 
         this.getUsers();
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.AdminvalidationErrors = error.response.data.errors;
+          console.log(this.AdminvalidationErrors);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du type.";
+        }
       }
-    }
+
     },
 
     async createClient() {
-        const emailCheckResponse = await this.$axios.post('/api/check-email', {
-            email: this.emailClient
-            });
-
-            if (!emailCheckResponse.data.isUnique) {
-                const toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                customClass: {
-                    popup: "colored-toast",
-                },
-                timer: 3000,
-            });
-            toast.fire({
-                icon: "error",
-                title: "L'adresse e-mail est déjà utilisée.",
-            });
-
-            return;
-            }
-    else{
+        this.ClientvalidationErrors={};
       try {
         await axios.post(`/api/users/create/client`, {
           name: this.nameClient,
@@ -1395,9 +1401,16 @@ async search() {
 
         this.getUsers();
       }catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.ClientvalidationErrors = error.response.data.errors;
+          console.log(this.ClientvalidationErrors);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du type.";
+        }
       }
-    }
+
     },
 
     openEditModal(user) {
@@ -1445,77 +1458,63 @@ async search() {
       this.addressEdited = user.address;
     },
 
-   async updateUser(user) {
-      const emailCheckResponse = await this.$axios.post('/api/check-email', {
-            email: this.emailEdited
-            });
+    async updateUser(user) {
+        this.validationErrorsEdit={};
+try {
+ await axios.put(`/api/users/edit/${user.id}`, {
+    role: this.selectRole,
+    name: this.nameEdited,
+    email: this.emailEdited,
 
-            if (!emailCheckResponse.data.isUnique && this.emailEdited!=user.email) {
-                const toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                customClass: {
-                    popup: "colored-toast",
-                },
-                timer: 3000,
-            });
-            toast.fire({
-                icon: "error",
-                title: "L'adresse e-mail est déjà utilisée.",
-            });
-
-            return;
-            }
-    else{
-      try {
-        axios.put(`/api/users/edit/${user.id}`, {
-          role: this.selectRole,
-          name: this.nameEdited,
-          email: this.emailEdited,
-
-          society: this.societyEdited,
-          type_ind: this.type_indEdited,
-          responsable: this.responsableEdited,
-          N_responsable: this.N_responsableEdited,
-          country: this.selectedCountry,
-          city: this.selectedState,
-          address: this.addressEdited,
-        });
-        this.userEdit = {};
-        this.selectRole = "";
-        this.nameEdited = "";
-        this.emailEdited = "";
-        this.societyEdited = "";
-        this.type_indEdited = "";
-        this.responsableEdited = "";
-        this.N_responsableEdited = "";
-        this.selectedCountry = "";
-        this.selectedState = "";
-        this.addressEdited = "";
-        const toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          customClass: {
-            popup: "colored-toast",
-          },
-          timer: 3000,
-        });
-        toast.fire({
-          icon: "success",
-          title: "Utilisateur modifié avec succés!",
-        });
-        // $('#addUserModal').removeClass('show');
-
-        $("#editUserModal").modal("hide");
-
-        this.getUsers();
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    society: this.societyEdited,
+    type_ind: this.type_indEdited,
+    responsable: this.responsableEdited,
+    N_responsable: this.N_responsableEdited,
+    country: this.selectedCountry,
+    city: this.selectedState,
+    address: this.addressEdited,
+  });
+  this.userEdit = {};
+  this.selectRole = "";
+  this.nameEdited = "";
+  this.emailEdited = "";
+  this.societyEdited = "";
+  this.type_indEdited = "";
+  this.responsableEdited = "";
+  this.N_responsableEdited = "";
+  this.selectedCountry = "";
+  this.selectedState = "";
+  this.addressEdited = "";
+  const toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    customClass: {
+      popup: "colored-toast",
     },
+    timer: 3000,
+  });
+  toast.fire({
+    icon: "success",
+    title: "Client modifié avec succés!",
+  });
+  // $('#addUserModal').removeClass('show');
+
+  $("#editUserModal").modal("hide");
+
+  this.getUsers();
+} catch (error) {
+    if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.validationErrorsEdit = error.response.data.errors;
+          console.log(this.validationErrorsEdit);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du type.";
+        }
+}
+},
+
 
 
     deleteUser(user_id) {

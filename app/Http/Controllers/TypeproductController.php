@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Typeproduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TypeproductController extends Controller
 {
@@ -16,6 +17,24 @@ class TypeproductController extends Controller
 
     public function createType(Request $request)
     {
+        $rules = [
+            'name' => 'required|string|max:255',
+        ];
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
         $request->validate([
             'name'=>'required',
         ]);
@@ -33,11 +52,26 @@ class TypeproductController extends Controller
 
     public function updateType(Request $request, $id)
     {
-        $request->validate([
-            'name'=>'required',
-        ]);
+        $rules = [
+            'name' => 'required|string|max:255',
+        ];
+
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+
+        ];
+
 
         $type_product=Typeproduct::find($id);
+        
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
         $type_product->name = $request->name;
         $type_product->update();
         return response()->json([

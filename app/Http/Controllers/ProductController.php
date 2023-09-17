@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Notifications\SimpleNotification;
+use Illuminate\Support\Facades\Validator;
+
 class ProductController extends Controller
 {
 
@@ -20,6 +22,35 @@ class ProductController extends Controller
 
     public function createProduct(Request $request)
 {
+
+    $rules = [
+        'name' => 'required|string|max:255',
+        'type_prod' => 'required|string|max:255',
+        'debit' => 'required|string',
+        'unity_debit' => 'required|string|max:255',
+        'pression' => 'required|string',
+        'year' => 'required|integer',
+        'time_day' => 'required|integer|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:255',
+    ];
+
+    $messages = [
+        'required' => 'Ce champ est requis.',
+        'string' => 'Ce champ doit être une chaîne de caractères.',
+        'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+        'integer' => 'Ce champ doit être un entier.',
+        'image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
+        'image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
+
+    ];
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
+
     $product = new Product();
     $product->name = $request->name;
     $product->type_prod = $request->type_prod;
@@ -31,7 +62,7 @@ class ProductController extends Controller
 
     if ($request->hasFile('image')) {
         $image = $request->file('image');
-        $imageName = $image->getClientOriginalName();
+        $imageName = time() . '_' . $image->getClientOriginalName();
         $image->storeAs('public/img/pompes', $imageName);
         $product->image = $imageName;
     }
@@ -44,6 +75,32 @@ class ProductController extends Controller
 
 public function updateProduct(Request $request, $id)
 {
+
+    $rules = [
+        'name' => 'required|string|max:255',
+        'type_prod' => 'required|string|max:255',
+        'debit' => 'required|string',
+        'unity_debit' => 'required|string|max:255',
+        'pression' => 'required|string',
+        'year' => 'required|integer',
+        'time_day' => 'required|integer|max:255',
+    ];
+    if ($request->hasFile('image')) {
+        $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:255';
+    }
+
+    $messages = [
+        'required' => 'Ce champ est requis.',
+        'string' => 'Ce champ doit être une chaîne de caractères.',
+        'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+        'integer' => 'Ce champ doit être un entier.',
+        'image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
+        'image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
+
+
+    ];
+
+
     try {
         $product = Product::find($id);
 
@@ -52,6 +109,12 @@ public function updateProduct(Request $request, $id)
                 'error' => 'Product not found'
             ], 404);
         }
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
 
     $product->name = $request->name;
     $product->type_prod = $request->type_prod;
@@ -64,7 +127,7 @@ public function updateProduct(Request $request, $id)
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = $image->getClientOriginalName();
+            $imageName = time() . '_' . $image->getClientOriginalName();
             $image->storeAs('public/img/pompes', $imageName);
             $product->image = $imageName;
         }

@@ -78,13 +78,15 @@
                           >Société</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.society}]"
                           id="inputFirstName"
                           type="text"
                           placeholder="Entrer le nom de votre société"
                           v-model="society"
-                          required
+
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.society" :key="index">{{ err }}<br></span>
+
                       </div>
                       <!-- Form Group (last name)-->
                       <div class="col-md-6">
@@ -95,11 +97,11 @@
                           >Type industrie</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.type_ind}]"
                           id="inputLastName"
                           aria-label="Default select example"
                           v-model="type_ind"
-                          required
+
                         >
                           <option
                             v-for="industrie in type_industries"
@@ -109,6 +111,8 @@
                             {{ industrie.name }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.type_ind" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
                     <!-- Form Row        -->
@@ -119,13 +123,15 @@
                           >Résponsable</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.responsable}]"
                           id="inputOrgName"
                           type="text"
                           placeholder="Entrer le nom du répsponsable"
                           v-model="responsable"
-                          required
+
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.responsable" :key="index">{{ err }}<br></span>
+
                       </div>
                       <!-- Form Group (location)-->
                       <div class="col-md-6">
@@ -133,13 +139,15 @@
                           >Numéro du résponsable</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
                           id="inputLocation"
                           type="text"
                           placeholder="Entrer le numéro du répsponsable"
                           v-model="N_responsable"
-                          required
+
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
 
@@ -148,10 +156,10 @@
                       <div class="col-md-6">
                         <label for="country" style="float: left">Pays</label>
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.country}]"
                           v-model="selectedCountry"
                           @change="fireState()"
-                          required
+
                         >
                           <option selected hidden>Open this select menu</option>
                           <option
@@ -162,16 +170,18 @@
                             {{ country.name }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.country" :key="index">{{ err }}<br></span>
+
                       </div>
                       <div class="col-md-6">
                         <label for="country" style="float: left"
                           >Gouvernorat</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.city}]"
                           :disabled="selectedCountry == ''"
                           v-model="selectedState"
-                          required
+
                         >
                           <option hidden selected>Open this select menu</option>
                           <option
@@ -182,6 +192,8 @@
                             {{ state.name }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.city" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
 
@@ -191,13 +203,15 @@
                         >Adresse</label
                       >
                       <textarea
-                        class="form-control"
+                      :class="['form-control', {'is-invalid': validationErrorsEdit.address}]"
                         id="inputUsername"
                         rows="4"
                         placeholder="Entrer votre adresse"
                         v-model="address"
-                        required
+
                       ></textarea>
+                      <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.address" :key="index">{{ err }}<br></span>
+
                     </div>
                     <!-- Save changes button-->
                     <button class="btn btn-primary" type="submit">
@@ -253,6 +267,7 @@
                           type="password"
                           placeholder="Nouveau mot de passe"
                           v-model="new_password"
+                          minlength="8"
                           required
                         />
                       </div>
@@ -267,6 +282,7 @@
                           type="password"
                           placeholder="Confirmez votre nouveau mot de passe"
                           v-model="password_confirmation"
+                          minlength="8"
                           required
                         />
                       </div>
@@ -329,6 +345,7 @@
                           type="password"
                           placeholder="Nouveau mot de passe"
                           v-model="new_password"
+                          minlength="8"
                           required
                         />
                       </div>
@@ -343,6 +360,7 @@
                           type="password"
                           placeholder="Confirmez votre nouveau mot de passe"
                           v-model="password_confirmation"
+                          minlength="8"
                           required
                         />
                       </div>
@@ -425,14 +443,15 @@ export default {
         this.fireState();
       });
       this.address = window.Laravel.user.address;
-      console.log("user's role is " + this.role);
-      console.log("user's id is " + this.id);
-      console.log("password " + this.old_password);
+    //   console.log("user's role is " + this.role);
+    //   console.log("user's id is " + this.id);
+    //   console.log("password " + this.old_password);
     }
   },
 
   data() {
     return {
+      validationErrorsEdit:{},
       formSubmitted: false,
       user: {},
       role: null,
@@ -467,9 +486,10 @@ export default {
         (state) => state.country_id === this.selectedCountry
       );
     },
-    updateClientDetails(user) {
+   async updateClientDetails(user) {
+    this.validationErrorsEdit={};
       try {
-        axios.put(`/api/users/updateClientDetails/${user.id}`, {
+      await  axios.put(`/api/users/updateClientDetails/${user.id}`, {
           society: this.society,
           type_ind: this.type_ind,
           responsable: this.responsable,
@@ -480,7 +500,6 @@ export default {
         });
 
         this.$router.push("/profile");
-        // window.location.reload();
 
         const toast = Swal.mixin({
           toast: true,
@@ -497,7 +516,14 @@ export default {
             " Les informations du profil ont été mises à jour avec succès!",
         });
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.validationErrorsEdit = error.response.data.errors;
+          console.log(this.validationErrorsEdit);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du type.";
+        }
       }
     },
 

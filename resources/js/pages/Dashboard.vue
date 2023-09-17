@@ -65,7 +65,7 @@
                       {{ diagnosticCount }}
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
               <div class="col-auto">
@@ -166,152 +166,163 @@
               <div class="card-header">Détails du compte</div>
               <div class="card-body">
                 <form @submit.prevent="updateClientDetails(user)">
-                  <!-- Form Group (username)-->
-                  <!-- <div class="mb-3">
-                            <label class="small mb-1" for="inputUsername">Nom et Prénom</label>
-                            <input class="form-control" id="inputUsername" type="text" placeholder="Entrer votre nom et pénom">
-                        </div> -->
-                  <!-- Form Row-->
-                  <div class="row gx-3 mb-3">
-                    <!-- Form Group (first name)-->
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputFirstName"
-                        >Société</label
-                      >
-                      <input
-                        class="form-control"
-                        id="inputFirstName"
-                        type="text"
-                        placeholder="Entrer le nom de votre société"
-                        v-model="society"
-                        required
-                      />
-                    </div>
-                    <!-- Form Group (last name)-->
-                    <div class="col-md-6">
-                      <label
-                        class="small mb-1"
-                        for="inputLastName"
-                        style="float: left"
-                        >Type industrie</label
-                      >
-                      <select
-                        class="form-select"
-                        id="inputLastName"
-                        v-model="type_ind"
-                        required
-                      >
-                        <option value="" disabled selected>
-                          Sélectionner le type d'industrie
-                        </option>
-                        <option
-                          v-for="industrie in type_industries"
-                          :key="industrie.id"
-                          :value="industrie.id"
+                    <!-- Form Group (username)-->
+                    <!-- <div class="mb-3">
+                                <label class="small mb-1" for="inputUsername">Nom et Prénom</label>
+                                <input class="form-control" id="inputUsername" type="text" placeholder="Entrer votre nom et pénom">
+                            </div> -->
+                    <!-- Form Row-->
+                    <div class="row gx-3 mb-3">
+                      <!-- Form Group (first name)-->
+                      <div class="col-md-6">
+                        <label class="small mb-1" for="inputFirstName"
+                          >Société</label
                         >
-                          {{ industrie.name }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <!-- Form Row        -->
-                  <div class="row gx-3 mb-3">
-                    <!-- Form Group (organization name)-->
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputOrgName"
-                        >Résponsable</label
-                      >
-                      <input
-                        class="form-control"
-                        id="inputOrgName"
-                        type="text"
-                        placeholder="Entrer le nom du répsponsable"
-                        v-model="responsable"
-                        required
-                      />
-                    </div>
-                    <!-- Form Group (location)-->
-                    <div class="col-md-6">
-                      <label class="small mb-1" for="inputLocation"
-                        >Numéro du résponsable</label
-                      >
-                      <input
-                        class="form-control"
-                        id="inputLocation"
-                        type="text"
-                        placeholder="Entrer le numéro du répsponsable"
-                        v-model="N_responsable"
-                        required
-                      />
-                    </div>
-                  </div>
+                        <input
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.society}]"
+                          id="inputFirstName"
+                          type="text"
+                          placeholder="Entrer le nom de votre société"
+                          v-model="society"
 
-                  <!-- Country & state Add  -->
-                  <div class="row gx-3 mb-3">
-                    <div class="col-md-6">
-                      <label for="country" style="float: left">Pays</label>
-                      <select
-                        class="form-select"
-                        v-model="selectedCountry"
-                        @change="fireState()"
-                        required
-                      >
-                        <option value="" disabled selected>
-                          Sélectionner le pays
-                        </option>
+                        />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.society" :key="index">{{ err }}<br></span>
 
-                        <option
-                          :value="country.id"
-                          v-for="country in countries"
-                          :key="country.id"
+                      </div>
+                      <!-- Form Group (last name)-->
+                      <div class="col-md-6">
+                        <label
+                          class="small mb-1"
+                          for="inputLastName"
+                          style="float: left"
+                          >Type industrie</label
                         >
-                          {{ country.name }}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <label for="country" style="float: left"
-                        >Gouvernorat</label
-                      >
-                      <select
-                        class="form-select"
-                        :disabled="selectedCountry == ''"
-                        v-model="selectedState"
-                        required
-                      >
-                        <option value="" disabled selected>
-                          Sélectionner le gouvernorat
-                        </option>
-                        <option
-                          :value="state.id"
-                          v-for="state in states"
-                          :key="state.id"
-                        >
-                          {{ state.name }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
+                        <select
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.type_ind}]"
+                          id="inputLastName"
+                          aria-label="Default select example"
+                          v-model="type_ind"
 
-                  <!-- Form Group (username)-->
-                  <div class="mb-3">
-                    <label class="small mb-1" for="inputUsername"
-                      >Adresse</label
-                    >
-                    <textarea
-                      class="form-control"
-                      id="inputUsername"
-                      rows="4"
-                      placeholder="Entrer votre adresse"
-                      v-model="address"
-                      required
-                    ></textarea>
-                  </div>
-                  <!-- Save changes button-->
-                  <button class="btn btn-primary" type="submit">
-                    Enregistrer
-                  </button>
-                </form>
+                        >
+                        <option :value="null" disabled selected hidden>Sélectionner le type d'industrie</option>
+
+                          <option
+                            v-for="industrie in type_industries"
+                            :key="industrie.id"
+                            :value="industrie.id"
+                          >
+                            {{ industrie.name }}
+                          </option>
+                        </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.type_ind" :key="index">{{ err }}<br></span>
+
+                      </div>
+                    </div>
+                    <!-- Form Row        -->
+                    <div class="row gx-3 mb-3">
+                      <!-- Form Group (organization name)-->
+                      <div class="col-md-6">
+                        <label class="small mb-1" for="inputOrgName"
+                          >Résponsable</label
+                        >
+                        <input
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.responsable}]"
+                          id="inputOrgName"
+                          type="text"
+                          placeholder="Entrer le nom du répsponsable"
+                          v-model="responsable"
+
+                        />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.responsable" :key="index">{{ err }}<br></span>
+
+                      </div>
+                      <!-- Form Group (location)-->
+                      <div class="col-md-6">
+                        <label class="small mb-1" for="inputLocation"
+                          >Numéro du résponsable</label
+                        >
+                        <input
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
+                          id="inputLocation"
+                          type="text"
+                          placeholder="Entrer le numéro du répsponsable"
+                          v-model="N_responsable"
+
+                        />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
+
+                      </div>
+                    </div>
+
+                    <!-- Country & state Add  -->
+                    <div class="row gx-3 mb-3">
+                      <div class="col-md-6">
+                        <label for="country" style="float: left">Pays</label>
+                        <select
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.country}]"
+                          v-model="selectedCountry"
+                          @change="fireState()"
+
+                        >
+                        <option :value="null" disabled selected hidden>Sélectionner un pays</option>
+
+                          <option
+                            :value="country.id"
+                            v-for="country in countries"
+                            :key="country.id"
+                          >
+                            {{ country.name }}
+                          </option>
+                        </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.country" :key="index">{{ err }}<br></span>
+
+                      </div>
+                      <div class="col-md-6">
+                        <label for="country" style="float: left"
+                          >Gouvernorat</label
+                        >
+                        <select
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.city}]"
+                          :disabled="selectedCountry == ''"
+                          v-model="selectedState"
+
+                        >
+
+                        <option :value="null" disabled selected hidden>Sélectionner le gouvernorat</option>
+                          <option
+                            :value="state.id"
+                            v-for="state in states"
+                            :key="state.id"
+                          >
+                            {{ state.name }}
+                          </option>
+                        </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.city" :key="index">{{ err }}<br></span>
+
+                      </div>
+                    </div>
+
+                    <!-- Form Group (username)-->
+                    <div class="mb-3">
+                      <label class="small mb-1" for="inputUsername"
+                        >Adresse</label
+                      >
+                      <textarea
+                      :class="['form-control', {'is-invalid': validationErrorsEdit.address}]"
+                        id="inputUsername"
+                        rows="4"
+                        placeholder="Entrer votre adresse"
+                        v-model="address"
+
+                      ></textarea>
+                      <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.address" :key="index">{{ err }}<br></span>
+
+                    </div>
+                    <!-- Save changes button-->
+                    <button class="btn btn-primary" type="submit">
+                      Enregistrer
+                    </button>
+                  </form>
               </div>
             </div>
           </div>
@@ -545,6 +556,7 @@ export default {
   },
   data() {
     return {
+      validationErrorsEdit:{},
       formSubmitted: false,
       user: {},
       role: null,
@@ -554,7 +566,7 @@ export default {
       responsable: "",
       N_responsable: "",
       countries: listCountries,
-      selectedCountry: "",
+      selectedCountry: '222',
       selectedState: "",
       states: [],
       address: "",
@@ -586,13 +598,19 @@ export default {
       console.log("user's role is " + this.role);
       console.log("user's id is " + this.id);
       //Client
+
       this.society = window.Laravel.user.society;
       this.type_ind = window.Laravel.user.type_ind;
       this.responsable = window.Laravel.user.responsable;
       this.N_responsable = window.Laravel.user.N_responsable;
       this.selectedCountry = window.Laravel.user.country;
+
       this.selectedState = window.Laravel.user.city;
       this.address = window.Laravel.user.address;
+
+    this.$nextTick(() => {
+        this.fireState();
+      });
     }
     if (
       this.society &&
@@ -616,10 +634,10 @@ export default {
       );
     },
 
-    updateClientDetails(user) {
-      console.log("user name:" + user.name);
+    async updateClientDetails(user) {
+    this.validationErrorsEdit={};
       try {
-        axios.put(`/api/users/requestVerification/${user.id}`, {
+      await  axios.put(`/api/users/requestVerification/${user.id}`, {
           society: this.society,
           type_ind: this.type_ind,
           responsable: this.responsable,
@@ -649,12 +667,19 @@ export default {
         });
         toast.fire({
           icon: "success",
-          title: " succés!",
+          title:
+            " Demande a été envoyer avec succées!",
         });
-
         this.$router.push("/dashboard");
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.validationErrorsEdit = error.response.data.errors;
+          console.log(this.validationErrorsEdit);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du type.";
+        }
       }
     },
 

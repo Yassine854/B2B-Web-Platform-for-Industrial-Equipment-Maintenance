@@ -36,10 +36,10 @@
               <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                    <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
-                    <h5 class="modal-title col-11" id="addTypeIndustryLabel">
-                        Ajouter un nouvel type d'industrie
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-plus fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="editProductLabel">
+                        Ajouter un nouveau type
                     </h5>
                     </div>
 
@@ -52,22 +52,26 @@
                   </div>
                   <div class="modal-body">
 
-                    <form  @submit.prevent="createType()">
+                    <form @submit.prevent="createType()">
                         <div class="mb-3">
                                   <label
                                     class="small mb-1"
+
                                     for="name"
                                     style="float: left"
                                     >Nom</label
                                   >
                                   <input
-                                    class="form-control"
+                                  :class="['form-control', {'is-invalid': validationErrors.name}]"
+
                                     id="name"
                                     rows="4"
                                     placeholder="Entrer le type d'industrie"
                                     v-model="name"
-                                    required
+
                                   >
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrors.name" :key="index">{{ err }}<br></span>
+
                         </div>
                                 <div class="modal-footer">
                         <button
@@ -114,7 +118,7 @@
                     ></button>
                   </div>
                   <div class="modal-body">
-                    <form @submit.prevent="updateType(typeEdit)" >
+                    <form @submit.prevent="updateType(typeEdit)">
 
                         <div class="mb-3">
                                   <label
@@ -124,13 +128,16 @@
                                     >Nom</label
                                   >
                                   <input
-                                    class="form-control"
+                                   :class="['form-control', {'is-invalid': validationErrorsEdit.name}]"
                                     id="name"
                                     rows="4"
                                     placeholder="Entrer le type d'industrie"
                                     v-model="name"
-                                    required
+
                                   >
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.name" :key="index">{{ err }}<br></span>
+
+
                         </div>
 
                         <div class="modal-footer">
@@ -257,7 +264,7 @@ import layout from "../layouts/layout.vue";
   let searchType = ref([]);
 
   const currentPage = ref(1);
-  const itemsPerPage = ref(5); // Set the default number of items per page
+  const itemsPerPage = ref(10); // Set the default number of items per page
 
 
   onMounted(async () => {
@@ -313,6 +320,8 @@ import layout from "../layouts/layout.vue";
     },
     data() {
       return {
+        validationErrors : {},
+        validationErrorsEdit:{},
         type_ind: {},
         typeEdit: {},
         name: "",
@@ -373,6 +382,7 @@ import layout from "../layouts/layout.vue";
 
 
       async createType() {
+        this.validationErrors = {};
         try {
           await axios.post(`/api/types_industrie/create`, {
             name: this.name,
@@ -397,9 +407,15 @@ import layout from "../layouts/layout.vue";
           $("#addTypeIndustry").modal("hide");
 
           this.get_all_types();
-          window.location.reload();
         } catch (error) {
-          console.log(error);
+            if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.validationErrors = error.response.data.errors;
+          console.log(this.validationErrors);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du type.";
+        }
         }
       },
 
@@ -410,35 +426,48 @@ import layout from "../layouts/layout.vue";
         this.typeEdit=type_ind;
           },
 
-      updateType(type_ind) {
-        try {
-          axios.put(`/api/types_industrie/update/${type_ind.id}`, {
-            name: this.name,
-          });
+  async updateType(type_ind) {
+  this.validationErrorsEdit = {};
+  try {
+    const response = await axios.put(`/api/types_industrie/update/${type_ind.id}`, {
+      name: this.name,
+    });
 
+    // Check if the update was successful
+    if (response.status === 200) {
+      const toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        customClass: {
+          popup: "colored-toast",
+        },
+        timer: 3000,
+      });
 
+      toast.fire({
+        icon: "success",
+        title: "Element modifié avec succès!",
+      });
 
-          const toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            customClass: {
-              popup: "colored-toast",
-            },
-            timer: 3000,
-          });
-          toast.fire({
-            icon: "success",
-            title: "Element modifié avec succés!",
-          });
+      // Hide the modal, reset form data, and refresh the list
+      $("#editTypeIndustry").modal("hide");
+      this.get_all_types();
+      this.typeEdit = {};
+    } else {
+      this.errorMessage = "Une erreur s'est produite lors de la mise à jour de l'élément.";
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      // Validation errors, set the validationErrors object
+      this.validationErrorsEdit = error.response.data.errors;
+    } else {
+      // Handle other errors (e.g., server errors)
+      this.errorMessage = "Une erreur s'est produite lors de la mise à jour de l'élément.";
+    }
+  }
+},
 
-          $("#editTypeIndustry").modal("hide");
-          this.get_all_types();
-          this.typeEdit = {};
-        } catch (error) {
-          console.log(error);
-        }
-      },
 
       deleteType(type_id) {
         Swal.fire({

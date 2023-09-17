@@ -36,10 +36,10 @@
               <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                    <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
-                    <h5 class="modal-title col-11" id="addProductLabel">
-                        Ajouter une nouvelle Pompe
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-plus fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="editProductLabel">
+                        Ajouter une nouvelle pompe
                     </h5>
                     </div>
 
@@ -51,7 +51,6 @@
                     ></button>
                   </div>
                   <div class="modal-body">
-
                     <form  @submit.prevent="createProduct()">
 
                         <div class="row gx-3 mb-3">
@@ -63,14 +62,17 @@
                                 >Nom</label
                                 >
                                 <input
-                                class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.name}]"
                                 id="name"
                                 rows="4"
                                 type="text"
                                 placeholder="Entrer le nom du pompe"
                                 v-model="name"
-                                required
+
                                 >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.name" :key="index">{{ err }}<br></span>
+
+
                             </div>
 
                             <div class="col-md-6">
@@ -81,13 +83,13 @@
                                     >Type de produit</label
                                   >
                                   <select
-                                    class="form-select"
+                                  :class="['form-select', {'is-invalid': validationErrors.type_prod}]"
                                     id="type_prod"
                                     aria-label="Default select example"
                                     v-model="type_prod"
-                                    required
+
                                   >
-                                  <option :value="''" disabled selected>Sélectionner le type de la pompe</option>
+                                  <option :value="''" disabled selected hidden>Sélectionner le type de la pompe</option>
 
                                         <option
                                         v-for="types in type_products"
@@ -97,6 +99,9 @@
                                         {{ types.name }}
                                         </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrors.type_prod" :key="index">{{ err }}<br></span>
+
+
                             </div>
                         </div>
 
@@ -106,21 +111,26 @@
                                     <div class="col-md-6">
                                         <label class="small mb-1" for="debit" style="float: left">Débit</label>
                                         <input
-                                            class="form-control"
+                                        :class="['form-control', {'is-invalid': validationErrors.debit}]"
                                             id="debit"
                                             type="text"
                                             placeholder="Entrer le débit"
                                             v-model="debit"
-                                            required
+
                                         >
+                                        <span class="invalid-feedback" v-for="(err, index) in validationErrors.debit" :key="index">{{ err }}<br></span>
+
+
                                     </div>
                                     <div class="col-md-4">
                                     <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
-                                    <select id="flow-rate" class="form-select" v-model="unity_debit" required>
+                                    <select id="flow-rate" :class="['form-control', {'is-invalid': validationErrors.debit}]" v-model="unity_debit">
                                         <option value="m³/h">m³/h</option>
                                         <option value="l/s">l/s</option>
                                     </select>
-                                    </div>
+                                    <span class="invalid-feedback" v-for="(err, index) in validationErrors.unity_debit" :key="index">{{ err }}<br></span>
+                                </div>
+
                                 </div>
                             </div>
 
@@ -132,14 +142,16 @@
                                 >Pression</label
                                 >
                                 <input
-                                class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.pression}]"
                                 id="Pression"
                                 rows="4"
                                 type="text"
                                 placeholder="Entrer la pression"
                                 v-model="pression"
-                                required
+
                                 >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.pression" :key="index">{{ err }}<br></span>
+
                             </div>
                         </div>
 
@@ -152,14 +164,16 @@
                                 >Année</label
                                 >
                                 <input
-                                class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.year}]"
                                 id="Année"
                                 rows="4"
                                 type="text"
                                 placeholder="Entrer l'année"
                                 v-model="year"
-                                required
+
                                 >
+
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.year" :key="index">{{ err }}<br></span>
                             </div>
 
                             <div class="col-md-6">
@@ -170,20 +184,24 @@
                                 >HT/J</label
                                 >
                                 <input
-                                class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.time_day}]"
                                 id="time_day"
                                 rows="4"
                                 type="text"
                                 placeholder="Entrer l'heure du travail"
                                 v-model="time_day"
-                                required
+
                                 >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.time_day" :key="index">{{ err }}<br></span>
+
                             </div>
                         </div>
 
                         <div class="mb-3">
                         <label for="image" class="form-label" style="float: left">Image</label>
-                        <input @change="uploadImage" class="form-control" type="file" id="image">
+                        <input @change="uploadImage" :class="['form-control', {'is-invalid': validationErrors.image}]" type="file" id="image">
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrors.image" :key="index">{{ err }}<br></span>
+
                         </div>
 
                         <div class="modal-footer">
@@ -209,185 +227,165 @@
 
             <!----------------------------------------------- End Create product------------------------------------------>
 
-            <!-----------------------------------------------Edit product------------------------------------------>
-
-            <div class="modal fade" id="editProduct" tabindex="-1">
-              <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <div class="d-flex align-items-center">
-                    <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px;"></i>
-                    <h5 class="modal-title mb-0" id="editProductLabel">
-                        Modifier la pompe
-                    </h5>
-                    </div>
-
-
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form @submit.prevent="updateProduct(productEdit)" >
-
-                        <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="name"
-                                style="float: left"
-                                >Nom</label
-                                >
-                                <input
-                                class="form-control"
-                                id="name"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer le nom du pompe"
-                                v-model="nameEdit"
-                                required
-                                >
-                            </div>
-
-                            <div class="col-md-6">
-                                  <label
-                                    class="small mb-1"
-                                    for="type_prod"
-                                    style="float: left"
-                                    >Type de produit</label
-                                  >
-                                  <select
-                                    class="form-select"
-                                    id="type_prod"
-                                    aria-label="Default select example"
-                                    v-model="type_prodEdit"
-                                    required
-                                  >
-                                        <option
-                                        v-for="types in type_products"
-                                        :key="types.id"
-                                        :value="types.id"
-                                        >
-                                        {{ types.name }}
-                                        </option>
-                                  </select>
-                            </div>
-                        </div>
-
-                            <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <div class="row gx-3 mb-6">
-                                    <div class="col-md-6">
-                                        <label class="small mb-1" for="debit" style="float: left">Débit</label>
-                                        <input
-                                            class="form-control"
-                                            id="debit"
-                                            type="text"
-                                            placeholder="Entrer le débit"
-                                            v-model="debitEdit"
-                                            required
-                                        >
-                                    </div>
-                                    <div class="col-md-4">
-                                    <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
-                                    <select id="flow-rate" class="form-select" v-model="unity_debitEdit" required>
-                                        <option value="m³/h">m³/h</option>
-                                        <option value="l/s">l/s</option>
-                                    </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="Pression"
-                                style="float: left"
-                                >Pression</label
-                                >
-                                <input
-                                class="form-control"
-                                id="Pression"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer la pression"
-                                v-model="pressionEdit"
-                                required
-                                >
-                            </div>
-                        </div>
-
-                        <div class="row gx-3 mb-3">
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="Année"
-                                style="float: left"
-                                >Année</label
-                                >
-                                <input
-                                class="form-control"
-                                id="Année"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer l'année"
-                                v-model="yearEdit"
-                                required
-                                >
-                            </div>
-
-                            <div class="col-md-6">
-                                <label
-                                class="small mb-1"
-                                for="time_day"
-                                style="float: left"
-                                >HT/J</label
-                                >
-                                <input
-                                class="form-control"
-                                id="time_day"
-                                rows="4"
-                                type="text"
-                                placeholder="Entrer l'heure du travail"
-                                v-model="time_dayEdit"
-                                required
-                                >
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                        <label for="imageEdit" class="form-label" style="float: left">Image</label>
-                        <input  @change="uploadImageEdit" class="form-control" type="file" id="imageEdit">
-                        </div>
-
-
-
-                        <div class="modal-footer">
-                            <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                            >
-                            Annuler
-                            </button>
-                            <button
-                            type="submit"
-                            class="btn btn-primary"
-                            >
-                             Modifier
-                        </button>
-                      </div>
-
-                    </form>
-
-
-                  </div>
+            <!-- Edit product modal -->
+<div class="modal fade" id="editProduct" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex align-items-center">
+          <i class="fa-solid fa-pen fa-xl me-2"></i>
+          <h5 class="modal-title mb-0" id="editProductLabel">
+            Modifier la pompe
+          </h5>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form @submit.prevent="updateProduct(productEdit)">
+          <div class="row gx-3 mb-3">
+            <div class="col-md-6">
+              <label
+                class="small mb-1"
+                for="name"
+                style="float: left"
+              >Nom</label>
+              <input
+                :class="['form-control', {'is-invalid': validationErrorsEdit.name}]"
+                id="name"
+                rows="4"
+                type="text"
+                placeholder="Entrer le nom du pompe"
+                v-model="nameEdit"
+              >
+              <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.name" :key="index">{{ err }}<br></span>
+            </div>
+            <div class="col-md-6">
+              <label
+                class="small mb-1"
+                for="type_prod"
+                style="float: left"
+              >Type de produit</label>
+              <select
+                :class="['form-select', {'is-invalid': validationErrorsEdit.type_prod}]"
+                id="type_prod"
+                aria-label="Default select example"
+                v-model="type_prodEdit"
+              >
+                <option :value="null" disabled selected hidden>Sélectionner le type de la pompe</option>
+                <option
+                  v-for="types in type_products"
+                  :key="types.id"
+                  :value="types.id"
+                >{{ types.name }}</option>
+              </select>
+              <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.type_prod" :key="index">{{ err }}<br></span>
+            </div>
+          </div>
+          <div class="row gx-3 mb-3">
+            <div class="col-md-6">
+              <div class="row gx-3 mb-6">
+                <div class="col-md-6">
+                  <label class="small mb-1" for="debit" style="float: left">Débit</label>
+                  <input
+                    :class="['form-control', {'is-invalid': validationErrorsEdit.debit}]"
+                    id="debit"
+                    type="text"
+                    placeholder="Entrer le débit"
+                    v-model="debitEdit"
+                  >
+                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.debit" :key="index">{{ err }}<br></span>
+                </div>
+                <div class="col-md-4">
+                  <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
+                  <select :class="['form-select', {'is-invalid': validationErrorsEdit.debit}]" id="flow-rate" v-model="unity_debitEdit">
+                    <option value="m³/h">m³/h</option>
+                    <option value="l/s">l/s</option>
+                  </select>
                 </div>
               </div>
             </div>
+            <div class="col-md-6">
+              <label
+                class="small mb-1"
+                for="Pression"
+                style="float: left"
+              >Pression</label>
+              <input
+                :class="['form-control', {'is-invalid': validationErrorsEdit.pression}]"
+                id="Pression"
+                rows="4"
+                type="text"
+                placeholder="Entrer la pression"
+                v-model="pressionEdit"
+              >
+              <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.pression" :key="index">{{ err }}<br></span>
+            </div>
+          </div>
+          <div class="row gx-3 mb-3">
+            <div class="col-md-6">
+              <label
+                class="small mb-1"
+                for="Année"
+                style="float: left"
+              >Année</label>
+              <input
+                :class="['form-control', {'is-invalid': validationErrorsEdit.year}]"
+                id="Année"
+                rows="4"
+                type="text"
+                placeholder="Entrer l'année"
+                v-model="yearEdit"
+              >
+              <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.year" :key="index">{{ err }}<br></span>
+            </div>
+            <div class="col-md-6">
+              <label
+                class="small mb-1"
+                for="time_day"
+                style="float: left"
+              >HT/J</label>
+              <input
+                :class="['form-control', {'is-invalid': validationErrorsEdit.time_day}]"
+                id="time_day"
+                rows="4"
+                type="text"
+                placeholder="Entrer l'heure du travail"
+                v-model="time_dayEdit"
+              >
+              <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.time_day" :key="index">{{ err }}<br></span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="imageEdit" class="form-label" style="float: left">Image</label>
+            <input @change="uploadImageEdit" :class="['form-control', {'is-invalid': validationErrorsEdit.image}]" type="file" id="imageEdit">
+            <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.image" :key="index">{{ err }}<br></span>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+            >
+              Modifier
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
             <!----------------------------------------------- End Edit product------------------------------------------>
 
@@ -399,7 +397,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-          <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px;"></i>
+            <i class="fa-brands fa-product-hunt me-2"></i>
           <h5 class="modal-title mb-0" id="editProductLabel">
             Détails de la pompe
           </h5>
@@ -572,7 +570,7 @@
   let searchProduct = ref([]);
 
   const currentPage = ref(1);
-  const itemsPerPage = ref(5); // Set the default number of items per page
+  const itemsPerPage = ref(10); // Set the default number of items per page
 
 
   onMounted(async () => {
@@ -638,6 +636,8 @@
     },
     data() {
       return {
+        validationErrors : {},
+        validationErrorsEdit:{},
         product: {},
         name: "",
         type_prod:"",
@@ -730,7 +730,7 @@
       },
 
       async createProduct() {
-        console.log(this.image);
+        this.validationErrors = {};
         try {
             let form = new FormData();
             form.append('name', this.name);
@@ -740,7 +740,7 @@
             form.append('pression', this.pression);
             form.append('year', this.year);
             form.append('time_day', this.time_day);
-            form.append('image', this.image);
+            form.append('image', this.image ?? '');
           await axios.post(`/api/products/create`, form);
           console.log(form);
           this.name = "";
@@ -770,7 +770,14 @@
           this.get_products();
           window.location.reload();
         } catch (error) {
-          console.log(error);
+            if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.validationErrors = error.response.data.errors;
+          console.log(this.validationErrors);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du produit.";
+        }
         }
       },
 
@@ -789,6 +796,7 @@
           },
 
 updateProduct(product) {
+    this.validationErrorsEdit = {};
   try {
     let formEdit = new FormData();
     formEdit.append('name', this.nameEdit);
@@ -798,7 +806,7 @@ updateProduct(product) {
     formEdit.append('pression', this.pressionEdit);
     formEdit.append('year', this.yearEdit);
     formEdit.append('time_day', this.time_dayEdit);
-    formEdit.append('image', this.imageEdit);
+    formEdit.append('image', this.imageEdit ?? '');
     axios({
       method: 'post',
       url: `/api/products/update/${product.id}`,
@@ -835,7 +843,14 @@ updateProduct(product) {
       this.imageEdit = "";
       this.unity_debitEdit="";
     }).catch(error => {
-      console.log(error);
+        if (error.response.status === 400) {
+          // Validation errors, set the validationErrors object
+          this.validationErrorsEdit = error.response.data.errors;
+          console.log(this.validationErrorsEdit);
+        } else {
+          // Handle other errors (e.g., server errors)
+          this.errorMessage = "Une erreur s'est produite lors de la création du produit.";
+        }
     });
   } catch (error) {
     console.log(error);
@@ -934,5 +949,4 @@ td img {
   max-width: 300px;
   max-height: 300px;
 }
-
   </style>

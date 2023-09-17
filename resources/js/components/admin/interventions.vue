@@ -35,13 +35,16 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px"></i>
-          <h5 class="modal-title col-11" id="addInterventionLabel">Créer une nouvelle intervention</h5>
-        </div>
+        <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-plus fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="editProductLabel">
+                        Ajouter une nouvelle intervention
+                    </h5>
+                    </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
         <form @submit.prevent="createIntervention()">
           <!-- Client and Product Selection -->
           <div class="row mb-3">
@@ -55,7 +58,7 @@
             <div class="col-md-6">
               <label class="small mb-1" for="product_select" style="float: left;">Pompes</label>
               <select class="form-select" id="product_select" v-model="product" required>
-                <option value="" disabled>Sélectionner une pompe</option>
+                <option :value="null" disabled selected hidden>Sélectionner une pompe</option>
                 <option v-for="product in productsForSelectedClient" :key="product.product_id" :value="product.product_id">{{ product.product[0].name }}</option>
               </select>
             </div>
@@ -393,10 +396,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <div class="d-flex align-items-center">
-                    <i
-                      class="fa-solid fa-pen fa-xl"
-                      style="margin-right: 10px"
-                    ></i>
+                    <i class="fa-brands fa-servicestack me-2"></i>
                     <h5 class="modal-title mb-0" id="showInterventionLabel">
                       Détails de l'intervention
                     </h5>
@@ -448,7 +448,7 @@
                             disabled
                           />
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3" v-if="diagnosticShow">
                           <label class="small" for="nature" style="float: left"
                             >Diagnostic</label
                           >
@@ -1024,7 +1024,7 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Oui, supprimez-le !",
+        confirmButtonText: "Oui, supprimez-la !",
         cancelButtonText: "Annuler",
       }).then((result) => {
         if (result.isConfirmed) {
