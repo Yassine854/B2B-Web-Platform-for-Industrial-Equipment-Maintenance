@@ -36,10 +36,10 @@
               <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <div class="d-flex align-items-center justify-content-center mb-3">
-                    <i class="fa-sharp fa-solid fa-plus fa-xl" style="margin-right: 10px;"></i>
-                    <h5 class="modal-title col-11" id="addProductLabel">
-                        Assigner une pompe au client
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-plus fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="editProductLabel">
+                        Affecter une pompe au client
                     </h5>
                     </div>
 
@@ -67,11 +67,11 @@
                                     >Clients</label
                                   >
                                   <select
-                                    class="form-select"
+                                  :class="['form-select', {'is-invalid': validationErrors.client_id}]"
                                     id="type_prod"
                                     aria-label="Default select example"
                                     v-model="client"
-                                    required
+
                                   >
                                   <option value="" selected disabled hidden>Sélectionner un client</option>
                                         <option
@@ -82,6 +82,8 @@
                                         {{ client.society }}
                                         </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrors.client_id" :key="index">{{ err }}<br></span>
+
                             </div>
 
 
@@ -91,14 +93,14 @@
                                     class="small mb-1"
                                     for="type_prod"
                                     style="float: left"
-                                    >Pompes</label
+                                    >Pompe</label
                                   >
                                   <select
-                                    class="form-select"
+                                  :class="['form-select', {'is-invalid': validationErrors.product_id}]"
                                     id="type_prod"
                                     aria-label="Default select example"
                                     v-model="product"
-                                    required
+
                                   >
                                   <option value="" selected disabled hidden>Sélectionner une pompe</option>
                                         <option
@@ -106,9 +108,11 @@
                                         :key="product.id"
                                         :value="product.id"
                                         >
-                                        {{ product.name }}
+                                        {{ product.id }}-{{ product.name }}
                                         </option>
                                   </select>
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrors.product_id" :key="index">{{ err }}<br></span>
+
                             </div>
                         </div>
 
@@ -123,13 +127,15 @@
                                 >Changement d'huile</label
                                 >
                                 <input
-                                class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.c_huile}]"
                                 id="Année"
                                 rows="4"
                                 type="text"
                                 placeholder="Entrer le temps de changement d'huile"
                                 v-model="c_huile"
                                 >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.c_huile" :key="index">{{ err }}<br></span>
+
                             </div>
 
                             <div class="col-md-6">
@@ -140,13 +146,15 @@
                                 >Changement des cartouches de filtres</label
                                 >
                                 <input
-                                class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.c_filtre}]"
                                 id="time_day"
                                 rows="4"
                                 type="text"
                                 placeholder="Entrer le temps de changement de filtre"
                                 v-model="c_filtre"
                                 >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.c_filtre" :key="index">{{ err }}<br></span>
+
                             </div>
                         </div>
 
@@ -160,13 +168,15 @@
                                 >Changement des déshuileurs</label
                                 >
                                 <input
-                                class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.c_dehuil}]"
                                 id="Année"
                                 rows="4"
                                 type="text"
                                 placeholder="Entrer le temps de changement des déshuileurs"
                                 v-model="c_dehuil"
                                 >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.c_dehuil" :key="index">{{ err }}<br></span>
+
                             </div>
 
                             <div class="col-md-6">
@@ -177,12 +187,14 @@
                                   >Entretien</label
                                 >
                                 <input
-                                  class="form-control"
+                                :class="['form-control', {'is-invalid': validationErrors.entretien}]"
                                   id="inputOrgName"
                                   type="text"
                                   placeholder="Entrer le temps d'entretien"
                                   v-model="entretien"
                                 />
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.entretien" :key="index">{{ err }}<br></span>
+
                               </div>
                         </div>
 
@@ -348,6 +360,8 @@ import layout from "../layouts/layout";
     },
     data() {
       return {
+        validationErrors:{},
+        validationErrorsEdit:{},
         client: "",
         product:"",
         c_huile:"",
@@ -418,7 +432,7 @@ import layout from "../layouts/layout";
       },
 
       async createAssignment() {
-
+        this.validationErrors={};
         try {
             let form = new FormData();
             form.append('client_id', this.client);
@@ -454,7 +468,12 @@ import layout from "../layouts/layout";
           this.$router.push("/parc_clients");
           window.location.reload();
         } catch (error) {
-          console.log(error);
+            if (error.response.status === 400) {
+          this.validationErrors = error.response.data.errors;
+          console.log(this.validationErrors);
+        } else {
+          this.errorMessage = "Une erreur s'est produite lors de la création du produit.";
+        }
         }
       },
 

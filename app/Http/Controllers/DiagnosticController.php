@@ -51,21 +51,43 @@ class DiagnosticController extends Controller
                 'date',
             ],
             'informations' => 'required|array',
-            'informations.*.def' => 'required|string',
+            'informations.*.def' => 'required',
+            'informations.*.description' => 'nullable|string|max:255',
+            'informations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:512',
 
             'pieces' => 'required|array',
-            'pieces.*.designation' => 'required|string',
-            'pieces.*.reference' => 'required|string',
+            'pieces.*.designation' => 'required|string|max:255',
+            'pieces.*.reference' => 'required|string|max:255',
             'pieces.*.quantite' => 'required|integer',
         ];
 
-        // Create a validator instance
-        $validator = Validator::make($request->all(), $rules);
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'integer' => 'Ce champ doit être un entier.',
+            'date' => 'La date doit être au format valide.',
+            'array' => 'Ce champ doit être un tableau.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'informations.*.image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
+            'informations.*.image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
+            'informations.required' => 'La définition des informations est requise.',
+            'informations.array' => 'Le champ des informations doit être un tableau et doit contenir au moins un élément.',
+            'informations.*.def.required' => 'Le champ défaut est requis.',
+            'pieces.required' => 'La définition des piéces est requise.',
+            'pieces.array' => 'Le champ des pièces doit être un tableau et doit contenir au moins un élément.',
+            'pieces.*.designation.required' => 'La désignation des pièces est requise.',
+            'pieces.*.reference.required' => 'La référence des pièces est requise.',
+            'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+        ];
+
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
 
         // Sample data for the intervention
         $DiagnosticData = [
@@ -126,21 +148,42 @@ class DiagnosticController extends Controller
                 'date',
             ],
             'informations' => 'required|array',
-            'informations.*.def' => 'required|string',
+            'informations.*.def' => 'required',
+            'informations.*.description' => 'nullable|string|max:255',
+            'informations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:512',
 
             'pieces' => 'required|array',
-            'pieces.*.designation' => 'required|string',
-            'pieces.*.reference' => 'required|string',
+            'pieces.*.designation' => 'required|string|max:255',
+            'pieces.*.reference' => 'required|string|max:255',
             'pieces.*.quantite' => 'required|integer',
         ];
 
-        // Create a validator instance
-        $validator = Validator::make($request->all(), $rules);
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'integer' => 'Ce champ doit être un entier.',
+            'date' => 'La date doit être au format valide.',
+            'array' => 'Ce champ doit être un tableau.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'informations.*.image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
+            'informations.*.image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
+            'informations.required' => 'La définition des informations est requise.',
+            'informations.array' => 'Le champ des informations doit être un tableau et doit contenir au moins un élément.',
+            'informations.*.def.required' => 'Le champ défaut est requis.',
+            'pieces.required' => 'La définition des piéces est requise.',
+            'pieces.array' => 'Le champ des pièces doit être un tableau et doit contenir au moins un élément.',
+            'pieces.*.designation.required' => 'La désignation des pièces est requise.',
+            'pieces.*.reference.required' => 'La référence des pièces est requise.',
+            'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+        ];
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
 
         // Sample data for the intervention
         $DiagnosticData = [
@@ -150,6 +193,8 @@ class DiagnosticController extends Controller
         ];
 
         DB::table('diagnostics')->where('id', $id)->update($DiagnosticData);
+
+
 
         DB::table('informations')->where('diagnostic_id', $id)->delete();
 

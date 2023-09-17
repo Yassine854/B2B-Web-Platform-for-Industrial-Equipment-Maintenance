@@ -82,7 +82,7 @@
             :href="$router.resolve({ name: 'diagnostics' }).href"
             class="nav-link"
           >
-          <i class="fa-brands fa-searchengin"></i>
+          <i class="fas fa-clipboard-list"></i>
             <span>Diagnostics</span></a
           >
         </li>

@@ -31,7 +31,7 @@ class ProductController extends Controller
         'pression' => 'required|string',
         'year' => 'required|integer',
         'time_day' => 'required|integer|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:512',
     ];
 
     $messages = [

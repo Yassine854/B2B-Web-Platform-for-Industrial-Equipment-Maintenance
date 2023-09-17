@@ -89,19 +89,34 @@ public function getProductName($id)
             'name' => 'required|string',
             'client_id' => 'required|integer',
             'product_id' => 'required|integer',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
+            'diagnostic_id'=> 'nullable',
             'date' => [
                 'required',
                 'date',
             ],
             'pieces' => 'required|array',
-            'pieces.*.designation' => 'required|string',
-            'pieces.*.reference' => 'required|string',
+            'pieces.*.designation' => 'required|string|max:255',
+            'pieces.*.reference' => 'required|string|max:255',
             'pieces.*.quantite' => 'required|integer',
         ];
 
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'integer' => 'Ce champ doit être un entier.',
+            'date' => 'La date doit être au format valide.',
+            'array' => 'Ce champ doit être un tableau.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'pieces.required' => 'La définition des piéces est requise.',
+            'pieces.array' => 'Le champ des pièces doit être un tableau et doit contenir au moins un élément.',
+            'pieces.*.designation.required' => 'La désignation des pièces est requise.',
+            'pieces.*.reference.required' => 'La référence des pièces est requise.',
+            'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+        ];
+
         // Create a validator instance
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if validation fails
         if ($validator->fails()) {
@@ -153,24 +168,38 @@ public function getProductName($id)
 
     public function updateIntervention(Request $request, $id)
     {
-        // Define the validation rules
         $rules = [
             'name' => 'required|string',
             'client_id' => 'required|integer',
             'product_id' => 'required|integer',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:255',
+            'diagnostic_id'=> 'nullable',
             'date' => [
                 'required',
                 'date',
             ],
             'pieces' => 'required|array',
-            'pieces.*.designation' => 'required|string',
-            'pieces.*.reference' => 'required|string',
+            'pieces.*.designation' => 'required|string|max:255',
+            'pieces.*.reference' => 'required|string|max:255',
             'pieces.*.quantite' => 'required|integer',
         ];
 
+        $messages = [
+            'required' => 'Ce champ est requis.',
+            'integer' => 'Ce champ doit être un entier.',
+            'date' => 'La date doit être au format valide.',
+            'array' => 'Ce champ doit être un tableau.',
+            'string' => 'Ce champ doit être une chaîne de caractères.',
+            'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'pieces.required' => 'La définition des piéces est requise.',
+            'pieces.array' => 'Le champ des pièces doit être un tableau et doit contenir au moins un élément.',
+            'pieces.*.designation.required' => 'La désignation des pièces est requise.',
+            'pieces.*.reference.required' => 'La référence des pièces est requise.',
+            'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+        ];
+
         // Create a validator instance
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         // Check if validation fails
         if ($validator->fails()) {

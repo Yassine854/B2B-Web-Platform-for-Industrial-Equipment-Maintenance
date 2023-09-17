@@ -1079,7 +1079,7 @@ window.Swal = Swal;
 let users = ref([]);
 let type_industries = ref([]);
 const currentPage = ref(1);
-const itemsPerPage = ref(5); // Set the default number of items per page
+const itemsPerPage = ref(10); // Set the default number of items per page
 
 let selectRole = ref(1);
 
@@ -1315,7 +1315,7 @@ async search() {
     },
 
     async createAdmin() {
-
+        this.AdminvalidationErrors={};
       try {
         await axios.post(`/api/users/create/admin`, {
           name: this.nameAdmin,
@@ -1414,9 +1414,8 @@ async search() {
     },
 
     openEditModal(user) {
-      //   console.log("userId is: " + user.id);
-      console.log("password is " + user.password);
       $("#editUserModal").modal("show");
+      this.validationErrorsEdit={}
       if (user.role == 2) this.selectRole = "2";
       else this.selectRole = "1";
 

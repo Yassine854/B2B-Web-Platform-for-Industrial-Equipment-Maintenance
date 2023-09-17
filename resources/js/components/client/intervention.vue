@@ -26,14 +26,11 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <div class="d-flex align-items-center">
-                      <i
-                        class="fa-solid fa-pen fa-xl"
-                        style="margin-right: 10px"
-                      ></i>
-                      <h5 class="modal-title mb-0" id="showInterventionLabel">
-                        Détails de l'intervention
-                      </h5>
-                    </div>
+                    <i class="fa-brands fa-servicestack fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="showInterventionLabel">
+                      Détails de l'intervention
+                    </h5>
+                  </div>
                     <button
                       type="button"
                       class="btn-close"
@@ -81,7 +78,7 @@
                               disabled
                             />
                           </div>
-                          <div class="mb-3">
+                          <div class="mb-3" v-if="diagnosticShow">
                             <label class="small" for="nature" style="float: left"
                               >Diagnostic</label
                             >

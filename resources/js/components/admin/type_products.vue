@@ -420,6 +420,7 @@ import layout from "../layouts/layout.vue";  import {
 
       openEditModal(type_prod) {
         $("#editTypeProduct").modal("show");
+        this.validationErrorsEdit={}
         this.name = type_prod.name;
         this.typeEdit=type_prod;
           },

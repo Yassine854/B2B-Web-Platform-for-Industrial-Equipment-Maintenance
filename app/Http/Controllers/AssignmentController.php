@@ -9,7 +9,9 @@ use App\Models\Product;
 use App\Models\Assignment;
 use Illuminate\Http\Request;
 use App\Notifications\Notify;
+use Illuminate\Validation\Rule;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 
 class AssignmentController extends Controller
@@ -70,6 +72,28 @@ class AssignmentController extends Controller
 
     public function createAssignment(Request $request)
 {
+
+    $rules = [
+        'client_id' => 'required|integer',
+        'product_id' => 'required|integer',
+        'c_huile' => 'nullable|integer',
+        'c_filtre' => 'nullable|integer',
+        'c_dehuil' => 'nullable|integer',
+        'entretien' => 'nullable|integer',
+    ];
+
+    $messages = [
+        'required' => 'Ce champ est requis.',
+        'integer' => 'Ce champ doit être un entier.',
+    ];
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
+
     $assignment = new Assignment();
     $assignment->client_id = $request->client_id;
     $assignment->product_id = $request->product_id;
@@ -109,6 +133,22 @@ class AssignmentController extends Controller
 
 public function updateAssignment(Request $request, $id)
 {
+    $rules = [
+        'client_id' => 'required|integer',
+        'product_id' => 'required|integer',
+        'c_huile' => 'nullable|integer',
+        'c_filtre' => 'nullable|integer',
+        'c_dehuil' => 'nullable|integer',
+        'entretien' => 'nullable|integer',
+    ];
+
+    $messages = [
+        'required' => 'Ce champ est requis.',
+        'integer' => 'Ce champ doit être un entier.',
+    ];
+
+
+
     try {
         $assignment = Assignment::find($id);
         $today=Carbon::now();
@@ -118,6 +158,12 @@ public function updateAssignment(Request $request, $id)
             return response()->json([
                 'error' => 'Assignment not found'
             ], 404);
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
         }
 
         $originalCHuile = $assignment->c_huile;

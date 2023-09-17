@@ -422,6 +422,7 @@ import layout from "../layouts/layout.vue";
 
       openEditModal(type_ind) {
         $("#editTypeIndustry").modal("show");
+        this.validationErrorsEdit={}
         this.name = type_ind.name;
         this.typeEdit=type_ind;
           },

@@ -288,27 +288,32 @@
           </div>
           <div class="row gx-3 mb-3">
             <div class="col-md-6">
-              <div class="row gx-3 mb-6">
-                <div class="col-md-6">
-                  <label class="small mb-1" for="debit" style="float: left">Débit</label>
-                  <input
-                    :class="['form-control', {'is-invalid': validationErrorsEdit.debit}]"
-                    id="debit"
-                    type="text"
-                    placeholder="Entrer le débit"
-                    v-model="debitEdit"
-                  >
-                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.debit" :key="index">{{ err }}<br></span>
-                </div>
-                <div class="col-md-4">
-                  <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
-                  <select :class="['form-select', {'is-invalid': validationErrorsEdit.debit}]" id="flow-rate" v-model="unity_debitEdit">
-                    <option value="m³/h">m³/h</option>
-                    <option value="l/s">l/s</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+                                <div class="row gx-3 mb-6">
+                                    <div class="col-md-6">
+                                        <label class="small mb-1" for="debit" style="float: left">Débit</label>
+                                        <input
+                                        :class="['form-control', {'is-invalid': validationErrorsEdit.debit}]"
+                                            id="debit"
+                                            type="text"
+                                            placeholder="Entrer le débit"
+                                            v-model="debitEdit"
+
+                                        >
+                                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.debit" :key="index">{{ err }}<br></span>
+
+
+                                    </div>
+                                    <div class="col-md-4">
+                                    <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
+                                    <select id="flow-rate" :class="['form-control', {'is-invalid': validationErrorsEdit.debit}]" v-model="unity_debitEdit">
+                                        <option value="m³/h">m³/h</option>
+                                        <option value="l/s">l/s</option>
+                                    </select>
+                                    <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.unity_debit" :key="index">{{ err }}<br></span>
+                                </div>
+
+                                </div>
+                            </div>
             <div class="col-md-6">
               <label
                 class="small mb-1"
@@ -397,7 +402,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="d-flex align-items-center">
-            <i class="fa-brands fa-product-hunt me-2"></i>
+            <i class="fa-brands fa-product-hunt fa-xl me-2"></i>
           <h5 class="modal-title mb-0" id="editProductLabel">
             Détails de la pompe
           </h5>
@@ -768,14 +773,11 @@
           $("#addProduct").modal("hide");
 
           this.get_products();
-          window.location.reload();
         } catch (error) {
-            if (error.response.status === 400) {
-          // Validation errors, set the validationErrors object
+        if (error.response.status === 400) {
           this.validationErrors = error.response.data.errors;
           console.log(this.validationErrors);
         } else {
-          // Handle other errors (e.g., server errors)
           this.errorMessage = "Une erreur s'est produite lors de la création du produit.";
         }
         }
@@ -783,6 +785,7 @@
 
       openEditModal(product) {
         $("#editProduct").modal("show");
+        this.validationErrorsEdit={}
         this.productEdit=product;
         this.nameEdit = product.name;
         this.type_prodEdit=product.type_prod;

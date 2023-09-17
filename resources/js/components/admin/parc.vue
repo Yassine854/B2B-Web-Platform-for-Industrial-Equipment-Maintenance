@@ -40,15 +40,12 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
-                  <div class="d-flex align-items-center">
-                    <i
-                      class="fa-solid fa-pen fa-xl"
-                      style="margin-right: 10px"
-                    ></i>
-                    <h5 class="modal-title mb-0" id="addAssignmentLabel">
-                      Affecter une pompe
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-plus fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="editProductLabel">
+                        Affecter une pompe
                     </h5>
-                  </div>
+                    </div>
                   <button
                     type="button"
                     class="btn-close"
@@ -64,89 +61,105 @@
                           class="small mb-1"
                           for="type_prod"
                           style="float: left"
-                          >Pompes</label
+                          >Pompe</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrors.product_id}]"
                           id="type_prod"
                           v-model="product"
-                          required
                         >
-                        <option value="" disabled selected>Sélectionner une pompe</option>
+                        <option value="" disabled selected hidden>Sélectionner une pompe</option>
                           <option
                             v-for="product in products"
                             :key="product.id"
                             :value="product.id"
                           >
-                            {{ product.name }}
+                          {{ product.id }}-{{ product.name }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrors.product_id" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
                     <div class="row gx-3 mb-3">
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="Année"
-                          style="float: left"
-                          >Changement d'huile</label
-                        >
-                        <input
-                          class="form-control"
-                          id="Année"
-                          type="text"
-                          placeholder="Entrer le temps de changement d'huile"
-                          v-model="c_huile"
-                        />
-                      </div>
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="time_day"
-                          style="float: left"
-                          >Changement des cartouches de filtres</label
-                        >
-                        <input
-                          class="form-control"
-                          id="time_day"
-                          type="text"
-                          placeholder="Entrer le temps de changement de filtre"
-                          v-model="c_filtre"
-                        />
-                      </div>
-                    </div>
-                    <div class="row gx-3 mb-3">
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="Année"
-                          style="float: left"
-                          >Changement des déshuileurs</label
-                        >
-                        <input
-                          class="form-control"
-                          id="Année"
-                          type="text"
-                          placeholder="Entrer le temps de changement des déshuileurs"
-                          v-model="c_dehuil"
-                        />
-                      </div>
-                      <div class="col-md-6">
-                        <label
-                          class="small mb-1"
-                          for="inputOrgName"
-                          style="float: left"
-                          >Entretien</label
-                        >
-                        <input
-                          class="form-control"
-                          id="inputOrgName"
-                          type="text"
-                          placeholder="Entrer le temps d'entretien"
-                          v-model="entretien"
-                        />
-                      </div>
-                    </div>
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="Année"
+                                style="float: left"
+                                >Changement d'huile</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.c_huile}]"
+                                id="Année"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps de changement d'huile"
+                                v-model="c_huile"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.c_huile" :key="index">{{ err }}<br></span>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="time_day"
+                                style="float: left"
+                                >Changement des cartouches de filtres</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.c_filtre}]"
+                                id="time_day"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps de changement de filtre"
+                                v-model="c_filtre"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.c_filtre" :key="index">{{ err }}<br></span>
+
+                            </div>
+                        </div>
+
+
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="Année"
+                                style="float: left"
+                                >Changement des déshuileurs</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.c_dehuil}]"
+                                id="Année"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps de changement des déshuileurs"
+                                v-model="c_dehuil"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.c_dehuil" :key="index">{{ err }}<br></span>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label
+                                  class="small mb-1"
+                                  for="inputOrgName"
+                                  style="float: left"
+                                  >Entretien</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.entretien}]"
+                                  id="inputOrgName"
+                                  type="text"
+                                  placeholder="Entrer le temps d'entretien"
+                                  v-model="entretien"
+                                />
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.entretien" :key="index">{{ err }}<br></span>
+
+                              </div>
+                        </div>
                     <div class="modal-footer">
                       <button
                         type="button"
@@ -179,7 +192,7 @@
                       style="margin-right: 10px"
                     ></i>
                     <h5 class="modal-title mb-0" id="editAssignmentLabel">
-                      Modifier la pompe
+                      Modifier les données de la pompe
                     </h5>
                   </div>
 
@@ -201,7 +214,7 @@
                           >Client</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.client_id}]"
                           id="client"
                           aria-label="Default select example"
                           v-model="client"
@@ -211,6 +224,8 @@
                             {{ society }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.client_id" :key="index">{{ err }}<br></span>
+
                       </div>
 
                       <div class="col-md-6">
@@ -218,10 +233,10 @@
                           class="small mb-1"
                           for="type_prod"
                           style="float: left"
-                          >Pompes</label
+                          >Pompe</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.product_id}]"
                           id="type_prod"
                           aria-label="Default select example"
                           v-model="productEdit"
@@ -232,9 +247,11 @@
                             :key="product.id"
                             :value="product.id"
                           >
-                            {{ product.name }}
+                          {{ product.id }}-{{ product.name }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.product_id" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
 
@@ -247,13 +264,15 @@
                           >Changement d'huile</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.c_huile}]"
                           id="Année"
                           rows="4"
                           type="text"
                           placeholder="Entrer le temps de changement d'huile"
                           v-model="c_huileEdit"
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.c_huile" :key="index">{{ err }}<br></span>
+
                       </div>
 
                       <div class="col-md-6">
@@ -264,13 +283,15 @@
                           >Changement des cartouches de filtres</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.c_filtre}]"
                           id="time_day"
                           rows="4"
                           type="text"
                           placeholder="Entrer le temps de changement de filtre"
                           v-model="c_filtreEdit"
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.c_filtre" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
 
@@ -283,13 +304,15 @@
                           >Changement des déshuileurs</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.c_dehuil}]"
                           id="Année"
                           rows="4"
                           type="text"
                           placeholder="Entrer le temps de changement des déshuileurs"
                           v-model="c_dehuilEdit"
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.c_dehuil" :key="index">{{ err }}<br></span>
+
                       </div>
 
                       <div class="col-md-6">
@@ -300,12 +323,13 @@
                           >Entretien</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.entretien}]"
                           id="inputOrgName"
                           type="text"
                           placeholder="Entrer le temps d'entretien"
                           v-model="entretienEdit"
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.entretien" :key="index">{{ err }}<br></span>
                       </div>
                     </div>
 
@@ -339,7 +363,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <div class="d-flex align-items-center">
-              <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
+              <i class="fa-solid fa-user fa-xl" style="margin-right: 10px"></i>
               <h5 class="modal-title mb-0" id="showAssignmentLabel">
                 Détails du parc
               </h5>
@@ -626,7 +650,7 @@ const router = useRouter();
 const route =useRoute();
 const assignmentId = route.params.id;
 let currentPage = ref(1);
-let itemsPerPage = ref(5);
+let itemsPerPage = ref(10);
 
 onMounted(async () => {
   get_all_products();
@@ -719,6 +743,8 @@ export default {
   },
   data() {
     return {
+      validationErrors:{},
+      validationErrorsEdit:{},
       client: "",
       society: "",
       clientId: "",
@@ -799,7 +825,8 @@ export default {
       this.$emit("page-change", page);
     },
 
-    addAssignment() {
+   async addAssignment() {
+        this.validationErrors={};
       try {
         this.clientAdd = this.clientId;
         let form = new FormData();
@@ -809,7 +836,7 @@ export default {
         form.append("c_filtre", this.c_filtre);
         form.append("c_dehuil", this.c_dehuil);
         form.append("entretien", this.entretien);
-        axios.post(`/api/assignments/create`, form);
+       await axios.post(`/api/assignments/create`, form);
         console.log(form);
         this.product = "";
         this.c_huile = "";
@@ -830,16 +857,21 @@ export default {
           icon: "success",
           title: "Attribution ajouté avec succés !",
         });
-        $("#addProduct").modal("hide");
-        this.$router.push("/parc_clients");
-        window.location.reload();
-      } catch (error) {
-        console.log(error);
+        $("#addAssignment").modal("hide");
+        this.get_assignments()
+       } catch (error) {
+        if (error.response.status === 400) {
+          this.validationErrors = error.response.data.errors;
+          console.log(this.validationErrors);
+        } else {
+          this.errorMessage = "Une erreur s'est produite lors de la création du produit.";
+        }
       }
     },
 
     openEditModal(assignment) {
       $("#editAssignment").modal("show");
+      this.validationErrorsEdit={}
       const selectedIndex = 0;
       const selectedValue = $("#client option:eq(" + selectedIndex + ")").val();
       this.client = selectedValue;
@@ -892,9 +924,9 @@ export default {
       }
     },
 
-    updateAssignment(assignment) {
+   async updateAssignment(assignment) {
       try {
-        axios.put(`/api/assignments/update/${assignment.id}`, {
+       await axios.put(`/api/assignments/update/${assignment.id}`, {
           client_id: this.client,
           product_id: this.productEdit,
           c_huile: this.c_huileEdit,
@@ -929,7 +961,12 @@ export default {
         this.c_dehuilEdit = "";
         this.entretienEdit = "";
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          this.validationErrorsEdit = error.response.data.errors;
+          console.log(this.validationErrorsEdit);
+        } else {
+          this.errorMessage = "Une erreur s'est produite lors de la mise a jour du produit.";
+        }
       }
     },
 

@@ -50,17 +50,21 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="small mb-1" for="client_select" style="float: left;">Clients</label>
-              <select class="form-select" id="client_select" v-model="client" required>
-                <option value="" disabled>Sélectionner un client</option>
+              <select :class="['form-select', {'is-invalid': validationErrors.client_id}]" id="client_select" v-model="client" >
+                <option :value="null" selected hidden disabled>Sélectionner un client</option>
                 <option v-for="client in uniqueClients" :key="client.id" :value="client.id">{{ client.name }}</option>
               </select>
+              <span class="invalid-feedback" v-for="(err, index) in validationErrors.client_id" :key="index">{{ err }}<br></span>
+
             </div>
             <div class="col-md-6">
               <label class="small mb-1" for="product_select" style="float: left;">Pompes</label>
-              <select class="form-select" id="product_select" v-model="product" required>
+              <select :class="['form-select', {'is-invalid': validationErrors.product_id}]" id="product_select" v-model="product" >
                 <option :value="null" disabled selected hidden>Sélectionner une pompe</option>
-                <option v-for="product in productsForSelectedClient" :key="product.product_id" :value="product.product_id">{{ product.product[0].name }}</option>
+                <option v-for="product in productsForSelectedClient" :key="product.product_id" :value="product.product_id">{{ product.product[0].id }}-{{ product.product[0].name }}</option>
               </select>
+              <span class="invalid-feedback" v-for="(err, index) in validationErrors.product_id" :key="index">{{ err }}<br></span>
+
             </div>
           </div>
 
@@ -68,16 +72,20 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="small mb-1" for="type_prod" style="float: left;">Nature</label>
-              <select class="form-select" id="type_prod" v-model="name" required>
+              <select :class="['form-select', {'is-invalid': validationErrors.name}]" id="type_prod" v-model="name" >
                 <option value="" selected disabled hidden>Sélectionner la nature d'intervention</option>
                 <option value="Entretien">Entretien</option>
                 <option value="Révision">Révision</option>
                 <option value="Réparation">Réparation</option>
               </select>
+              <span class="invalid-feedback" v-for="(err, index) in validationErrors.name" :key="index">{{ err }}<br></span>
+
             </div>
             <div class="col-md-6">
-              <label class="small mb-1" for="time_day" style="float: left;">Date</label>
-              <input class="form-control" id="time_day" type="date" v-model="date" required />
+              <label class="small mb-1" for="date" style="float: left;">Date</label>
+              <input :class="['form-control', {'is-invalid': validationErrors.date}]" id="date" type="date" v-model="date"  />
+              <span class="invalid-feedback" v-for="(err, index) in validationErrors.date" :key="index">{{ err }}<br></span>
+
             </div>
           </div>
 
@@ -85,31 +93,39 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="small mb-1" for="diagnostic_select" style="float: left;">Diagnostic</label>
-              <select class="form-select" id="diagnostic_select" v-model="diagnostic">
-                <option value="" disabled>Sélectionner un diagnostic</option>
+              <select :class="['form-select', {'is-invalid': validationErrors.diagnostic_id}]" id="diagnostic_select" v-model="diagnostic">
+                <option value="" selected disabled hidden>Sélectionner un diagnostic</option>
                 <option v-for="diagnostic in diagnostics" :key="diagnostic.id" :value="diagnostic.id">D{{ diagnostic.id }}</option>
               </select>
+              <span class="invalid-feedback" v-for="(err, index) in validationErrors.diagnostic_id" :key="index">{{ err }}<br></span>
+
             </div>
           </div>
 
           <!-- Pièces de Rechange -->
           <label class="small mb-1" style="float: left;">Pièces de rechange</label>
           <br />
-          <div class="container border p-3 mb-3">
+          <div :class="['container border p-3 mb-3', {'is-invalid': validationErrors.pieces}]">
             <!-- Pieces Input Section (Repeatable) -->
             <div v-for="(piece, index) in pieces" :key="index" class="border p-3 mb-3">
-              <div class="row gx-3 mb-3 align-items-center">
+              <div class="row gx-3 mb-3">
                 <div class="col-md-4">
                   <label class="small mb-1" for="designation" style="float: left;">Désignation</label>
-                  <input class="form-control" type="text" id="designation" placeholder="Désignation" v-model="piece.designation" required />
+                  <input :class="['form-control', {'is-invalid': validationErrors[`pieces.${index}.designation`]}]" type="text" id="designation" placeholder="Désignation" v-model="piece.designation"  />
+                  <span class="invalid-feedback" v-for="(err,ind) in validationErrors[`pieces.${index}.designation`]" :key="ind">{{ err }}<br/></span>
+
                 </div>
                 <div class="col-md-4">
                   <label class="small mb-1" for="reference" style="float: left;">Référence</label>
-                  <input class="form-control" type="text" id="reference" placeholder="Référence" v-model="piece.reference" required />
+                  <input :class="['form-control', {'is-invalid': validationErrors[`pieces.${index}.reference`]}]" type="text" id="reference" placeholder="Référence" v-model="piece.reference"  />
+                  <span class="invalid-feedback" v-for="(err,ind) in validationErrors[`pieces.${index}.reference`]" :key="ind">{{ err }}<br/></span>
+
                 </div>
                 <div class="col-md-3">
                   <label class="small mb-1" for="quantite" style="float: left;">Quantité</label>
-                  <input class="form-control" type="number" id="quantite" min="0" placeholder="Quantité" v-model="piece.quantite" required />
+                  <input :class="['form-control', {'is-invalid': validationErrors[`pieces.${index}.quantite`]}]" type="number" id="quantite" min="0" placeholder="Quantité" v-model="piece.quantite"  />
+                  <span class="invalid-feedback" v-for="(err,ind) in validationErrors[`pieces.${index}.quantite`]" :key="ind">{{ err }}<br/></span>
+
                 </div>
                 <div class="col-md-1 d-flex align-items-start mt-4 mb-md-0">
                   <button class="btn btn-danger" type="button" @click="removePiece(index)">-</button>
@@ -122,12 +138,13 @@
               <button class="btn btn-info" type="button" @click="addPiece"><i class="fa-solid fa-plus"></i> Ajouter une pièce</button>
             </div>
           </div>
+          <span class="invalid-feedback" v-for="(err, index) in validationErrors.pieces" :key="index">{{ err }}<br></span>
 
           <!-- Description Textarea -->
           <div class="row mb-3">
             <div class="col-md-12">
               <label class="small mb-1" for="description" style="float: left;">Description</label>
-              <textarea class="form-control" id="description" rows="4" placeholder="Entrer la description" v-model="description" required></textarea>
+              <textarea class="form-control" id="description" rows="4" placeholder="Entrer la description" v-model="description" ></textarea>
             </div>
           </div>
           <br />
@@ -153,17 +170,12 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
               <div class="modal-content">
                 <div class="modal-header">
-                  <div
-                    class="d-flex align-items-center justify-content-center mb-3"
-                  >
-                    <i
-                      class="fa-sharp fa-solid fa-plus fa-xl"
-                      style="margin-right: 10px"
-                    ></i>
-                    <h5 class="modal-title col-11" id="editInterventionLabel">
-                      Modifier l'intervention
+                    <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-pen fa-xl me-2"></i>
+                    <h5 class="modal-title mb-0" id="editProductLabel">
+                       Modifier l'intervention
                     </h5>
-                  </div>
+                    </div>
 
                   <button
                     type="button"
@@ -188,7 +200,7 @@
                           >Clients</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.client_id}]"
                           id="client" v-model="client"
                         >
                           <option value="" selected disabled hidden>
@@ -202,6 +214,8 @@
                             {{ client.name }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.client_id" :key="index">{{ err }}<br></span>
+
                       </div>
 
                       <!-- Product Dropdown -->
@@ -213,7 +227,7 @@
                           >Pompes</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.product_id}]"
                           id="product_select"
                           aria-label="Default select example"
                           v-model="productEdit"
@@ -226,9 +240,11 @@
                             :key="product.product_id"
                             :value="product.product_id"
                           >
-                            {{ product.product[0].name }}
+                          {{ product.product[0].id }}-{{ product.product[0].name }}
                           </option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.product_id" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
 
@@ -242,7 +258,7 @@
                           >Nature</label
                         >
                         <select
-                          class="form-select"
+                        :class="['form-select', {'is-invalid': validationErrorsEdit.name}]"
                           id="type_prod"
                           v-model="nameEdit"
                         >
@@ -253,6 +269,8 @@
                           <option value="Révision">Révision</option>
                           <option value="Réparation">Réparation</option>
                         </select>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.name" :key="index">{{ err }}<br></span>
+
                       </div>
 
                       <!-- Date Input -->
@@ -264,20 +282,28 @@
                           >Date</label
                         >
                         <input
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.date}]"
                           id="time_day"
                           type="date"
                           v-model="dateEdit"
                         />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.date" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
 
             <div class="row mb-3">
             <div class="col-md-6">
               <label class="small mb-1" for="diagnostic_select" style="float: left;">Diagnostic</label>
-              <select class="form-select" id="diagnostic_select" v-model="diagnosticEdit">
+              <select :class="['form-select', {'is-invalid': validationErrorsEdit.diagnostic_id}]" id="diagnostic_select" v-model="diagnosticEdit">
+                <option :value="null" selected disabled hidden>Sélectionner un diagnostic</option>
+
+                <option value=""></option>
+
                 <option v-for="diagnostic in diagnostics" :key="diagnostic.id" :value="diagnostic.id">D{{ diagnostic.id }}</option>
               </select>
+              <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.diagnostic_id" :key="index">{{ err }}<br></span>
+
             </div>
           </div>
 
@@ -285,40 +311,43 @@
                     <label class="small mb-1" style="float: left">Pièces de rechange</label>
 <br>
 <div class="container">
-    <form class="border p-3 mb-3">
+    <form :class="['container border p-3 mb-3', {'is-invalid': validationErrorsEdit.pieces}]">
         <div
             v-for="(piece, index) in editPieces"
             :key="index"
         >
             <!-- Each piece is enclosed in a border -->
             <div class="border p-3 mb-3">
-                <div class="row gx-3 mb-3 align-items-center">
+                <div class="row gx-3 mb-3">
                     <div class="col-md-4">
                         <label class="small mb-1" for="designation">Désignation</label>
                         <input
-                            class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit[`pieces.${index}.designation`]}]"
                             type="text"
                             id="designation"
                             placeholder="Désignation"
                             v-model="piece.designation"
-                            required
+
                         />
+                        <span class="invalid-feedback" v-for="(err,ind) in validationErrorsEdit[`pieces.${index}.designation`]" :key="ind">{{ err }}<br/></span>
+
                     </div>
                     <div class="col-md-4">
                         <label class="small mb-1" for="reference">Référence</label>
                         <input
-                            class="form-control"
-                            type="text"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit[`pieces.${index}.reference`]}]" type="text"
                             id="reference"
                             placeholder="Référence"
                             v-model="piece.reference"
-                            required
+
                         />
+                        <span class="invalid-feedback" v-for="(err,ind) in validationErrorsEdit[`pieces.${index}.reference`]" :key="ind">{{ err }}<br/></span>
+
                     </div>
                     <div class="col-md-3">
                         <label class="small mb-1" for="quantite">Quantité</label>
                         <input
-                            class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit[`pieces.${index}.quantite`]}]"
                             type="number"
                             id="quantite"
                             min="0"
@@ -326,6 +355,8 @@
                             v-model="piece.quantite"
                             required
                         />
+                        <span class="invalid-feedback" v-for="(err,ind) in validationErrorsEdit[`pieces.${index}.quantite`]" :key="ind">{{ err }}<br/></span>
+
                     </div>
                     <div class="col-md-1 d-flex align-items-start mt-4 mb-md-0">
                         <button
@@ -347,6 +378,8 @@
             </button>
         </div>
     </form>
+    <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.pieces" :key="index">{{ err }}<br></span>
+
 </div>
 
                     <!-- Description Textarea -->
@@ -359,12 +392,14 @@
                           >Description</label
                         >
                         <textarea
-                          class="form-control"
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.description}]"
                           id="description"
                           rows="4"
                           placeholder="Entrer la description"
                           v-model="descriptionEdit"
                         ></textarea>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.description" :key="index">{{ err }}<br></span>
+
                       </div>
                     </div>
                     <br />
@@ -396,7 +431,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <div class="d-flex align-items-center">
-                    <i class="fa-brands fa-servicestack me-2"></i>
+                    <i class="fa-brands fa-servicestack fa-xl me-2"></i>
                     <h5 class="modal-title mb-0" id="showInterventionLabel">
                       Détails de l'intervention
                     </h5>
@@ -675,7 +710,7 @@ let diagnostics = ref([]);
 let searchIntervention = ref([]);
 
 const currentPage = ref(1);
-const itemsPerPage = ref(10); // Set the default number of items per page
+const itemsPerPage = ref(10);
 
 onMounted(async () => {
   get_all_interventions();
@@ -819,6 +854,8 @@ export default {
   },
   data() {
     return {
+    validationErrors : {},
+    validationErrorsEdit:{},
       //Create
       name: "",
       client: "",
@@ -915,6 +952,7 @@ export default {
     },
 
     async createIntervention() {
+        this.validationErrors={};
       try {
         const formData = {
           name: this.name,
@@ -953,12 +991,18 @@ export default {
         $("#addIntervention").modal("hide");
         this.get_all_interventions();
       } catch (error) {
-        console.error("Error creating intervention:", error);
+        if (error.response.status === 400) {
+          this.validationErrors = error.response.data.errors;
+          console.log(this.validationErrors);
+        } else {
+          this.errorMessage = "Une erreur s'est produite lors de la création d'intervention.";
+        }
       }
     },
 
     openEditModal(intervention) {
       $("#editIntervention").modal("show");
+      this.validationErrorsEdit={};
       this.interventionEdit = intervention;
       this.nameEdit = intervention.name;
       this.client = intervention.client_id;
@@ -1012,7 +1056,12 @@ export default {
         this.dateEdit = "";
         this.editPieces = [];
       } catch (error) {
-        console.log(error);
+        if (error.response.status === 400) {
+          this.validationErrorsEdit = error.response.data.errors;
+          console.log(this.validationErrorsEdit);
+        } else {
+          this.errorMessage = "Une erreur s'est produite lors de la création d'intervention.";
+        }
       }
     },
 
