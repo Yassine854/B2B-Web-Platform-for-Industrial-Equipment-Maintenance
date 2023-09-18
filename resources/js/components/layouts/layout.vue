@@ -10,13 +10,14 @@
         id="accordionSidebar"
       >
         <!-- Sidebar - Brand -->
-        <a  style="background:rgb(163, 163, 163)"
+        <a  style="background:rgb(255, 255, 255)"
         class="sidebar-brand d-flex align-items-center justify-content-center"
         href="https://www.generale-services.com.tn/"
         target="_blank"
         >
         <div class="sidebar-brand-icon">
-            <img :src="'https://www.generale-services.com.tn/front/images/GSI-logo-PNG.png'" style="max-width: 195px;"/>
+
+            <img :src="'../storage/img/GSI-logo-PNG.png'" style="max-width: 195px;"/>
         </div>
 
 

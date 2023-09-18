@@ -28,6 +28,69 @@ class InterventionController extends Controller
     ], 200);
 }
 
+//Charts
+public function DonutChart()
+{
+    $interventions = DB::table('interventions')
+    ->select('name', DB::raw('COUNT(*) as count'))
+    ->groupBy('name')
+    ->get();
+
+    return response()->json([
+        'interventions' => $interventions,
+    ], 200);
+
+}
+
+public function ClientsBarChart()
+{
+    $interventions = DB::table('interventions')
+        ->select('users.society as society', DB::raw('COUNT(*) as count'))
+        ->join('users', 'interventions.client_id', '=', 'users.id')
+        ->where('users.role', 1)
+        ->groupBy('interventions.client_id', 'users.society')
+        ->get();
+
+    return response()->json([
+        'interventions' => $interventions,
+    ], 200);
+}
+
+public function MonthlyBarChart()
+{
+    $interventions = DB::table('interventions')
+        ->select(DB::raw('YEAR(date) as year'), DB::raw('MONTH(date) as month'), DB::raw('COUNT(*) as count'))
+        ->groupBy('year', 'month')
+        ->orderBy('year')
+        ->orderBy('month')
+        ->get();
+
+    $data = [];
+
+    foreach ($interventions as $intervention) {
+        $year = $intervention->year;
+        $month = $intervention->month;
+        $count = $intervention->count;
+
+        // Create an entry for the year if it doesn't exist
+        if (!isset($data[$year])) {
+            $data[$year] = [];
+        }
+
+        // Store the count for the month with the month index as the key
+        $data[$year][$month] = $count;
+    }
+
+    return response()->json([
+        'interventions' => $data,
+    ], 200);
+}
+
+
+
+
+
+
 public function getClientInterventions($id)
 {
     $interventions = Intervention::with(['pdrs', 'diagnostic'])
@@ -263,5 +326,18 @@ public function getProductName($id)
 
     return response()->json(['interventionCount' => $interventionCount]);
 }
+
+public function getNameCount()
+{
+    $interventions = DB::table('interventions')
+        ->select('name', DB::raw('COUNT(name) as count'))
+        ->groupBy('name')
+        ->get();
+
+    return response()->json([
+        'interventions' => $interventions
+    ], 200);
+}
+
 
 }

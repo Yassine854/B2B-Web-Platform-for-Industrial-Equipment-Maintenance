@@ -111,6 +111,8 @@ Route::get('/get-diagnostic-count', [DiagnosticController::class, 'getDiagnostic
 
 //Interventions
 Route::get('/get_all_interventions',[InterventionController::class,'get_all_interventions']);
+
+
 Route::get('/getClientInterventions/{id}',[InterventionController::class,'getClientInterventions']);
 Route::get('/interventions/get_all_assignments',[InterventionController::class,'get_all_assignments']);
 Route::post('/interventions/create', [InterventionController::class, 'createIntervention']);
@@ -123,6 +125,12 @@ Route::get('/get-intervention-count', [InterventionController::class, 'getInterv
 Route::get('/get_all_notifications',[NotificationController::class,'get_all_notifications']);
 Route::post('/notifications/markAsRead/{id}',[NotificationController::class,'markAsRead']);
 Route::get('/get-notification-count', [NotificationController::class, 'getNotificationCount']);
+
+//Charts
+Route::get('/interventions/DonutChart',[InterventionController::class,'DonutChart']);
+Route::get('/interventions/ClientsBarChart',[InterventionController::class,'ClientsBarChart']);
+Route::get('/interventions/MonthlyBarChart',[InterventionController::class,'MonthlyBarChart']);
+
 
 });
 // Route::group(['prefix' => 'posts','middleware' => 'auth:sanctum'], function() {

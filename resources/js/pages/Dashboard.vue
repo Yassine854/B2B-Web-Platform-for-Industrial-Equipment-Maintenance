@@ -18,7 +18,7 @@
                 </div>
               </div>
               <div class="col-auto">
-                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                <i class="fa-solid fa-users fa-2x text-gray-300"></i>
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@
                 </div>
               </div>
               <div class="col-auto">
-                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                <i class="fas fa-screwdriver-wrench fa-2x text-gray-300"></i>
               </div>
             </div>
           </div>
@@ -99,6 +99,53 @@
         </div>
       </div>
     </div>
+
+    <div class="row">
+
+<div class="col-xl-8 col-lg-7">
+
+    <!-- Area Chart -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+        </div>
+        <div class="card-body">
+            <div class="chart-bar">
+                <canvas ref="clientsBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+        </div>
+        <div class="card-body">
+            <div class="chart-bar">
+                <canvas ref="MonthlyBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Donut Chart -->
+<div class="col-xl-4 col-lg-5">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <div class="chart-pie pt-4">
+                <canvas ref="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
   </layout>
 
   <!-- End Admin Dashboard -->
@@ -505,6 +552,10 @@
 <script setup>
 import { onMounted, ref, computed } from "vue";
 import layout from "../components/layouts/layout.vue";
+import Chart from 'chart.js/auto';
+import axios from "axios";
+
+
 import {
   checkLoginStatus,
   checkLoginAdmin,
@@ -517,10 +568,16 @@ import Swal from "sweetalert2";
 let type_industries = ref([]);
 let ClientAssignments = ref([]);
 let ClientId = window.Laravel.user.id;
+
 onMounted(async () => {
   get_all_types();
   get_client_assignments();
+
 });
+
+
+
+
 
 const get_all_types = async () => {
   try {
@@ -581,6 +638,41 @@ export default {
       c_dehuilShow: "",
       entretienShow: "",
       productShow: "",
+
+      //Charts
+      interventionsDonut:[],
+      interventionsClientBarChart:[],
+      interventionsMonthlyBarChart:[],
+
+      pieChartData: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+          },
+        ],
+      },
+
+      ClientsBarChartData: {
+        labels: [],
+        datasets: [
+          {
+            label:'Sociétés',
+            data: [],
+          },
+        ],
+      },
+
+
+      MonthlyBarChartData: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+          },
+        ],
+      },
+
     };
   },
   mounted() {
@@ -588,6 +680,10 @@ export default {
     this.fetchInterventionCount();
     this.fetchDiagnosticCount();
     this.fetchNotificationCount();
+    //charts
+    this.DonutChartData();
+    this.ClientsBarChart();
+    this.MonthlyChartData();
 
   },
   created() {
@@ -633,6 +729,161 @@ export default {
         (state) => state.country_id === this.selectedCountry
       );
     },
+    //Charts
+     async DonutChartData() {
+      try {
+        const response = await axios.get("/api/interventions/DonutChart");
+        this.interventionsDonut = response.data.interventions;
+        // console.log(this.interventionsDonut);
+
+        this.interventionsDonut.forEach((data) => {
+        this.pieChartData.labels.push(data.name);
+        this.pieChartData.datasets[0].data.push(data.count);
+        });
+
+      const ctx = this.$refs.pieChart.getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: this.pieChartData,
+        options: {
+        cutoutPercentage: 50, // Adjust this value to center the doughnut
+        responsive: true,
+        maintainAspectRatio: false, // To control the aspect ratio
+        // Add other chart options as needed
+      },
+      });
+
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async ClientsBarChart() {
+      try {
+        const response = await axios.get("/api/interventions/ClientsBarChart");
+        this.interventionsClientBarChart = response.data.interventions;
+        console.log(this.interventionsClientBarChart);
+
+        this.interventionsClientBarChart.forEach((data) => {
+        this.ClientsBarChartData.labels.push(data.society);
+        this.ClientsBarChartData.datasets[0].data.push(data.count);
+        });
+
+      const ctx = this.$refs.clientsBarChart.getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: this.ClientsBarChartData,
+        options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Sociétés',
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Nombre d'interventions",
+        },
+        ticks: {
+          precision: 0,
+        },
+        borderWidth: 1
+
+      },
+    },
+},
+      });
+
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async MonthlyChartData() {
+      try {
+        const response = await axios.get("/api/interventions/MonthlyBarChart");
+        const interventionsData = response.data.interventions;
+        console.log(interventionsData);
+
+        const labels = [
+          'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+        ];
+        const monthColors = [
+          'rgb(255, 99, 132)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 159, 64)',
+          'rgb(255, 205, 86)',
+          'rgb(153, 102, 255)',
+          'rgb(255, 87, 51)',
+          'rgb(101, 203, 75)',
+          'rgb(238, 130, 238)',
+          'rgb(0, 128, 128)',
+          'rgb(255, 0, 0)',
+          'rgb(0, 0, 255)'
+        ];
+        const years = Object.keys(interventionsData);
+
+        const datasets = labels.map((month, index) => {
+          const counts = years.map((year) => {
+            return interventionsData[year][index + 1] || 0;
+          });
+
+          return {
+            label: month,
+            data: counts,
+            backgroundColor: monthColors[index % monthColors.length],
+            borderWidth: 1,
+          };
+        });
+
+        const ctx = this.$refs.MonthlyBarChart.getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: years,
+            datasets: datasets,
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                title: {
+                display: true,
+                text: "Années",
+                },
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                display: true,
+                text: "Nombre d'interventions",
+                },
+                ticks: {
+                precision: 0,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "right", // Position the legend on the right side
+              },
+            },
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
 
     async updateClientDetails(user) {
     this.validationErrorsEdit={};

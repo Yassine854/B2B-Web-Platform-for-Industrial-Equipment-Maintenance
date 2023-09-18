@@ -27,6 +27,7 @@
     "dependencies": {
         "autoprefixer": "10.4.5",
         "bootstrap-vue": "^2.23.1",
+        "chart.js": "^4.4.0",
         "global-country-state-city-select": "^1.0.7",
         "jquery": "^3.7.0",
         "jspdf": "^2.5.1",
