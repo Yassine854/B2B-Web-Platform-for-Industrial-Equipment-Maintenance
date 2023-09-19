@@ -21,3 +21,5 @@ Route::get('{any}', function () {
 
 
 Route::get('/client_interventions', 'InterventionController@getClientInterventions')->name('client_interventions');
+Route::get('/reset-password/{token}', 'PasswordResetController@showResetForm')
+    ->name('password.reset');

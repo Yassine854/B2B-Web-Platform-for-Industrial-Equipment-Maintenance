@@ -43,6 +43,12 @@
                             <div class="row mt-1">
                                 <div class="col-md-8 offset-md-4">
                                     <small class="text-muted">
+                                    <router-link to="/forgot-password">Mot de passe oublié ?</router-link>
+                                    </small>
+
+                                </div>
+                                <div class="col-md-8 offset-md-4">
+                                    <small class="text-muted">
                                     Vous n'avez pas encore de compte ?
                                     <router-link to="/register">S'inscrire</router-link>
                                     </small>

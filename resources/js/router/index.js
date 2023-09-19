@@ -5,6 +5,8 @@ import {createWebHistory, createRouter} from "vue-router";
 import Home from '../pages/Home';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
+import forgotPassword from '../pages/ForgotPassword'
+import resetPassword from '../pages/ResetPassword'
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile'
 
@@ -44,6 +46,16 @@ export const routes = [
         path: '/login',
         component: Login
     },
+    {
+        name: 'forgotPassword',
+        path: '/forgot-password',
+        component: forgotPassword,
+      },
+      {
+        path: '/reset-password/:token/:email',
+        name: 'reset-password',
+        component: resetPassword,
+      },
     {
         name: 'dashboard',
         path: '/dashboard',

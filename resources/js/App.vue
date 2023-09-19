@@ -7,7 +7,7 @@
 </script>
 
 <style>
-.modal-content {
+.modal-content  {
     text-align: left;
 }
 </style>

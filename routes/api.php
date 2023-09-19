@@ -1,18 +1,20 @@
 <?php
 
-use App\Http\Controllers\API\PostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Password;
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\API\UserController;
 // use App\Http\Controllers\TypeController;
-use App\Http\Controllers\TypeindustrieController;
-use App\Http\Controllers\TypeproductController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\API\PostsController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\DiagnosticController;
+use App\Http\Controllers\TypeproductController;
 use App\Http\Controllers\InterventionController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TypeindustrieController;
+use App\Http\Controllers\PasswordResetController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,6 +36,14 @@ Route::post('login', [UserController::class, 'login']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('check-email', [UserController::class, 'check_email']);
+
+
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
+
+Route::post('/password/reset/{token}/{email}', [PasswordResetController::class, 'reset'])
+    ->name('api.password.reset');
+
+
 
 Route::middleware('auth:sanctum')->group(function () {
 

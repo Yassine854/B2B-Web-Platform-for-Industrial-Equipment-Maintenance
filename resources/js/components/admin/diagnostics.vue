@@ -640,9 +640,10 @@
 
 
                   </div>
-            <div>
-            <button class="btn btn-danger mb-4 mt-1" @click="downloadPdf(diagnosticId)">Télécharger PDF</button>
-          </div>
+                  <div class="d-flex justify-content-center align-items-center">
+                <button class="btn btn-danger mb-4 mt-1" @click="downloadPdf(diagnosticId)">Télécharger PDF</button>
+            </div>
+
                 </div>
               </div>
             </div>
