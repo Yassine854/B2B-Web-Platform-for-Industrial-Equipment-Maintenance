@@ -42,7 +42,7 @@ class NetoyageFiltre extends Command
 
                 //Email notification
                 $details = new SendEmailNotification([
-                    'greeting' => 'Cher(e) '.$client->society,
+                    'greeting' => 'Chère '.$client->society,
                     'body' => "N'oubliez pas de nettoyer le filtre de la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name,
                 ]);
 

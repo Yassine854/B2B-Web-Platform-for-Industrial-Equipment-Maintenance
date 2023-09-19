@@ -217,9 +217,9 @@ public function getProductName($id)
 
         //Email notification
         $details = new SendEmailNotification([
-            'greeting' => 'Cher(e) '.$client->society,
+            'greeting' => 'Chère '.$client->society,
             'body' => 'Une intervention pour la pompe '.$product->id.'-'.$product->name. ' a été effectuée!',
-            'actiontext' => 'Cliquez',
+            'actiontext' => 'Cliquez ici',
             'actionurl' => url(route('client_interventions')),
         ]);
 

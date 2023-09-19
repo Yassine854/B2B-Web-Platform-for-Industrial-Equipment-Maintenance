@@ -432,7 +432,7 @@
                             class="form-control bg-danger text-white"
                             id="pression"
                             type="text"
-                            value="Il faut changer les cartouches de filtres."
+                            value="Il faut changer les cartouches."
                             readonly
                           />
                           <input

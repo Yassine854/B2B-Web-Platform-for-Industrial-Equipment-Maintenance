@@ -107,7 +107,7 @@
     <!-- Area Chart -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Intervention par client</h6>
         </div>
         <div class="card-body">
             <div class="chart-bar">
@@ -119,7 +119,7 @@
     <!-- Bar Chart -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Intervention par mois</h6>
         </div>
         <div class="card-body">
             <div class="chart-bar">
@@ -135,7 +135,7 @@
     <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Donut Chart</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Répartition des interventions</h6>
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -389,7 +389,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <div class="d-flex align-items-center">
-              <i class="fa-solid fa-pen fa-xl" style="margin-right: 10px"></i>
+                <i class="fa-solid fa-user fa-xl" style="margin-right: 10px"></i>
               <h5 class="modal-title mb-0" id="showAssignmentLabel">
                 Détails du parc
               </h5>
@@ -456,7 +456,7 @@
                             class="form-control bg-danger text-white"
                             id="pression"
                             type="text"
-                            value="Il faut changer les cartouches de filtres."
+                            value="Il faut changer les cartouches."
                             readonly
                           />
                           <input
@@ -657,7 +657,7 @@ export default {
         labels: [],
         datasets: [
           {
-            label:'Sociétés',
+            label:"Nombre d'intérventions",
             data: [],
           },
         ],
@@ -876,6 +876,11 @@ export default {
                 position: "right", // Position the legend on the right side
               },
             },
+            layout: {
+          padding: {
+            top: 30, // Adjust top padding to create space for month labels
+          },
+        },
           },
         });
       } catch (error) {

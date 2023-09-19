@@ -6,3 +6,8 @@
 
 </script>
 
+<style>
+.modal-content {
+    text-align: left;
+}
+</style>

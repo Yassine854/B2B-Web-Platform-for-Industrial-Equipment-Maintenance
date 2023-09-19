@@ -120,8 +120,10 @@ class AssignmentController extends Controller
             $assignment->updated_c_dehuil = $today->copy()->addDays($DeshuilDaysLeft);
         }
     if($assignment->entretien)
-    $assignment->updated_entretien = $today->copy()->addHours((int) $assignment->entretien);
-
+        {
+            $EntretienDaysLeft=(int) $assignment->entretien / (int) $product->time_day; //result in days
+            $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
+        }
     $assignment->save();
 
     $assignment->client()->attach($assignment->client_id); // Array of client IDs
@@ -194,7 +196,8 @@ public function updateAssignment(Request $request, $id)
             $assignment->updated_c_dehuil = $today->copy()->addDays($DeshuilDaysLeft);
         }
         if ($originalCEntretien !== $assignment->entretien) {
-            $assignment->updated_entretien = $today->copy()->addHours((int) $assignment->entretien);        }
+            $EntretienDaysLeft=(int) $assignment->entretien / (int) $product->time_day; //result in days
+            $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);         }
 
         $assignment->update();
 
@@ -329,8 +332,16 @@ public function updateEntretien($id) {
                 'error' => 'Assignment not found',
             ], 404);
         }
+        $product = Product::find($assignment->product_id);
 
-        $assignment->updated_entretien = $today->copy()->addHours((int) $assignment->entretien);
+        if (!$product) {
+            return response()->json([
+                'error' => 'Product not found',
+            ], 404);
+        }
+
+        $EntretienDaysLeft=(int) $assignment->entretien / (int) $product->time_day; //result in days
+        $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
         $assignment->save();
 
         return response()->json([

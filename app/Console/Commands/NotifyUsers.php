@@ -48,7 +48,7 @@ class NotifyUsers extends Command
 
                         //Email notification
                     $details = new SendEmailNotification([
-                    'greeting' => 'Cher(e) '.$client->society,
+                    'greeting' => 'Chère '.$client->society,
                     'body' => "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                 ]);
 
@@ -66,7 +66,7 @@ class NotifyUsers extends Command
 
                     //Email notification
                     $details = new SendEmailNotification([
-                        'greeting' => 'Cher(e) '.$client->society,
+                        'greeting' => 'Chère '.$client->society,
                         'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);
@@ -83,7 +83,7 @@ class NotifyUsers extends Command
 
                     //Email notification
                     $details = new SendEmailNotification([
-                        'greeting' => 'Cher(e) '.$client->society,
+                        'greeting' => 'Chère '.$client->society,
                         'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);
@@ -100,7 +100,7 @@ class NotifyUsers extends Command
 
                     //Email notification
                     $details = new SendEmailNotification([
-                        'greeting' => 'Cher(e) '.$client->society,
+                        'greeting' => 'Chère '.$client->society,
                         'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);

@@ -17,7 +17,14 @@
         >
         <div class="sidebar-brand-icon">
 
-            <img :src="'../storage/img/GSI-logo-PNG.png'" style="max-width: 195px;"/>
+            <div class="sidebar-brand-icon desktop-image">
+    <img :src="'../storage/img/GSI LOGO.png'" alt="Desktop Image" style="max-width: 200px;" />
+</div>
+
+<div class="sidebar-brand-icon mobile-image">
+    <img :src="'../storage/img/GSI LOGO Responsive.png'" alt="Mobile Image" style="max-width: 100px;" />
+</div>
+
         </div>
 
 
@@ -354,23 +361,24 @@
         id="accordionSidebar"
       >
         <!-- Sidebar - Brand -->
-        <a
+        <a  style="background:rgb(255, 255, 255)"
         class="sidebar-brand d-flex align-items-center justify-content-center"
         href="https://www.generale-services.com.tn/"
         target="_blank"
         >
         <div class="sidebar-brand-icon">
-            <i><img :src="'../storage/img/GS.png'" /></i>
+
+            <div class="sidebar-brand-icon desktop-image">
+    <img :src="'../storage/img/GSI LOGO.png'" alt="Desktop Image" style="max-width: 200px;" />
+</div>
+
+<div class="sidebar-brand-icon mobile-image">
+    <img :src="'../storage/img/GSI LOGO Responsive.png'" alt="Mobile Image" style="max-width: 100px;" />
+</div>
+
         </div>
 
-        <div class="sidebar-brand-text mx-3">
-            <span class="d-block font-weight-bold" style="font-size: 1.25rem"
-            >Génerale</span
-            >
-            <span class="d-block" style="font-size: 0.48rem"
-            >Services Industriels</span
-            >
-        </div>
+
         </a>
 
         <!-- Divider -->
@@ -467,9 +475,14 @@
           :style="{ backgroundColor: notification.read_at === null ? '#d3e3fc' : '' }"
           @click="markAsRead(notification.id)"
         >
-          <div class="mr-3">
+        <div class="mr-3" v-if="notification.data.type == 'warning'">
             <div class="icon-circle bg-warning">
               <i class="fas fa-exclamation-triangle text-white"></i>
+            </div>
+          </div>
+          <div class="mr-3" v-if="notification.data.type == 'info'">
+            <div class="icon-circle bg-primary">
+              <i class="fas fa-bell fa-fw text-white"></i>
             </div>
           </div>
           <div>
@@ -718,18 +731,42 @@ export default {
 </script>
 
 <style>
-/* Define the styles for the scrollbar within the notifications container */
+
+.mobile-image {
+    display: none;
+}
+
+
+@media (min-width: 768px) {
+    .desktop-image {
+        display: block;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .mobile-image {
+        display: block;
+    }
+
+    .desktop-image {
+        display: none;
+    }
+}
+
+
+
 .overflow-auto::-webkit-scrollbar {
-  width: 10px; /* Adjust the width as needed */
+  width: 10px;
 }
 
 .overflow-auto::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Track color */
+  background: #f1f1f1;
   border-radius: 10px;
 }
 
 .overflow-auto::-webkit-scrollbar-thumb {
-  background: #4e73df; /* Scrollbar thumb color */
+  background: #4e73df;
   border-radius: 10px;
 }
 </style>
