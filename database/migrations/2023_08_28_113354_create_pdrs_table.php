@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('pdrs', function (Blueprint $table) {
             $table->id()->start_from(0001);
-            $table->string('designation');
-            $table->string('reference');
-            $table->string('quantite');
+            $table->string('designation')->nullable();
+            $table->string('reference')->nullable();
+            $table->string('quantite')->nullable();
             $table->unsignedBigInteger('intervention_id')->nullable();
             $table->unsignedBigInteger('diagnostic_id')->nullable();
             $table->foreign('intervention_id')

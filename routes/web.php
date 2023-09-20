@@ -22,6 +22,6 @@ Route::get('{any}', function () {
 
 Route::get('/client_interventions', 'InterventionController@getClientInterventions')->name('client_interventions');
 Route::get('/reset-password', function () {
-    // Your reset password logic here
+    // Nothing
 })->name('reset-password');
 

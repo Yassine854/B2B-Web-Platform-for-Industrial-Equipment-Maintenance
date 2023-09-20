@@ -174,7 +174,7 @@
         <div
           class="bg-white rounded shadow-sm d-flex flex-column align-items-center justify-content-center"
           @click="openShowModal(assignment)"
-          style="cursor: pointer"
+          style="cursor: pointer;height:300px;"
         >
           <img
             :src="'/storage/img/pompes/' + assignment.product[0].image"
@@ -183,12 +183,12 @@
             style="height: 150px; width: 150px"
           />
           <div class="p-4">
-            <!-- Use the text-truncate class to handle long product names -->
-            <h5 class="text-dark text-truncate">{{ assignment.product[0].name }}</h5>
-            <p class="small text-muted mb-0">
-              Code GSI :<b>{{ assignment.product[0].id }}</b>
-            </p>
-          </div>
+    <h5 class="text-dark ">{{ assignment.product[0].name }}</h5>
+    <p class="small text-muted ">
+        Code GSI : <b>{{ assignment.product[0].id }}</b>
+    </p>
+</div>
+
         </div>
       </div>
     </div>

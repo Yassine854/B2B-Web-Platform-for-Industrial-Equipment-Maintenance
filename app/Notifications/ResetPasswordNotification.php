@@ -46,7 +46,7 @@ class ResetPasswordNotification extends Notification
         ->greeting('Monsieur/Madame,')
         ->line('Vous recevez cet e-mail car nous avons reçu une demande de réinitialisation de mot de passe pour votre compte.')
         ->action('Réinitialiser le mot de passe', $this->url)
-        ->salutation('Génerale Services Iindustriels.');
+        ->salutation('Génerale Services Industriels.');
     }
 
     /**

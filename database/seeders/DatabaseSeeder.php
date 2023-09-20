@@ -23,13 +23,13 @@ class DatabaseSeeder extends Seeder
             'role' => 2
         ]);
 
-        for ($i = 1; $i <= 40; $i++) {
-            User::create([
-                'name' => 'User ' . $i,
-                'email' => 'user' . $i . '@test.com',
-                'password' => Hash::make('password'),
-                'role' => null // Assuming 1 represents regular users
-            ]);
-        }
+        // for ($i = 1; $i <= 40; $i++) {
+        //     User::create([
+        //         'name' => 'User ' . $i,
+        //         'email' => 'user' . $i . '@test.com',
+        //         'password' => Hash::make('password'),
+        //         'role' => null // Assuming 1 represents regular users
+        //     ]);
+        // }
     }
 }

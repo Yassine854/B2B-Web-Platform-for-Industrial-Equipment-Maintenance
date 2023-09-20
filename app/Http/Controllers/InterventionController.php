@@ -158,10 +158,10 @@ public function getProductName($id)
                 'required',
                 'date',
             ],
-            'pieces' => 'required|array',
-            'pieces.*.designation' => 'required|string|max:255',
-            'pieces.*.reference' => 'required|string|max:255',
-            'pieces.*.quantite' => 'required|integer',
+            'pieces' => 'nullable|array',
+            'pieces.*.designation' => 'nullable|string|max:255',
+            'pieces.*.reference' => 'nullable|string|max:255',
+            'pieces.*.quantite' => 'nullable|integer',
         ];
 
         $messages = [
@@ -241,10 +241,10 @@ public function getProductName($id)
                 'required',
                 'date',
             ],
-            'pieces' => 'required|array',
-            'pieces.*.designation' => 'required|string|max:255',
-            'pieces.*.reference' => 'required|string|max:255',
-            'pieces.*.quantite' => 'required|integer',
+            'pieces' => 'nullable|array',
+            'pieces.*.designation' => 'nullable|string|max:255',
+            'pieces.*.reference' => 'nullable|string|max:255',
+            'pieces.*.quantite' => 'nullable|integer',
         ];
 
         $messages = [
