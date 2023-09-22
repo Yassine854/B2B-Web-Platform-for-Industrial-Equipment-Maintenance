@@ -13,7 +13,7 @@ class NotificationController extends Controller
     public function get_all_notifications(Request $request)
     {
         $user = $request->user();
-        $notifications = $user->notifications;
+        $notifications = $user->notifications()->orderBy('created_at', 'desc')->get();
 
         return response()->json(['notifications' => $notifications]);
     }
