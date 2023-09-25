@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('product_id');
+            $table->date('date')->nullable();
             $table->string('c_huile')->nullable();
             $table->string('c_filtre')->nullable();
             $table->string('c_dehuil')->nullable();

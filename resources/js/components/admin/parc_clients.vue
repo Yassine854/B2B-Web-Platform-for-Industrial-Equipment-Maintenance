@@ -115,8 +115,25 @@
 
                             </div>
                         </div>
+                        <div class="row gx-3 mb-3">
+                            <div class=" col-md-12">
+                                    <label
+                                    class="small mb-1"
+                                    for="date"
+                                    style="float: left"
+                                    >Date de changement</label
+                                    >
+                                    <input
+                                    :class="['form-control', {'is-invalid': validationErrors.date}]"
+                                    id="date"
+                                    rows="4"
+                                    type="date"
+                                    v-model="date"
+                                    >
+                                    <span class="invalid-feedback" v-for="(err, index) in validationErrors.date" :key="index">{{ err }}<br></span>
 
-
+                                </div>
+                        </div>
 
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
@@ -364,6 +381,7 @@ import layout from "../layouts/layout";
         validationErrorsEdit:{},
         client: "",
         product:"",
+        date:"",
         c_huile:"",
         c_filtre:"",
         c_dehuil:"",
@@ -432,11 +450,13 @@ import layout from "../layouts/layout";
       },
 
       async createAssignment() {
+        console.log(this.date);
         this.validationErrors={};
         try {
             let form = new FormData();
             form.append('client_id', this.client);
             form.append('product_id', this.product);
+            form.append('date', this.date);
             form.append('c_huile', this.c_huile);
             form.append('c_filtre',this.c_filtre);
             form.append('c_dehuil',this.c_dehuil);
@@ -445,6 +465,7 @@ import layout from "../layouts/layout";
           console.log(form);
           this.client = "";
           this.product="";
+          this.date="";
           this.c_huile="";
           this.c_filtre="";
           this.c_dehuil="";

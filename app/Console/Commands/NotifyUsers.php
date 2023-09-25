@@ -43,13 +43,55 @@ class NotifyUsers extends Command
                     $diffInDays = $now->diffInDays(Carbon::parse($assignment->updated_c_huile));
                     if ($diffInDays == 10){
                         //app notifications
-                        $message = "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !"; // Change this to your desired message.
+                        $message = "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !";
                         Notification::send($client, new ClientNotification($message,"warning"));
 
                         //Email notification
                     $details = new SendEmailNotification([
                     'greeting' => 'Chère '.$client->society,
                     'body' => "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
+                ]);
+
+                Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 5){
+                        //app notifications
+                        $message = "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !";
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                        //Email notification
+                    $details = new SendEmailNotification([
+                    'greeting' => 'Chère '.$client->society,
+                    'body' => "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
+                ]);
+
+                Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 3){
+                        //app notifications
+                        $message = "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !";
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                        //Email notification
+                    $details = new SendEmailNotification([
+                    'greeting' => 'Chère '.$client->society,
+                    'body' => "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
+                ]);
+
+                Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 1){
+                        //app notifications
+                        $message = "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !";
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                        //Email notification
+                    $details = new SendEmailNotification([
+                    'greeting' => 'Chère '.$client->society,
+                    'body' => "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
                 ]);
 
                 Notification::send($client,$details);
@@ -71,6 +113,45 @@ class NotifyUsers extends Command
                     ]);
                     Notification::send($client,$details);
                     }
+
+                    if ($diffInDays == 5){
+                        //App notification
+                        $message = "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 3){
+                        //App notification
+                        $message = "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 1){
+                        //App notification
+                        $message = "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
                  }
                  //Changement des déshuilleurs
                  if ($assignment->c_dehuil){
@@ -88,6 +169,45 @@ class NotifyUsers extends Command
                     ]);
                     Notification::send($client,$details);
                     }
+
+                    if ($diffInDays == 5){
+                        //App notification
+                        $message = "Changement des déshuileurs pour la pompe ".$assignment->product[0]->name." dans 5 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 3){
+                        //App notification
+                        $message = "Changement des déshuileurs pour la pompe ".$assignment->product[0]->name." dans 3 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 1){
+                        //App notification
+                        $message = "Changement des déshuileurs pour la pompe ".$assignment->product[0]->name." dans 1 jour !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
                  }
                  //Entretien génerale
                  if ($assignment->entretien){
@@ -102,6 +222,45 @@ class NotifyUsers extends Command
                     $details = new SendEmailNotification([
                         'greeting' => 'Chère '.$client->society,
                         'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 5){
+                        //App notification
+                        $message = "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 3){
+                        //App notification
+                        $message = "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 1){
+                        //App notification
+                        $message = "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
                     ]);
                     Notification::send($client,$details);
                     }

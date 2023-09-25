@@ -11,6 +11,7 @@ class Assignment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'date',
         'c_huile',
         'c_filtre',
         'c_dehuil',

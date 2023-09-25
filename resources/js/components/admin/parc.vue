@@ -81,6 +81,27 @@
 
                       </div>
                     </div>
+
+                    <div class="row gx-3 mb-3">
+                            <div class=" col-md-12">
+                                    <label
+                                    class="small mb-1"
+                                    for="date"
+                                    style="float: left"
+                                    >Date de changement</label
+                                    >
+                                    <input
+                                    :class="['form-control', {'is-invalid': validationErrors.date}]"
+                                    id="date"
+                                    rows="4"
+                                    type="date"
+                                    v-model="date"
+                                    >
+                                    <span class="invalid-feedback" v-for="(err, index) in validationErrors.date" :key="index">{{ err }}<br></span>
+
+                                </div>
+                        </div>
+
                     <div class="row gx-3 mb-3">
                             <div class="col-md-6">
                                 <label
@@ -256,6 +277,26 @@
                     </div>
 
                     <div class="row gx-3 mb-3">
+                            <div class=" col-md-12">
+                                    <label
+                                    class="small mb-1"
+                                    for="date"
+                                    style="float: left"
+                                    >Date de changement</label
+                                    >
+                                    <input
+                                    :class="['form-control', {'is-invalid': validationErrorsEdit.date}]"
+                                    id="date"
+                                    rows="4"
+                                    type="date"
+                                    v-model="dateEdit"
+                                    >
+                                    <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.date" :key="index">{{ err }}<br></span>
+
+                                </div>
+                        </div>
+
+                    <div class="row gx-3 mb-3">
                       <div class="col-md-6">
                         <label
                           class="small mb-1"
@@ -392,6 +433,25 @@
                       />
                     </div>
                   </div>
+                  <div class="row gx-3 mb-3">
+                        <div class=" col-md-12">
+                                <label
+                                class="small mb-1"
+                                for="date"
+                                style="float: left"
+                                >Date de changement</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrorsEdit.date}]"
+                                id="date"
+                                rows="4"
+                                type="date"
+                                v-model="dateShow"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.date" :key="index">{{ err }}<br></span>
+
+                            </div>
+                    </div>
                   <!-- Maintenance Sections -->
                   <div class="row">
                     <div class="col-md-6" v-if="c_huileShow">
@@ -578,7 +638,7 @@
                     class="me-4 text-info"
                     @click="openShowModal(assignment)"
                   >
-                    <i class="fa-solid fa-eye"></i>
+                    <i class="fa-solid fa-arrows-rotate"></i>
                   </a>
                   <a
                     id="crudBtn"
@@ -761,6 +821,7 @@ export default {
       //Add
       clientAdd: "",
       product: "",
+      date:"",
       c_huile: "",
       c_filtre: "",
       c_dehuil: "",
@@ -769,6 +830,7 @@ export default {
       //Edit
       AssignmentEdit: {},
       productEdit: "",
+      dateEdit:"",
       c_huileEdit: "",
       c_filtreEdit: "",
       c_dehuilEdit: "",
@@ -779,6 +841,7 @@ export default {
       productShow: "",
       assignmentID:"",
       codeShow: "",
+      dateShow:"",
       c_huileShow: "",
       c_filtreShow: "",
       c_dehuilShow: "",
@@ -840,6 +903,7 @@ export default {
         let form = new FormData();
         form.append("client_id", this.clientAdd);
         form.append("product_id", this.product);
+        form.append("date", this.date);
         form.append("c_huile", this.c_huile);
         form.append("c_filtre", this.c_filtre);
         form.append("c_dehuil", this.c_dehuil);
@@ -847,6 +911,7 @@ export default {
        await axios.post(`/api/assignments/create`, form);
         console.log(form);
         this.product = "";
+        this.date="";
         this.c_huile = "";
         this.c_filtre = "";
         this.c_dehuil = "";
@@ -885,6 +950,7 @@ export default {
       this.client = selectedValue;
       this.AssignmentEdit = assignment;
       this.productEdit = assignment.product[0].id;
+      this.dateEdit=assignment.date;
       this.c_huileEdit = assignment.c_huile;
       this.c_filtreEdit = assignment.c_filtre;
       this.c_dehuilEdit = assignment.c_dehuil;
@@ -897,6 +963,7 @@ export default {
   this.productShow = "";
   this.assignmentID = "";
   this.imageShow = "";
+  this.dateShow="";
   this.c_huileShow = "";
   this.c_filtreShow = "";
   this.c_dehuilShow = "";
@@ -937,6 +1004,7 @@ export default {
        await axios.put(`/api/assignments/update/${assignment.id}`, {
           client_id: this.client,
           product_id: this.productEdit,
+          date: this.dateEdit,
           c_huile: this.c_huileEdit,
           c_filtre: this.c_filtreEdit,
           c_dehuil: this.c_dehuilEdit,
@@ -964,6 +1032,7 @@ export default {
 
         this.AssignmentEdit = {};
         this.productEdit = "";
+        this.dateEdit="";
         this.c_huileEdit = "";
         this.c_filtreEdit = "";
         this.c_dehuilEdit = "";
@@ -1013,26 +1082,60 @@ export default {
       });
     },
 
-   async changerHuile(assignment_id){
-      try {
-        console.log(assignment_id);
-        axios.put(`/api/assignments/updateHuile/${assignment_id}`);
-        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
-        this.assignmentShow = response.data.assignment;
-        this.c_huileShow = new Date(this.assignmentShow.updated_c_huile);
-        this.get_assignments();
-      } catch (error) {
+    async changerHuile(assignment_id) {
+    try {
+        const result = await Swal.fire({
+            title: 'Réintialiser la date de changement de huile ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, réintialiser!'
+        });
+
+        if (result.isConfirmed) {
+            await axios.put(`/api/assignments/updateHuile/${assignment_id}`, { date: this.dateShow });
+            const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+            this.assignmentShow = response.data.assignment;
+            this.c_huileShow = new Date(this.assignmentShow.updated_c_huile);
+            this.get_assignments();
+            Swal.fire(
+                'Réintialisation effectuée avec succés !',
+                '',
+                'success'
+            );
+        }
+    } catch (error) {
         console.log(error);
-      }
-    },
+    }
+},
 
     async changerFiltre(assignment_id){
+        console.log(this.dateShow);
       try {
-        axios.put(`/api/assignments/updateFiltre/${assignment_id}`);
-        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
-        this.assignmentShow = response.data.assignment;
-        this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre);
-        this.get_assignments();
+        const result = await Swal.fire({
+            title: 'Réintialiser la date de changement des cartouches de filtres ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, réintialiser!'
+        });
+
+        if (result.isConfirmed) {
+            await axios.put(`/api/assignments/updateFiltre/${assignment_id}`,{date: this.dateShow});
+
+            const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+            this.assignmentShow = response.data.assignment;
+            this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre);
+            this.get_assignments();
+            Swal.fire(
+                'Réintialisation effectuée avec succés !',
+                '',
+                'success'
+            );
+        }
+
       } catch (error) {
         console.log(error);
       }
@@ -1040,11 +1143,32 @@ export default {
 
     async changerDeshuil(assignment_id){
       try {
-        axios.put(`/api/assignments/updateDeshuil/${assignment_id}`);
-        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
-        this.assignmentShow = response.data.assignment;
-        this.c_dehuilShow = new Date(this.assignmentShow.updated_c_dehuil);
-        this.get_assignments();
+        const result = await Swal.fire({
+            title: 'Réintialiser la date de changement des déshuileurs ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, réintialiser!'
+        });
+
+        if (result.isConfirmed) {
+            await axios.put(`/api/assignments/updateDeshuil/${assignment_id}`,{date: this.dateShow});
+
+            const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+            this.assignmentShow = response.data.assignment;
+            this.c_dehuilShow = new Date(this.assignmentShow.updated_c_dehuil);
+            this.get_assignments();
+            Swal.fire(
+                'Réintialisation effectuée avec succés !',
+                '',
+                'success'
+            );
+        }
+
+
+
+
       } catch (error) {
         console.log(error);
       }
@@ -1052,11 +1176,29 @@ export default {
 
     async changerEntretien(assignment_id){
       try {
-        axios.put(`/api/assignments/updateEntretien/${assignment_id}`);
-        const response = await axios.get(`/api/assignments/show/${assignment_id}`);
-        this.assignmentShow = response.data.assignment;
-        this.entretienShow = new Date(this.assignmentShow.updated_entretien);
-        this.get_assignments();
+        const result = await Swal.fire({
+            title: "Réintialiser la date de changement d'entretien général?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, réintialiser!'
+        });
+
+        if (result.isConfirmed) {
+            await axios.put(`/api/assignments/updateEntretien/${assignment_id}`,{date: this.dateShow});
+
+            const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+            this.assignmentShow = response.data.assignment;
+            this.entretienShow = new Date(this.assignmentShow.updated_entretien);
+            this.get_assignments();
+            Swal.fire(
+                'Réintialisation effectuée avec succés !',
+                '',
+                'success'
+            );
+        }
+
       } catch (error) {
         console.log(error);
       }

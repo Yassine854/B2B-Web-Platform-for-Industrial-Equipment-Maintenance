@@ -97,6 +97,7 @@ class AssignmentController extends Controller
     $assignment = new Assignment();
     $assignment->client_id = $request->client_id;
     $assignment->product_id = $request->product_id;
+    $assignment->date = $request->date;
     $assignment->c_huile = $request->c_huile;
     $assignment->c_filtre = $request->c_filtre;
     $assignment->c_dehuil = $request->c_dehuil;
@@ -107,22 +108,38 @@ class AssignmentController extends Controller
     //updatables
     if($assignment->c_huile){
         $huileDaysLeft=(int) $assignment->c_huile / (int) $product->time_day; //result in days
-        $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);
+
+        if(isset($assignment->date))
+            $assignment->updated_c_huile = Carbon::parse($assignment->date)->addDays($huileDaysLeft);
+        else
+            $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);
     }
     if($assignment->c_filtre)
         {
         $filtreDaysLeft=(int) $assignment->c_filtre / (int) $product->time_day; //result in days
-        $assignment->updated_c_filtre = $today->copy()->addDays($filtreDaysLeft);
+
+        if(isset($assignment->date))
+            $assignment->updated_c_filtre = Carbon::parse($assignment->date)->addDays($filtreDaysLeft);
+        else
+            $assignment->updated_c_filtre = $today->copy()->addDays($filtreDaysLeft);
         }
     if($assignment->c_dehuil)
         {
             $DeshuilDaysLeft=(int) $assignment->c_dehuil / (int) $product->time_day; //result in days
+
+        if(isset($assignment->date))
+            $assignment->updated_c_dehuil = Carbon::parse($assignment->date)->addDays($DeshuilDaysLeft);
+        else
             $assignment->updated_c_dehuil = $today->copy()->addDays($DeshuilDaysLeft);
         }
     if($assignment->entretien)
         {
             $EntretienDaysLeft=(int) $assignment->entretien / (int) $product->time_day; //result in days
-            $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
+
+        if(isset($assignment->date))
+            $assignment->updated_entretien = Carbon::parse($assignment->date)->addDays($EntretienDaysLeft);
+        else
+        $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
         }
     $assignment->save();
 
@@ -175,6 +192,7 @@ public function updateAssignment(Request $request, $id)
 
         $assignment->client_id = $request->client_id;
         $assignment->product_id = $request->product_id;
+        $assignment->date = $request->date;
         $assignment->c_huile = $request->c_huile;
         $assignment->c_filtre = $request->c_filtre;
         $assignment->c_dehuil = $request->c_dehuil;
@@ -185,19 +203,36 @@ public function updateAssignment(Request $request, $id)
         // Check if c_huile was modified
         if ($originalCHuile !== $assignment->c_huile) {
             $huileDaysLeft=(int) $assignment->c_huile / (int) $product->time_day; //result in days
-            $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);        }
+            if(isset($assignment->date))
+                $assignment->updated_c_huile = Carbon::parse($assignment->date)->addDays($huileDaysLeft);
+            else
+                $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);
+            }
 
         if ($originalCFiltre !== $assignment->c_filtre) {
             $filtreDaysLeft=(int) $assignment->c_filtre / (int) $product->time_day; //result in days
-            $assignment->updated_c_filtre = $today->copy()->addDays($filtreDaysLeft);
+
+            if(isset($assignment->date))
+                $assignment->updated_c_filtre = Carbon::parse($assignment->date)->addDays($filtreDaysLeft);
+            else
+                $assignment->updated_c_filtre = $today->copy()->addDays($filtreDaysLeft);
         }
         if ($originalCDeHuile !== $assignment->c_dehuil) {
             $DeshuilDaysLeft=(int) $assignment->c_dehuil / (int) $product->time_day; //result in days
-            $assignment->updated_c_dehuil = $today->copy()->addDays($DeshuilDaysLeft);
+
+            if(isset($assignment->date))
+                $assignment->updated_c_dehuil = Carbon::parse($assignment->date)->addDays($DeshuilDaysLeft);
+            else
+                $assignment->updated_c_dehuil = $today->copy()->addDays($DeshuilDaysLeft);
         }
         if ($originalCEntretien !== $assignment->entretien) {
             $EntretienDaysLeft=(int) $assignment->entretien / (int) $product->time_day; //result in days
-            $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);         }
+
+            if(isset($assignment->date))
+                $assignment->updated_entretien = Carbon::parse($assignment->date)->addDays($EntretienDaysLeft);
+            else
+                $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
+        }
 
         $assignment->update();
 
@@ -218,7 +253,7 @@ public function updateAssignment(Request $request, $id)
 }
 
 
-public function updateHuile($id) {
+public function updateHuile(Request $request,$id) {
     try {
         $today = Carbon::now();
         $assignment = Assignment::find($id);
@@ -236,10 +271,18 @@ public function updateHuile($id) {
                 'error' => 'Product not found',
             ], 404);
         }
+        $assignment->date = $request->date;
 
         $huileDaysLeft = (int) $assignment->c_huile / (int) $product->time_day; //result in days
-        $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);
+
+        if(isset($assignment->date))
+            $assignment->updated_c_huile = Carbon::parse($assignment->date)->copy()->addDays($huileDaysLeft);
+
+        else
+            $assignment->updated_c_huile = $today->copy()->addDays($huileDaysLeft);
+
         $assignment->save();
+
 
         return response()->json([
             'message' => 'Assignment updated successfully',
@@ -254,7 +297,7 @@ public function updateHuile($id) {
 
 
 
-public function updateFiltre($id) {
+public function updateFiltre( Request $request, $id ) {
     try {
         $today = Carbon::now();
         $assignment = Assignment::find($id);
@@ -272,9 +315,15 @@ public function updateFiltre($id) {
                 'error' => 'Product not found',
             ], 404);
         }
+        $assignment->date = $request->date;
 
         $FiltreDaysLeft = (int) $assignment->c_filtre / (int) $product->time_day; //result in days
-        $assignment->updated_c_filtre = $today->copy()->addDays($FiltreDaysLeft);
+
+        if(isset($assignment->date))
+            $assignment->updated_c_filtre = Carbon::parse($assignment->date)->addDays($FiltreDaysLeft);
+        else
+            $assignment->updated_c_filtre = $today->copy()->addDays($FiltreDaysLeft);
+
         $assignment->save();
 
         return response()->json([
@@ -288,7 +337,7 @@ public function updateFiltre($id) {
     }
 }
 
-public function updateDeshuil($id) {
+public function updateDeshuil(Request $request,$id) {
     try {
         $today = Carbon::now();
         $assignment = Assignment::find($id);
@@ -306,9 +355,15 @@ public function updateDeshuil($id) {
                 'error' => 'Product not found',
             ], 404);
         }
+        $assignment->date = $request->date;
 
         $DehuilDaysLeft = (int) $assignment->c_dehuil / (int) $product->time_day; //result in days
-        $assignment->updated_c_dehuil = $today->copy()->addDays($DehuilDaysLeft);
+
+        if(isset($assignment->date))
+            $assignment->updated_c_dehuil = Carbon::parse($assignment->date)->addDays($DehuilDaysLeft);
+        else
+            $assignment->updated_c_dehuil = $today->copy()->addDays($DehuilDaysLeft);
+
         $assignment->save();
 
         return response()->json([
@@ -322,7 +377,7 @@ public function updateDeshuil($id) {
     }
 }
 
-public function updateEntretien($id) {
+public function updateEntretien(Request $request,$id) {
     try {
         $today = Carbon::now();
         $assignment = Assignment::find($id);
@@ -339,9 +394,14 @@ public function updateEntretien($id) {
                 'error' => 'Product not found',
             ], 404);
         }
+        $assignment->date = $request->date;
 
         $EntretienDaysLeft=(int) $assignment->entretien / (int) $product->time_day; //result in days
-        $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
+
+        if(isset($assignment->date))
+            $assignment->updated_entretien = Carbon::parse($assignment->date)->addDays($EntretienDaysLeft);
+        else
+            $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
         $assignment->save();
 
         return response()->json([
