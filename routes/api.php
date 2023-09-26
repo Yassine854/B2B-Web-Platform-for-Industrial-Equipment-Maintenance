@@ -57,6 +57,8 @@ Route::put('/users/requestVerification/{id}', [UserController::class, 'requestVe
 Route::post('/user/verifyOldPassword/{id}', [UserController::class, 'verifyOldPassword']);
 Route::put('/user/updatePassword/{id}', [UserController::class, 'updatePassword']);
 Route::post('/user/delete/{id}', [UserController::class, 'deleteUser']);
+Route::post('/user/disable/{id}', [UserController::class, 'disableUser']);
+Route::post('/user/activate/{id}', [UserController::class, 'activateUser']);
 Route::get('/search_user',[UserController::class,'search_user']);
 Route::post('/user/verifyEmail/{id}', [UserController::class, 'verifyEmail']);
 Route::get('/get-client-count', [UserController::class, 'getClientCount']);

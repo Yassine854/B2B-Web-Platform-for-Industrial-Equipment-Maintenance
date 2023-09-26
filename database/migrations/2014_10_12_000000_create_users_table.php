@@ -23,13 +23,14 @@ return new class extends Migration
             //Client information
             $table->string('society')->nullable();
             $table->unsignedBigInteger('type_ind')->nullable();
-            $table->string('responsable')->nullable();
+            // $table->string('responsable')->nullable();
             $table->string('N_responsable')->nullable();
             $table->string('country')->nullable();
             $table->string('city')->nullable();
             $table->string('address')->nullable();
             $table->foreign('type_ind')
               ->references('id')->on('typeindustries')->onDelete('restrict');
+            $table->boolean('disabled')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

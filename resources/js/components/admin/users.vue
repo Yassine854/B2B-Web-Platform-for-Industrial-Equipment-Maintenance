@@ -109,7 +109,7 @@
                                   class="small mb-1"
                                   for="inputOrgName"
                                   style="float: left"
-                                  >Nom d'utilisateur</label
+                                  >Nom du responsable</label
                                 >
                                 <input
                                 :class="['form-control', {'is-invalid': ClientvalidationErrors.name}]"
@@ -228,45 +228,6 @@
                                 </div>
                               </div>
 
-                              <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                  <label
-                                    class="small mb-1"
-                                    for="inputOrgName"
-                                    style="float: left"
-                                    >Résponsable</label
-                                  >
-                                  <input
-                                  :class="['form-control', {'is-invalid': ClientvalidationErrors.responsable}]"
-                                    id="inputOrgName"
-                                    type="text"
-                                    placeholder="Entrer le nom du répsponsable"
-                                    v-model="responsable"
-
-                                  />
-                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.responsable" :key="index">{{ err }}<br></span>
-
-                                </div>
-
-                                <div class="col-md-6">
-                                  <label
-                                    class="small mb-1"
-                                    for="inputLocation"
-                                    style="float: left"
-                                    >Numéro du résponsable</label
-                                  >
-                                  <input
-                                  :class="['form-control', {'is-invalid': ClientvalidationErrors.N_responsable}]"
-                                    id="inputLocation"
-                                    type="text"
-                                    placeholder="Entrer le numéro du répsponsable"
-                                    v-model="N_responsable"
-
-                                  />
-                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.N_responsable" :key="index">{{ err }}<br></span>
-
-                                </div>
-                              </div>
                               <!-- Country & state Add  -->
                               <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
@@ -276,7 +237,7 @@
                                   <select
                                 :class="['form-select', {'is-invalid': ClientvalidationErrors.country}]"
                                 v-model="selectedCountry"
-                                @change="fireState()"
+                                @change="handleCountryChange()"
                             >
                             <option value="" selected hidden>Sélectionner le pays</option>
 
@@ -314,6 +275,29 @@
 
                                 </div>
                               </div>
+
+                              <div class="row gx-3 mb-3">
+
+                                <div class="col-md-6">
+                                  <label
+                                    class="small mb-1"
+                                    for="inputLocation"
+                                    style="float: left"
+                                    >Numéro du résponsable</label
+                                  >
+                                  <input
+                                  :class="['form-control', {'is-invalid': ClientvalidationErrors.N_responsable}]"
+                                    id="inputLocation"
+                                    type="text"
+                                    placeholder="Entrer le numéro du répsponsable"
+                                    v-model="N_responsable"
+
+                                  />
+                                  <span class="invalid-feedback" v-for="(err, index) in ClientvalidationErrors.N_responsable" :key="index">{{ err }}<br></span>
+
+                                </div>
+                              </div>
+
                               <div class="mb-3">
                                 <label
 
@@ -513,7 +497,7 @@
                                   class="small mb-1"
                                   for="inputOrgName"
                                   style="float: left"
-                                >Nom d'utilisateur</label>
+                                >Nom du responsable</label>
                                 <input
                                 :class="['form-control', {'is-invalid': validationErrorsEdit.name}]"
                                   id="inputOrgName"
@@ -615,46 +599,6 @@
                                 </div>
                               </div>
 
-                              <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                  <label
-                                    class="small mb-1"
-                                    for="inputOrgName"
-                                    style="float: left"
-                                    >Résponsable</label
-                                  >
-                                  <input
-                                  :class="['form-control', {'is-invalid': validationErrorsEdit.responsable}]"
-                                    id="inputOrgName"
-                                    type="text"
-                                    placeholder="Entrer le nom du répsponsable"
-                                    v-model="responsableEdited"
-
-                                  />
-                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.responsable" :key="index">{{ err }}<br></span>
-
-                                </div>
-
-                                <div class="col-md-6">
-                                  <label
-                                    class="small mb-1"
-                                    for="inputLocation"
-                                    style="float: left"
-                                    >Numéro du résponsable</label
-                                  >
-                                  <input
-                                  :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
-                                    id="inputLocation"
-                                    type="text"
-                                    placeholder="Entrer le numéro du répsponsable"
-                                    v-model="N_responsableEdited"
-
-                                  />
-                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
-
-                                </div>
-                              </div>
-
                               <!-- Country & state Add  -->
                               <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
@@ -665,7 +609,7 @@
                                     id="selectCountry"
                                     :class="['form-select', {'is-invalid': validationErrorsEdit.country}]"
                                     v-model="selectedCountry"
-                                    @change="fireState()"
+                                    @change="handleCountryChangeEdited()"
                                   >
                                     <option
                                       :value="country.id"
@@ -702,6 +646,30 @@
 
                                 </div>
                               </div>
+
+                              <div class="row gx-3 mb-3">
+
+                                <div class="col-md-6">
+                                  <label
+                                    class="small mb-1"
+                                    for="inputLocation"
+                                    style="float: left"
+                                    >Numéro du résponsable</label
+                                  >
+                                  <input
+                                  :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
+                                    id="inputLocation"
+                                    type="text"
+                                    placeholder="Entrer le numéro du répsponsable"
+                                    v-model="N_responsableEdited"
+
+                                  />
+                                  <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
+
+                                </div>
+                              </div>
+
+
 
                               <div class="mb-3">
                                 <label
@@ -865,35 +833,7 @@
                               />
                             </div>
                           </div>
-                          <!-- Form Row        -->
-                          <div class="row gx-3 mb-3">
-                            <!-- Form Group (organization name)-->
-                            <div class="col-md-6">
-                              <label class="small mb-1" for="Responsable" style="float: left"
-                                >Responsable</label
-                              >
-                              <input
-                                class="form-control"
-                                id="Responsable"
-                                type="text"
-                                v-model="responsableEdited"
-                                disabled
-                              />
-                            </div>
-                            <!-- Form Group (location)-->
-                            <div class="col-md-6">
-                              <label class="small mb-1" for="N_responsableEdited" style="float: left"
-                                >Numéro du Responsable</label
-                              >
-                              <input
-                                class="form-control"
-                                id="N_responsableEdited"
-                                type="text"
-                                v-model="N_responsableEdited"
-                                disabled
-                              />
-                            </div>
-                          </div>
+
                           <!-- Form Row        -->
                           <div class="row gx-3 mb-3">
                             <!-- Form Group (organization name)-->
@@ -923,6 +863,25 @@
                               />
                             </div>
                           </div>
+
+                          <!-- Form Row        -->
+                          <div class="row gx-3 mb-3">
+
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                              <label class="small mb-1" for="N_responsableEdited" style="float: left"
+                                >Numéro du Responsable</label
+                              >
+                              <input
+                                class="form-control"
+                                id="N_responsableEdited"
+                                type="text"
+                                v-model="N_responsableEdited"
+                                disabled
+                              />
+                            </div>
+                          </div>
+
                           <!-- Form Group (username)-->
                           <div class="mb-3">
                               <label class="small mb-1" for="Adresse" style="float: left"
@@ -961,6 +920,7 @@
             <th scope="col">E-mail</th>
             <th scope="col">Vérification E-mail</th>
             <th scope="col">Role</th>
+            <th scope="col">État</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -993,6 +953,14 @@
               </button>
             </td>
             <td>
+                <div v-if="user.disabled==false">
+                    <i class="fa-solid fa-circle text-success"></i> <p>Actif</p>
+                </div>
+                <div v-if="user.disabled==true">
+                    <i class="fa-solid fa-circle text-danger"></i> <p>Désactivé</p>
+                </div>
+            </td>
+            <td>
               <a
                 v-if="user.role == 1 || user.role == null"
                 id="crudBtn"
@@ -1008,9 +976,15 @@
               >
                 <i class="fa-solid fa-pen-to-square"></i>
               </a>
-              <a id="crudBtn" @click="deleteUser(user.id)" class="text-danger">
+              <a id="crudBtn" @click="deleteUser(user.id)" class="me-4 text-danger">
                 <i class="fa-solid fa-trash"></i>
               </a>
+              <a v-if="user.role == 1 && user.disabled==false" id="crudBtn" @click="disableClient(user.id)" class="me-4 text-dark">
+                <i class="fa-solid fa-user-lock"></i>
+              </a>
+              <a v-if="user.role == 1 && user.disabled==true" id="crudBtn" @click="activateClient(user.id)" class="me-4 text-success">
+                <i class="fa-solid fa-lock-open"></i>
+            </a>
             </td>
           </tr>
         </tbody>
@@ -1178,7 +1152,6 @@ export default {
       passwordClient: "",
       society: "",
       type_ind: "",
-      responsable: "",
       N_responsable: "",
       address: "",
       //Edit
@@ -1186,7 +1159,6 @@ export default {
       emailEdited: "",
       societyEdited: "",
       type_indEdited: "",
-      responsableEdited: "",
       N_responsableEdited: "",
       selectedCountryEdited: "",
       selectedStateEdited: "",
@@ -1212,7 +1184,7 @@ export default {
       this.id = window.Laravel.user.id;
     }
     this.$nextTick(() => {
-        this.fireState();
+        this.handleCountryChange();
       });
   },
   mounted() {
@@ -1308,11 +1280,40 @@ async search() {
         (state) => state.country_id === this.selectedCountry
       );
     },
+
+    firePhoneCode() {
+  const Country = listCountries.find(
+    (country) => country.id === this.selectedCountry
+  );
+  if (Country) {
+    this.N_responsable = `(+${Country.phonecode})`;
+  }
+},
+
+firePhoneCodeEdited() {
+  const Country = listCountries.find(
+    (country) => country.id === this.selectedCountry
+  );
+  if (Country) {
+    this.N_responsableEdited = `(+${Country.phonecode})`;
+  }
+},
+
     arrayRemove(arr, value) {
       return arr.filter(function (ele) {
         return ele != value;
       });
     },
+
+    handleCountryChange() {
+    this.fireState();
+    this.firePhoneCode();
+  },
+
+  handleCountryChangeEdited() {
+    this.fireState();
+    this.firePhoneCodeEdited();
+  },
 
     async createAdmin() {
         this.AdminvalidationErrors={};
@@ -1367,7 +1368,6 @@ async search() {
           password: this.passwordClient,
           society: this.society,
           type_ind: this.type_ind,
-          responsable: this.responsable,
           N_responsable: this.N_responsable,
           country: this.selectedCountry,
           city: this.selectedState,
@@ -1378,9 +1378,8 @@ async search() {
         this.passwordClient = "";
         this.society = "";
         this.type_ind = "";
-        this.responsable = "";
         this.N_responsable = "";
-        this.selectedCountry = "";
+        this.selectedCountry = "222";
         this.selectedState = "";
         this.address = "";
 
@@ -1426,7 +1425,6 @@ async search() {
 
       this.societyEdited = user.society;
       this.type_indEdited = user.type_ind;
-      this.responsableEdited = user.responsable;
       this.N_responsableEdited = user.N_responsable;
       this.selectedCountry = user.country;
 
@@ -1448,7 +1446,6 @@ async search() {
       console.log("type===="+user.type_ind);
       this.type_indEdited = this.SelectedType_indShow(user.type_ind);
       console.log(this.type_indEdited);
-      this.responsableEdited = user.responsable;
       this.N_responsableEdited = user.N_responsable;
       this.SelectedCountryShow = this.selectedCountryName(user.country);
       this.SelectedStateShow = this.selectedStateName(user.city);
@@ -1467,7 +1464,6 @@ try {
 
     society: this.societyEdited,
     type_ind: this.type_indEdited,
-    responsable: this.responsableEdited,
     N_responsable: this.N_responsableEdited,
     country: this.selectedCountry,
     city: this.selectedState,
@@ -1479,9 +1475,8 @@ try {
   this.emailEdited = "";
   this.societyEdited = "";
   this.type_indEdited = "";
-  this.responsableEdited = "";
   this.N_responsableEdited = "";
-  this.selectedCountry = "";
+  this.selectedCountry = "222";
   this.selectedState = "";
   this.addressEdited = "";
   const toast = Swal.mixin({
@@ -1554,6 +1549,71 @@ try {
         }
       });
     },
+
+    disableClient(user_id) {
+      Swal.fire({
+        title: "Êtes-vous sûr(e) ?",
+        text: "Vous ne pourrez pas revenir en arrière !",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, désactiver-le !",
+        cancelButtonText: "Annuler",
+      }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+              .post("/api/user/disable/" + user_id)
+              .then((response) => {
+                this.getUsers();
+                console.log(response);
+                Swal.fire("", "La société a été désactivé!", "success");
+              })
+              .catch((errors) => {
+                console.log(errors);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Il y a eu un problème!",
+                    });
+              });
+
+        }
+      });
+    },
+
+    activateClient(user_id) {
+      Swal.fire({
+        title: "Êtes-vous sûr(e) ?",
+        text: "Vous ne pourrez pas revenir en arrière !",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, activer-le !",
+        cancelButtonText: "Annuler",
+      }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+              .post("/api/user/activate/" + user_id)
+              .then((response) => {
+                this.getUsers();
+                console.log(response);
+                Swal.fire("", "La société a été activé!", "success");
+              })
+              .catch((errors) => {
+                console.log(errors);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Il y a eu un problème!",
+                    });
+              });
+
+        }
+      });
+    },
+
     verifyEmail(user_id) {
       Swal.fire({
         title: "Valider l'E-mail ?",

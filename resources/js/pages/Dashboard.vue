@@ -152,7 +152,7 @@
 
   <!-- Client Dashboard verified -->
   <layout v-else>
-    <div v-if="checkClientVerification()">
+    <div v-if="checkClientVerification() && !checkClientDisabled()">
       <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
       </div>
@@ -257,7 +257,7 @@
                           v-model="type_ind"
 
                         >
-                        <option :value="null" disabled selected hidden>Sélectionner le type d'industrie</option>
+                        <option value="" disabled selected hidden>Sélectionner le type d'industrie</option>
 
                           <option
                             v-for="industrie in type_industries"
@@ -271,41 +271,6 @@
 
                       </div>
                     </div>
-                    <!-- Form Row        -->
-                    <div class="row gx-3 mb-3">
-                      <!-- Form Group (organization name)-->
-                      <div class="col-md-6">
-                        <label class="small mb-1" for="inputOrgName"
-                          >Résponsable</label
-                        >
-                        <input
-                        :class="['form-control', {'is-invalid': validationErrorsEdit.responsable}]"
-                          id="inputOrgName"
-                          type="text"
-                          placeholder="Entrer le nom du répsponsable"
-                          v-model="responsable"
-
-                        />
-                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.responsable" :key="index">{{ err }}<br></span>
-
-                      </div>
-                      <!-- Form Group (location)-->
-                      <div class="col-md-6">
-                        <label class="small mb-1" for="inputLocation"
-                          >Numéro du résponsable</label
-                        >
-                        <input
-                        :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
-                          id="inputLocation"
-                          type="text"
-                          placeholder="Entrer le numéro du répsponsable"
-                          v-model="N_responsable"
-
-                        />
-                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
-
-                      </div>
-                    </div>
 
                     <!-- Country & state Add  -->
                     <div class="row gx-3 mb-3">
@@ -314,10 +279,10 @@
                         <select
                         :class="['form-select', {'is-invalid': validationErrorsEdit.country}]"
                           v-model="selectedCountry"
-                          @change="fireState()"
+                          @change="handleCountryChange"
 
                         >
-                        <option :value="null" disabled selected hidden>Sélectionner un pays</option>
+                        <option value="" disabled selected hidden>Sélectionner un pays</option>
 
                           <option
                             :value="country.id"
@@ -341,7 +306,7 @@
 
                         >
 
-                        <option :value="null" disabled selected hidden>Sélectionner le gouvernorat</option>
+                        <option value="" disabled selected hidden>Sélectionner le gouvernorat</option>
                           <option
                             :value="state.id"
                             v-for="state in states"
@@ -354,6 +319,28 @@
 
                       </div>
                     </div>
+
+                    <!-- Form Row        -->
+                    <div class="row gx-3 mb-3">
+
+                      <!-- Form Group (location)-->
+                      <div class="col-md-6">
+                        <label class="small mb-1" for="inputLocation"
+                          >Numéro du résponsable</label
+                        >
+                        <input
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
+                          id="inputLocation"
+                          type="text"
+                          placeholder="Entrer le numéro du répsponsable"
+                          v-model="N_responsable"
+
+                        />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
+
+                      </div>
+                    </div>
+
 
                     <!-- Form Group (username)-->
                     <div class="mb-3">
@@ -382,9 +369,16 @@
         </div>
       </div>
     </div>
-    <div v-else-if="formSubmitted">
+    <div v-else-if="formSubmitted && !checkClientDisabled()">
       <div class="alert alert-info" role="alert">
         Votre e-mail est en attente de vérification.
+      </div>
+    </div>
+
+    <div v-else-if="checkClientDisabled()">
+      <div class="alert alert-danger" role="alert">
+        Nous vous informons que votre compte a été désactivé temporairement. <br>
+         Pour plus d'informations et pour résoudre ce problème, veuillez nous contacter dès que possible.
       </div>
     </div>
 
@@ -570,6 +564,7 @@ import {
   checkLoginStatus,
   checkLoginAdmin,
   checkClientVerification,
+  checkClientDisabled,
 } from "../auth"; // Import the checkLoginStatus function
 import listCountries from "../../json/country.json";
 import listStates from "../../json/state.json";
@@ -630,7 +625,7 @@ export default {
       id: "",
       society: "",
       type_ind: "",
-      responsable: "",
+      phonecode : "",
       N_responsable: "",
       countries: listCountries,
       selectedCountry: '222',
@@ -696,6 +691,7 @@ export default {
     this.MonthlyChartData();
 
   },
+
   created() {
     if (window.Laravel.user) {
       this.user = window.Laravel.user;
@@ -705,27 +701,25 @@ export default {
       console.log("user's id is " + this.id);
       //Client
 
-      this.society = window.Laravel.user.society;
-      this.type_ind = window.Laravel.user.type_ind;
-      this.responsable = window.Laravel.user.responsable;
-      this.N_responsable = window.Laravel.user.N_responsable;
-      this.selectedCountry = window.Laravel.user.country;
+    //   this.society = window.Laravel.user.society;
+    //   this.type_ind = window.Laravel.user.type_ind;
+    //   this.N_responsable = window.Laravel.user.N_responsable;
+    //   const country = window.Laravel.user.country;
 
-      this.selectedState = window.Laravel.user.city;
-      this.address = window.Laravel.user.address;
+    //   this.selectedState = window.Laravel.user.city;
+    //   this.address = window.Laravel.user.address;
 
     this.$nextTick(() => {
-        this.fireState();
+        this.handleCountryChange();
       });
     }
     if (
-      this.society &&
-      this.type_ind &&
-      this.responsable &&
-      this.N_responsable &&
-      this.selectedCountry &&
-      this.selectedState &&
-      this.address
+      this.user.society &&
+      this.user.type_ind &&
+      this.user.N_responsable &&
+      this.user.country &&
+      this.user.city &&
+      this.user.address
     )
       this.formSubmitted = true;
   },
@@ -733,12 +727,29 @@ export default {
     isAdmin() {
       return this.role === 2;
     },
+
+    handleCountryChange() {
+    this.fireState();
+    this.firePhoneCode();
+  },
+
     fireState() {
       this.states = [];
       this.states = listStates.filter(
         (state) => state.country_id === this.selectedCountry
       );
     },
+
+firePhoneCode() {
+  const Country = listCountries.find(
+    (country) => country.id === this.selectedCountry
+  );
+  if (Country) {
+    this.N_responsable = `(+${Country.phonecode})`;
+  }
+},
+
+
     //Charts
      async DonutChartData() {
       try {
@@ -906,7 +917,6 @@ export default {
       await  axios.put(`/api/users/requestVerification/${user.id}`, {
           society: this.society,
           type_ind: this.type_ind,
-          responsable: this.responsable,
           N_responsable: this.N_responsable,
           country: this.selectedCountry,
           city: this.selectedState,
@@ -915,7 +925,6 @@ export default {
 
         this.society = "";
         this.type_ind = "";
-        this.responsable = "";
         this.N_responsable = "";
         this.selectedCountry = "";
         this.selectedState = "";

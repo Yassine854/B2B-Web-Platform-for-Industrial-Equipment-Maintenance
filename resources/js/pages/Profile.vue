@@ -115,42 +115,6 @@
 
                       </div>
                     </div>
-                    <!-- Form Row        -->
-                    <div class="row gx-3 mb-3">
-                      <!-- Form Group (organization name)-->
-                      <div class="col-md-6">
-                        <label class="small mb-1" for="inputOrgName"
-                          >Résponsable</label
-                        >
-                        <input
-                        :class="['form-control', {'is-invalid': validationErrorsEdit.responsable}]"
-                          id="inputOrgName"
-                          type="text"
-                          placeholder="Entrer le nom du répsponsable"
-                          v-model="responsable"
-
-                        />
-                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.responsable" :key="index">{{ err }}<br></span>
-
-                      </div>
-                      <!-- Form Group (location)-->
-                      <div class="col-md-6">
-                        <label class="small mb-1" for="inputLocation"
-                          >Numéro du résponsable</label
-                        >
-                        <input
-                        :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
-                          id="inputLocation"
-                          type="text"
-                          placeholder="Entrer le numéro du répsponsable"
-                          v-model="N_responsable"
-
-                        />
-                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
-
-                      </div>
-                    </div>
-
                     <!-- Country & state Add  -->
                     <div class="row gx-3 mb-3">
                       <div class="col-md-6">
@@ -158,7 +122,7 @@
                         <select
                         :class="['form-select', {'is-invalid': validationErrorsEdit.country}]"
                           v-model="selectedCountry"
-                          @change="fireState()"
+                          @change="handleCountryChange()"
 
                         >
                           <option selected hidden>Open this select menu</option>
@@ -197,6 +161,27 @@
                       </div>
                     </div>
 
+
+                    <!-- Form Row        -->
+                    <div class="row gx-3 mb-3">
+
+                      <!-- Form Group (location)-->
+                      <div class="col-md-6">
+                        <label class="small mb-1" for="inputLocation"
+                          >Numéro du résponsable</label
+                        >
+                        <input
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.N_responsable}]"
+                          id="inputLocation"
+                          type="text"
+                          placeholder="Entrer le numéro du répsponsable"
+                          v-model="N_responsable"
+
+                        />
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.N_responsable" :key="index">{{ err }}<br></span>
+
+                      </div>
+                    </div>
                     <!-- Form Group (username)-->
                     <div class="mb-3">
                       <label class="small mb-1" for="inputUsername"
@@ -435,7 +420,6 @@ export default {
       //Client
       this.society = window.Laravel.user.society;
       this.type_ind = window.Laravel.user.type_ind;
-      this.responsable = window.Laravel.user.responsable;
       this.N_responsable = window.Laravel.user.N_responsable;
       this.selectedCountry = window.Laravel.user.country;
       this.selectedState = window.Laravel.user.city;
@@ -462,7 +446,6 @@ export default {
       password_confirmation: "",
       society: "",
       type_ind: "",
-      responsable: "",
       N_responsable: "",
       countries: listCountries,
       selectedCountry: "",
@@ -486,13 +469,26 @@ export default {
         (state) => state.country_id === this.selectedCountry
       );
     },
+    firePhoneCode() {
+  const Country = listCountries.find(
+    (country) => country.id === this.selectedCountry
+  );
+  if (Country) {
+    this.N_responsable = `(+${Country.phonecode})`;
+  }
+},
+
+
+    handleCountryChange() {
+    this.fireState();
+    this.firePhoneCode();
+  },
    async updateClientDetails(user) {
     this.validationErrorsEdit={};
       try {
       await  axios.put(`/api/users/updateClientDetails/${user.id}`, {
           society: this.society,
           type_ind: this.type_ind,
-          responsable: this.responsable,
           N_responsable: this.N_responsable,
           country: this.selectedCountry,
           city: this.selectedState,

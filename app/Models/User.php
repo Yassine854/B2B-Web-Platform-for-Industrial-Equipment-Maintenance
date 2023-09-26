@@ -30,7 +30,7 @@ class User extends Authenticatable
         //info client
         'society',
         'type_ind',
-        'responsable',
+        // 'responsable',
         'N_responsable',
         'country',
         'city',

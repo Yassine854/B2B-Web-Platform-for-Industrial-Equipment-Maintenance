@@ -11,6 +11,7 @@ use App\Notifications\Notify;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use App\Rules\PhoneNumberFormat;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -197,8 +198,7 @@ class UserController extends Controller
             'password' => 'required|string|min:8',
             'society' => 'required|string|max:255',
             'type_ind' => 'required|integer',
-            'responsable' => 'required|string|max:255',
-            'N_responsable' => 'required|string|max:255',
+            'N_responsable' => ['required','min:8', 'regex:/^\(\+\d+\)\s*\d+$/'],
             'country' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -211,6 +211,10 @@ class UserController extends Controller
             'email' => 'L\'adresse email n\'est pas valide.',
             'unique' => 'Cet email est déjà utilisé.',
             'min' => 'Le mot de passe doit avoir au moins :min caractères.',
+            'N_responsable.regex'=>"Cet numéro n'est pas valide.",
+            'N_responsable.min' => 'Ce champ doit contenir au moins :min caractères.',
+
+
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -226,7 +230,6 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
             $user->society = $request->society;
             $user->type_ind = $request->type_ind;
-            $user->responsable = $request->responsable;
             $user->N_responsable = $request->N_responsable;
             $user->country = $request->country;
             $user->city = $request->city;
@@ -255,8 +258,7 @@ class UserController extends Controller
         if ($request->role == 1) {
             $rules['society'] = 'required|string|max:255';
             $rules['type_ind'] = 'required|integer';
-            $rules['responsable'] = 'required|string|max:255';
-            $rules['N_responsable'] = 'required|string|max:255';
+            $rules['N_responsable'] = 'required|min:8|regex:/^\(\+\d+\)\s*\d+$/';
             $rules['country'] = 'required|string|max:255';
             $rules['city'] = 'required|string|max:255';
             $rules['address'] = 'required|string|max:255';
@@ -268,6 +270,10 @@ class UserController extends Controller
             'max' => 'Ce champ ne doit pas dépasser :max caractères.',
             'email' => 'L\'adresse email n\'est pas valide.',
             'unique' => 'Cet email est déjà utilisé.',
+            'N_responsable.regex'=>"Cet numéro n'est pas valide.",
+            'min' => 'Ce champ doit contenir au moins :min caractères.',
+
+
         ];
 
 
@@ -283,7 +289,6 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->society = $request->society;
         $user->type_ind = $request->type_ind;
-        $user->responsable = $request->responsable;
         $user->N_responsable = $request->N_responsable;
         $user->country = $request->country;
         $user->city = $request->city;
@@ -300,8 +305,7 @@ class UserController extends Controller
         $rules = [
             'society' =>'required|string|max:255',
             'type_ind'=>'required|integer',
-            'responsable' => 'required|string|max:255',
-            'N_responsable' => 'required|string|max:255',
+            'N_responsable' => ['required','min:8', 'regex:/^\(\+\d+\)\s*\d+$/'],
             'country' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -313,6 +317,10 @@ class UserController extends Controller
             'required' => 'Ce champ est requis.',
             'string' => 'Ce champ doit être une chaîne de caractères.',
             'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'N_responsable.regex'=>"Cet numéro n'est pas valide.",
+            'min' => 'Ce champ doit contenir au moins :min caractères.',
+
+
         ];
 
 
@@ -326,7 +334,6 @@ class UserController extends Controller
 
         $user->society = $request->society;
         $user->type_ind = $request->type_ind;
-        $user->responsable = $request->responsable;
         $user->N_responsable = $request->N_responsable;
         $user->country = $request->country;
         $user->city = $request->city;
@@ -344,8 +351,7 @@ class UserController extends Controller
         $rules = [
             'society' =>'required|string|max:255',
             'type_ind'=>'required|integer',
-            'responsable' => 'required|string|max:255',
-            'N_responsable' => 'required|string|max:255',
+            'N_responsable' => ['required','min:8', 'regex:/^\(\+\d+\)\s*\d+$/'],
             'country' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'address' => 'required|string|max:255',
@@ -357,6 +363,9 @@ class UserController extends Controller
             'required' => 'Ce champ est requis.',
             'string' => 'Ce champ doit être une chaîne de caractères.',
             'max' => 'Ce champ ne doit pas dépasser :max caractères.',
+            'min' => 'Ce champ doit contenir au moins :min caractères.',
+            'N_responsable.regex'=>"Cet numéro n'est pas valide.",
+
         ];
 
         $admins = User::where('role', 2)->get();
@@ -368,7 +377,6 @@ class UserController extends Controller
         }
         $user->society = $request->society;
         $user->type_ind = $request->type_ind;
-        $user->responsable = $request->responsable;
         $user->N_responsable = $request->N_responsable;
         $user->country = $request->country;
         $user->city = $request->city;
@@ -399,6 +407,20 @@ class UserController extends Controller
         $user=User::find($id);
         $user->delete();
         return response()->json('User deleted');
+    }
+
+    public function disableUser($id){
+        $user=User::find($id);
+        $user->disabled=true;
+        $user->save();
+        return response()->json('User disabled');
+    }
+
+    public function activateUser($id){
+        $user=User::find($id);
+        $user->disabled=false;
+        $user->save();
+        return response()->json('User activated');
     }
 
     public function search_user(Request $request) {
@@ -475,7 +497,7 @@ public function updatePassword(Request $request, $id)
 
     public function getClientCount()
 {
-    $clientCount = User::where('role', 1)->count();
+    $clientCount = User::where('role', 1)->where('disabled', false)->count();
 
     return response()->json(['clientCount' => $clientCount]);
 }

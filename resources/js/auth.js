@@ -11,7 +11,16 @@ export function checkLoginAdmin() {
 //Client auth
 export function checkLoginClient() {
     return (window.Laravel.isLoggedin && (window.Laravel.user.role==1|| window.Laravel.user.role==null))
+}
+
+
+//Client disabled
+export function checkClientDisabled() {
+    if (checkLoginClient()){
+        return (window.Laravel.user.disabled==true)
     }
+    return false
+}
 
 //Check Client email verified
 export function checkClientVerification() {
