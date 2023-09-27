@@ -93,7 +93,7 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="small mb-1" for="diagnostic_select" style="float: left;">Diagnostic</label>
-              <select :class="['form-select', {'is-invalid': validationErrors.diagnostic_id}]" id="diagnostic_select" v-model="diagnostic">
+              <select :class="['form-select', {'is-invalid': validationErrors.diagnostic_id}]" id="diagnostic_select" v-model="diagnostic" @change="loadPieces(diagnostic)">
                 <option value="" selected disabled hidden>Sélectionner un diagnostic</option>
                 <option v-for="diagnostic in diagnosticsForSelectedClientProduct" :key="diagnostic.id" :value="diagnostic.id">D{{ diagnostic.id }}</option>
               </select>
@@ -295,12 +295,12 @@
             <div class="row mb-3">
             <div class="col-md-6">
               <label class="small mb-1" for="diagnostic_select" style="float: left;">Diagnostic</label>
-              <select :class="['form-select', {'is-invalid': validationErrorsEdit.diagnostic_id}]" id="diagnostic_select" v-model="diagnosticEdit">
+              <select :class="['form-select', {'is-invalid': validationErrorsEdit.diagnostic_id}]" id="diagnostic_select" v-model="diagnosticEdit" @change="loadPiecesEdit(diagnosticEdit)">
                 <option :value="null" selected disabled hidden>Sélectionner un diagnostic</option>
 
                 <option value=""></option>
 
-                <option v-for="diagnostic in diagnosticsForSelectedClientProduct" :key="diagnostic.id" :value="diagnostic.id">D{{ diagnostic.id }}</option>
+                <option v-for="diagnostic in diagnosticsForSelectedClientProduct" :key="diagnostic.id" :value="diagnostic.id" >D{{ diagnostic.id }}</option>
               </select>
               <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.diagnostic_id" :key="index">{{ err }}<br></span>
 
@@ -444,139 +444,72 @@
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <form>
-                    <div class="row gx-4">
-                      <div class="col-md-6">
-                        <div class="mb-3">
-                          <label class="small" for="name" style="float: left"
-                            >Société</label
-                          >
-                          <input
-                            class="form-control"
-                            id="name"
-                            type="text"
-                            v-model="clientShow"
-                            disabled
-                          />
-                        </div>
-                        <div class="mb-3">
-                          <label class="small" for="pompe" style="float: left"
-                            >Pompe</label
-                          >
-                          <input
-                            class="form-control"
-                            id="pompe"
-                            type="text"
-                            v-model="productShow"
-                            disabled
-                          />
-                        </div>
-                        <div class="mb-3">
-                          <label class="small" for="nature" style="float: left"
-                            >Nature</label
-                          >
-                          <input
-                            class="form-control"
-                            id="nature"
-                            type="text"
-                            v-model="nameShow"
-                            disabled
-                          />
-                        </div>
-                        <div class="mb-3" v-if="diagnosticShow">
-                          <label class="small" for="nature" style="float: left"
-                            >Diagnostic</label
-                          >
-                          <input
-                            class="form-control"
-                            id="nature"
-                            type="text"
-                            :value="'D' + diagnosticShow"
-                            disabled
-                            />
+                    <div class="modal-body" ref="modalBodyRef" style="color: black;">
 
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="mb-3">
-                          <label class="small" for="date" style="float: left"
-                            >Date de l'intervention</label
-                          >
-                          <input
-                            class="form-control"
-                            id="date"
-                            type="text"
-                            v-model="dateShow"
-                            disabled
-                          />
-                        </div>
-                        <div class="mb-3">
-                          <label
-                            class="small"
-                            for="Description"
-                            style="float: left"
-                            >Description</label
-                          >
-                          <textarea
-                            class="form-control"
-                            rows="8"
-                            id="Description"
-                            v-model="descriptionShow"
-                            disabled
-                          ></textarea>
-                        </div>
-                      </div>
-                      <div class="col-md-12 mt-3">
-                        <label
-                          class="small"
-                          for="PiecesDeRechange"
-                          style="float: left"
-                          >Pièces de rechange</label
-                        >
-                        <div
-                          v-for="(piece, index) in ShowPieces"
-                          :key="index"
-                          class="mb-3"
-                        >
-                          <div class="input-group">
-                            <span class="input-group-text">Désignation</span>
-                            <input
-                              class="form-control"
-                              type="text"
-                              v-model="piece.designation"
-                              disabled
-                            />
-                            <span class="input-group-text">Référence</span>
-                            <input
-                              class="form-control"
-                              type="text"
-                              v-model="piece.reference"
-                              disabled
-                            />
-                            <span class="input-group-text">Quantité</span>
-                            <input
-                              class="form-control"
-                              type="text"
-                              v-model="piece.quantite"
-                              disabled
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-12 mt-3">
-                        <div
-                          class="d-flex align-items-center justify-content-center"
-                        >
-                          <div class="image shadow">
-                            <img
-                              :src="'/storage/img/pompes/' + imageShow"
-                              class="centered-image img-fluid"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
+<div class="d-flex justify-content-center">
+<img :src="'../storage/img/GSI-logo-PNG.png'" style="max-width:390px">
+</div>
+<br>
+<table class="bordered-table">
+    <thead>
+        <tr>
+            <th id="thead" colspan="4" class="text-center text-white">Intervention</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td id="titles" class="font-weight-bold">Société</td>
+            <td>{{ clientShow }}</td>
+            <td id="titles" class="font-weight-bold">Modèle</td>
+            <td>{{ getProductName(productShow) }}</td>
+        </tr>
+        <tr>
+            <td id="titles" class="font-weight-bold">Date Intervention</td>
+            <td>{{ dateShow }}</td>
+            <td id="titles" class="font-weight-bold">Code GSI</td>
+            <td>{{ productShow }}</td>
+        </tr>
+        <tr>
+            <td id="titles" class="font-weight-bold">Nature d'intervention</td>
+            <td colspan="3">{{ nameShow }}</td>
+        </tr>
+    </tbody>
+    <thead>
+        <tr>
+            <th id="thead" colspan="4" class="text-center text-white">Pièces de Rechange Nécessaires</th>
+        </tr>
+    </thead>
+    <tbody class="pieces-table">
+        <tr>
+            <th id="titles" class="font-weight-bold">Désignation</th>
+            <th id="titles" colspan="2" class="font-weight-bold">Référence</th>
+            <th id="titles" class="font-weight-bold">Quantité</th>
+        </tr>
+        <tr v-for="(piece, index) in ShowPieces" :key="index">
+            <td>{{ piece.designation }}</td>
+            <td colspan="2">{{ piece.reference }}</td>
+            <td>{{ piece.quantite }}</td>
+        </tr>
+    </tbody>
+    <thead>
+        <tr>
+            <th id="thead" colspan="4" class="text-center text-white">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="4">{{ descriptionShow }}</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+</div>
+<div class="d-flex justify-content-center align-items-center">
+<button class="btn btn-danger mb-4 mt-1" @click="downloadPdf(showIntervention)">Télécharger PDF</button>
+</div>
+
                 </div>
               </div>
             </div>
@@ -702,6 +635,7 @@ import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { jsPDF } from "jspdf";
 window.Swal = Swal;
 let interventions = ref([]);
 let assignments = ref([]);
@@ -782,6 +716,7 @@ const uniqueClients = computed(() => {
   assignments.value.forEach((assignment) => {
     const clientId = assignment.client[0].id;
     const societyName = assignment.client[0].society; // Assuming 'society' property holds the society name
+    if(assignment.client[0].disabled==false)
     societyMap.set(clientId, societyName); // Store ID-society pairs in the Map
   });
 
@@ -812,21 +747,22 @@ const productsForSelectedClient = computed(() => {
   return null;
 });
 
-const diagnosticsForSelectedClientProduct = computed(() => {
-  if (client.value !== null && (product.value !== null || productEdit.value !== null ) ){
-    const selectedDiagnostics = diagnostics.value.filter(
-      (diagnostic) =>
-      diagnostic.client_id === client.value && (diagnostic.product_id==product.value || diagnostic.product_id==productEdit.value)
-    );
+// const diagnosticsForSelectedClientProduct = computed(() => {
+//   if (client.value !== null && (product.value !== null || productEdit.value !== null ) ){
+//     const selectedDiagnostics = diagnostics.value.filter(
+//       (diagnostic) =>
+//       diagnostic.client_id === client.value && (diagnostic.product_id==product.value || diagnostic.product_id==productEdit.value)
+//     );
 
-    if (selectedDiagnostics.length > 0) {
-      console.log(selectedDiagnostics);
-      return selectedDiagnostics;
-    }
-  }
+//     if (selectedDiagnostics.length > 0) {
+//         this.pieces.value.push({ designation: "h", reference: "h", quantite: "h" });
+//       console.log(selectedDiagnostics)
+//       return selectedDiagnostics;
+//     }
+//   }
 
-  return null;
-});
+//   return null;
+// });
 
 
 
@@ -951,8 +887,80 @@ export default {
 
       return pages;
     },
+
+    diagnosticsForSelectedClientProduct() {
+      if (this.client !== null && (this.product !== null || this.productEdit !== null)) {
+        const selectedDiagnostics = this.diagnostics.filter(
+          (diagnostic) =>
+            diagnostic.client_id === this.client &&
+            (diagnostic.product_id === this.product || diagnostic.product_id === this.productEdit)
+        );
+
+        if (selectedDiagnostics.length > 0) {
+          // Assuming pieces is a ref or reactive property in your component's data
+          console.log(this.pieces);
+          console.log(selectedDiagnostics);
+          return selectedDiagnostics;
+        }
+      }
+
+      return null;
+    },
+
+
   },
   methods: {
+    loadPieces(diagnostic_id) {
+  try {
+    axios.get(`/api/diagnostics/show/${diagnostic_id}`)
+      .then((response) => {
+        const diagnosticInfo = response.data.diagnostic;
+        console.log(diagnosticInfo);
+
+        if (diagnosticInfo) {
+         this.pieces=[];
+          diagnosticInfo.pdrs.forEach((pdr) => {
+            this.pieces.push({
+              designation: pdr.designation,
+              reference: pdr.reference,
+              quantite: pdr.quantite
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading diagnostic information:", error);
+      });
+  } catch (error) {
+    console.error("Error loading pieces:", error);
+  }
+},
+
+loadPiecesEdit(diagnostic_id) {
+  try {
+    axios.get(`/api/diagnostics/show/${diagnostic_id}`)
+      .then((response) => {
+        const diagnosticInfo = response.data.diagnostic;
+        console.log(diagnosticInfo);
+
+        if (diagnosticInfo) {
+         this.editPieces=[];
+          diagnosticInfo.pdrs.forEach((pdr) => {
+            this.editPieces.push({
+              designation: pdr.designation,
+              reference: pdr.reference,
+              quantite: pdr.quantite
+            });
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error loading diagnostic information:", error);
+      });
+  } catch (error) {
+    console.error("Error loading pieces:", error);
+  }
+},
     addPiece() {
       this.pieces.push({ designation: "", reference: "", quantite: "" });
     },
@@ -965,6 +973,25 @@ export default {
     },
     removePieceEdit(index) {
       this.editPieces.splice(index, 1);
+    },
+
+
+async downloadPdf(intervention) {
+  const SocietyName=this.getSocietyName(intervention.client_id);
+  var doc = new jsPDF();
+// Source HTMLElement or a string containing HTML.
+var elementHTML = this.$refs.modalBodyRef;
+
+doc.html(elementHTML, {
+    callback: function(doc) {
+        // Save the PDF
+        doc.save('intervention '+SocietyName+'_'+intervention.product_id+'_'+intervention.date+'.pdf');
+    },
+    x: 15,
+    y: 15,
+    width: 170, //target width in the PDF document
+    windowWidth: 1000 //window width in CSS pixels
+});
     },
 
     changePage(page) {
@@ -1128,19 +1155,14 @@ export default {
           .then((response) => {
             this.showIntervention = response.data.intervention;
             this.nameShow = this.showIntervention.name;
+            this.productShow=response.data.intervention.product_id;
             this.clientShow = this.getSocietyName(
               this.showIntervention.client_id
             );
-            this.productShow = this.getProductName(
-              this.showIntervention.product_id
-            );
-            this.diagnosticShow = this.showIntervention.diagnostic_id;
             this.dateShow = this.showIntervention.date;
             this.ShowPieces = this.showIntervention.pdrs;
             this.descriptionShow = this.showIntervention.description;
-            this.imageShow = this.getProductImage(
-              this.showIntervention.product_id
-            );
+
           })
           .catch((error) => {
             console.error(error);

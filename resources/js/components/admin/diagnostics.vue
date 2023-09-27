@@ -822,8 +822,9 @@ const uniqueClients = computed(() => {
   const societyMap = new Map(); // Using a Map to store ID-society pairs
   assignments.value.forEach((assignment) => {
     const clientId = assignment.client[0].id;
-    const societyName = assignment.client[0].society; // Assuming 'society' property holds the society name
-    societyMap.set(clientId, societyName); // Store ID-society pairs in the Map
+    const societyName = assignment.client[0].society;
+    if(assignment.client[0].disabled==false)
+        societyMap.set(clientId, societyName); // Store ID-society pairs in the Map
   });
 
   // Create an array of objects containing society ID and name

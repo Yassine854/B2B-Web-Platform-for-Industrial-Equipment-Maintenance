@@ -385,6 +385,8 @@ class UserController extends Controller
         //Email notification
         $details = new SendEmailNotification([
             'body' => "La société ".$user->society." a demandé la vérification de son adresse E-mail.",
+            'actiontext' => 'Cliquez ici',
+            'actionurl' => route('users', ['name_society' => $user->society]),
         ]);
         Notification::send($admins,$details);
 

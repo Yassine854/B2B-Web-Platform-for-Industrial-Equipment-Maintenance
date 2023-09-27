@@ -21,6 +21,11 @@ Route::get('{any}', function () {
 
 
 Route::get('/client_interventions', 'InterventionController@getClientInterventions')->name('client_interventions');
+
+Route::get('/users/{name_society}', function () {
+    // Nothing
+})->name('users');
+
 Route::get('/reset-password', function () {
     // Nothing
 })->name('reset-password');

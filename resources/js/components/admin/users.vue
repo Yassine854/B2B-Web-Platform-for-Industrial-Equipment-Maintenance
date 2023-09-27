@@ -1184,7 +1184,10 @@ export default {
       this.id = window.Laravel.user.id;
     }
     this.$nextTick(() => {
-        this.handleCountryChange();
+        this.states = [];
+        this.states = listStates.filter(
+        (state) => state.country_id === this.selectedCountry
+      );
       });
   },
   mounted() {
@@ -1275,6 +1278,7 @@ async search() {
       this.$emit("page-change", page);
     },
     fireState() {
+      this.selectedState="";
       this.states = [];
       this.states = listStates.filter(
         (state) => state.country_id === this.selectedCountry
@@ -1430,7 +1434,10 @@ firePhoneCodeEdited() {
 
       this.selectedState = user.city;
       this.$nextTick(() => {
-        this.fireState();
+        this.states = [];
+        this.states = listStates.filter(
+        (state) => state.country_id === this.selectedCountry
+      );
       });
       console.log("country=" + this.selectedCountry);
       console.log("city=" + this.selectedState);

@@ -162,12 +162,7 @@
                           <div
                             class="d-flex align-items-center justify-content-center"
                           >
-                            <div class="image shadow">
-                              <img
-                                :src="'/storage/img/pompes/' + imageShow"
-                                class="centered-image img-fluid"
-                              />
-                            </div>
+                            
                           </div>
                         </div>
                       </div>

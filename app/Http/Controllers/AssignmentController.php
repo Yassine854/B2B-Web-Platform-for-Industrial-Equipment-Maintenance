@@ -55,11 +55,12 @@ class AssignmentController extends Controller
 
     public function get_all_clients()
     {
-        $clients = User::where('role', 1)->get();
+        $clients = User::where('role', 1)->where('disabled', false)->get();
         return response()->json([
             'clients' => $clients
         ], 200);
     }
+
 
     public function get_all_products()
     {

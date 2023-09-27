@@ -146,8 +146,8 @@
                           :disabled="selectedCountry == ''"
                           v-model="selectedState"
 
+
                         >
-                          <option hidden selected>Open this select menu</option>
                           <option
                             :value="state.id"
                             v-for="state in states"
@@ -424,7 +424,10 @@ export default {
       this.selectedCountry = window.Laravel.user.country;
       this.selectedState = window.Laravel.user.city;
       this.$nextTick(() => {
-        this.fireState();
+        this.states = [];
+        this.states = listStates.filter(
+        (state) => state.country_id === this.selectedCountry
+      );
       });
       this.address = window.Laravel.user.address;
     //   console.log("user's role is " + this.role);
@@ -464,6 +467,7 @@ export default {
       return this.role === 2;
     },
     fireState() {
+      this.selectedState="";
       this.states = [];
       this.states = listStates.filter(
         (state) => state.country_id === this.selectedCountry

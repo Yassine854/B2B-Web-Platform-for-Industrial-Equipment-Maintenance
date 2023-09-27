@@ -257,12 +257,22 @@
           <thead>
             <tr>
               <th scope="col">Société</th>
+              <th scope="col">État</th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody v-if="displayedAssignmentsSlice.length > 0">
   <tr v-for="(assignment,index) in displayedAssignmentsSlice" :key="index" id="crudBtn" @click="ShowAssignments(index)" >
     <td v-if="assignment.client">{{ assignment.client[0].society }}</td>
+    <td>
+        <div v-if="assignment.client[0].disabled==false">
+                    <i class="fa-solid fa-circle text-success"></i> <p>Actif</p>
+                </div>
+                <div v-if="assignment.client[0].disabled==true">
+                    <i class="fa-solid fa-circle text-danger"></i> <p>Désactivé</p>
+                </div>
+
+    </td>
     <th ><i class="fa-solid fa-chevron-right fa-lg text-dark"></i></th>
   </tr>
 </tbody>

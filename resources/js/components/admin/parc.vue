@@ -4,7 +4,7 @@
       class="container shadow p-3"
       style="background-color: white; position: relative"
     >
-      <div class="row">
+      <div class="row" v-if="clientInfo.disabled==false">
         <div class="d-flex justify-content-between">
           <a
             :href="$router.resolve({ name: 'parc_clients' }).href"
@@ -633,14 +633,14 @@
                   />
                 </td>
                 <td>
-                  <a
+                  <a v-if="clientInfo.disabled==false"
                     id="crudBtn"
                     class="me-4 text-info"
                     @click="openShowModal(assignment)"
                   >
                     <i class="fa-solid fa-arrows-rotate"></i>
                   </a>
-                  <a
+                  <a v-if="clientInfo.disabled==false"
                     id="crudBtn"
                     @click="openEditModal(assignment)"
                     class="me-4 text-warning"
@@ -728,6 +728,7 @@ onMounted(async () => {
 const assignmentsValue = ref([]);
 const society = ref("");
 const clientId = ref("");
+const clientInfo= ref([]);
 let searchProduct = ref([]);
 let products = ref([]);
 
@@ -739,6 +740,7 @@ const get_assignments = async () => {
     assignmentsValue.value = response.data.assignments.assignments;
     society.value = response.data.assignments.client[0].society;
     clientId.value = response.data.assignments.client[0].id;
+    clientInfo.value = response.data.assignments.client[0];
 
     console.log(assignmentsValue.value);
   } catch (error) {
