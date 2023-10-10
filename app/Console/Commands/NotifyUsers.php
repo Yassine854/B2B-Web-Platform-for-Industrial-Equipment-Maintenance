@@ -153,6 +153,123 @@ class NotifyUsers extends Command
                     Notification::send($client,$details);
                     }
                  }
+
+                 //Changement des palettes
+                 if ($assignment->ch_palette){
+                    $now =Carbon::now();
+                    $diffInDays = $now->diffInDays(Carbon::parse($assignment->updated_ch_palette));
+                    if ($diffInDays == 10){
+                        //App notification
+                        $message = "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 5){
+                        //App notification
+                        $message = "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 3){
+                        //App notification
+                        $message = "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 1){
+                        //App notification
+                        $message = "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+                 }
+
+
+                 //Inspection des palettes
+                 if ($assignment->insp_palette){
+                    $now =Carbon::now();
+                    $diffInDays = $now->diffInDays(Carbon::parse($assignment->updated_insp_palette));
+                    if ($diffInDays == 10){
+                        //App notification
+                        $message = "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 5){
+                        //App notification
+                        $message = "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 3){
+                        //App notification
+                        $message = "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+
+                    if ($diffInDays == 1){
+                        //App notification
+                        $message = "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !"; // Change this to your desired message.
+                        Notification::send($client, new ClientNotification($message,"warning"));
+
+                    //Email notification
+                    $details = new SendEmailNotification([
+                        'greeting' => 'Chère '.$client->society,
+                        'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
+                    ]);
+                    Notification::send($client,$details);
+                    }
+                 }
+
+
                  //Changement des déshuilleurs
                  if ($assignment->c_dehuil){
                     $now =Carbon::now();

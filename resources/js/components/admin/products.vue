@@ -124,7 +124,7 @@
                                     </div>
                                     <div class="col-md-4">
                                     <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
-                                    <select id="flow-rate" :class="['form-control', {'is-invalid': validationErrors.debit}]" v-model="unity_debit">
+                                    <select id="flow-rate" :class="['form-select', {'is-invalid': validationErrors.debit}]" v-model="unity_debit">
                                         <option value="m³/h">m³/h</option>
                                         <option value="l/s">l/s</option>
                                     </select>
@@ -305,7 +305,7 @@
                                     </div>
                                     <div class="col-md-4">
                                     <label class="small mb-1" for="flow-rate" style="float: left">Unité</label>
-                                    <select id="flow-rate" :class="['form-control', {'is-invalid': validationErrorsEdit.debit}]" v-model="unity_debitEdit">
+                                    <select id="flow-rate" :class="['form-select', {'is-invalid': validationErrorsEdit.debit}]" v-model="unity_debitEdit">
                                         <option value="m³/h">m³/h</option>
                                         <option value="l/s">l/s</option>
                                     </select>

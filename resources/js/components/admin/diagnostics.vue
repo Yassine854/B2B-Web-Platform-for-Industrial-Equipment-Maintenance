@@ -149,7 +149,8 @@
                     <input
                     :class="['form-control', {'is-invalid': validationErrors[`informations.${index}.def`]}]"
                     id="def"
-                    :value="'def' + (index + 1)" disabled                    />
+                    v-model="information.def"
+                     disabled         />
                     <span class="invalid-feedback" v-for="(err,ind) in validationErrors[`informations.${index}.def`]" :key="ind">{{ err }}<br/></span>
 
                 </div>
@@ -902,13 +903,13 @@ const changePage = (page) => {
         date: "",
 
         pieces: [{ designation: "", reference: "", quantite: "" }],
-        informations: [{ def: "1", description: "", image: "" }],
+        informations: [{ def: "def1", description: "", image: "" }],
 
         //Edit
         diagnosticEdit:{},
         productEdit: "",
         dateEdit: "",
-        editInformations: [{ def: "", description: "", image: "" }],
+        editInformations: [{ def: "def1", description: "", image: "" }],
         editPieces: [{ designation: "", reference: "", quantite: "" }],
 
         //Show
@@ -972,7 +973,8 @@ const changePage = (page) => {
       },
 
       addDiagnostic() {
-        this.informations.push({ def: "", description: "", image: "" });
+        const nextDef = this.informations.length + 1;
+        this.informations.push({ def: `def${nextDef}`, description: "", image: "" });
       },
       removeDiagnostic(index) {
         this.informations.splice(index, 1);
@@ -986,7 +988,8 @@ const changePage = (page) => {
       },
 
       addDiagnosticEdit() {
-        this.editInformations.push({ def: "", description: "", image: "" });
+        const nextDef = this.informations.length + 1;
+        this.editInformations.push({ def: `def${nextDef}`, description: "", image: "" });
       },
       removeDiagnosticEdit(index) {
         this.editInformations.splice(index, 1);

@@ -105,6 +105,9 @@ Route::put('/assignments/updateHuile/{id}', [AssignmentController::class, 'updat
 Route::put('/assignments/updateFiltre/{id}', [AssignmentController::class, 'updateFiltre']);
 Route::put('/assignments/updateDeshuil/{id}', [AssignmentController::class, 'updateDeshuil']);
 Route::put('/assignments/updateEntretien/{id}', [AssignmentController::class, 'updateEntretien']);
+Route::put('/assignments/updateChangerPalette/{id}', [AssignmentController::class, 'updateChangerPalette']);
+Route::put('/assignments/updateInspecterPalette/{id}', [AssignmentController::class, 'updateInspecterPalette']);
+
 
 
 

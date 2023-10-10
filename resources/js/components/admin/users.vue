@@ -1188,6 +1188,7 @@ export default {
         this.states = listStates.filter(
         (state) => state.country_id === this.selectedCountry
       );
+      this.firePhoneCode();
       });
   },
   mounted() {

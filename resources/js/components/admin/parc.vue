@@ -142,6 +142,45 @@
                             </div>
                         </div>
 
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="ch_palette"
+                                style="float: left"
+                                >Changement des palettes</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.ch_palette}]"
+                                id="ch_palette"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps de changement des palettes"
+                                v-model="ch_palette"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.ch_palette" :key="index">{{ err }}<br></span>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="insp_palette"
+                                style="float: left"
+                                >Inspection des Palettes</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.insp_palette}]"
+                                id="insp_palette"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps d'inspection des palettes"
+                                v-model="insp_palette"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.insp_palette" :key="index">{{ err }}<br></span>
+
+                            </div>
+                        </div>
 
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
@@ -337,6 +376,46 @@
                     </div>
 
                     <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="ch_palette"
+                                style="float: left"
+                                >Changement des palettes</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.ch_palette}]"
+                                id="ch_palette"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps de changement des palettes"
+                                v-model="ch_paletteEdit"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.ch_palette" :key="index">{{ err }}<br></span>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="insp_palette"
+                                style="float: left"
+                                >Inspection des Palettes</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.insp_palette}]"
+                                id="insp_palette"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps d'inspection des palettes"
+                                v-model="insp_paletteEdit"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.insp_palette" :key="index">{{ err }}<br></span>
+
+                            </div>
+                        </div>
+
+                    <div class="row gx-3 mb-3">
                       <div class="col-md-6">
                         <label
                           class="small mb-1"
@@ -509,6 +588,64 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="row">
+                    <div class="col-md-6" v-if="ch_paletteShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="ch_paletteShow"
+                          >Changement des palettes</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(ch_paletteShow)"
+                            class="form-control bg-danger text-white"
+                            id="debit"
+                            type="text"
+                            value="Il faut changer les palettes."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="ch_paletteShow"
+                            type="text"
+                            :value="formatDateToFrench(ch_paletteShow)"
+                            disabled
+                          />
+                          <button class="btn btn-secondary" type="button" @click="changerPalette(assignmentID)">Réinitialiser</button>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6" v-if="insp_paletteShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="insp_paletteShow"
+                          >Inspection des palettes</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(insp_paletteShow)"
+                            class="form-control bg-danger text-white"
+                            id="insp_paletteShow"
+                            type="text"
+                            value="Il faut inspecter les palettes."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="c_filtreShow"
+                            type="text"
+                            :value="formatDateToFrench(insp_paletteShow)"
+                            disabled
+                          />
+                          <button class="btn btn-secondary" type="button" @click="InspecterPalette(assignmentID)">Réinitialiser</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-md-6" v-if="c_dehuilShow">
                       <div class="mb-3">
@@ -828,6 +965,8 @@ export default {
       c_filtre: "",
       c_dehuil: "",
       entretien: "",
+      ch_palette:"",
+      insp_palette:"",
 
       //Edit
       AssignmentEdit: {},
@@ -837,6 +976,8 @@ export default {
       c_filtreEdit: "",
       c_dehuilEdit: "",
       entretienEdit: "",
+      ch_paletteEdit:"",
+      insp_paletteEdit:"",
 
       //show
       assignmentShow: {},
@@ -848,6 +989,8 @@ export default {
       c_filtreShow: "",
       c_dehuilShow: "",
       entretienShow: "",
+      ch_paletteShow:"",
+      insp_paletteShow:"",
       imageShow: "",
     };
   },
@@ -910,6 +1053,8 @@ export default {
         form.append("c_filtre", this.c_filtre);
         form.append("c_dehuil", this.c_dehuil);
         form.append("entretien", this.entretien);
+        form.append('ch_palette', this.ch_palette);
+        form.append('insp_palette', this.insp_palette);
        await axios.post(`/api/assignments/create`, form);
         console.log(form);
         this.product = "";
@@ -918,6 +1063,8 @@ export default {
         this.c_filtre = "";
         this.c_dehuil = "";
         this.entretien = "";
+        this.ch_palette="";
+        this.insp_palette="";
 
         const toast = Swal.mixin({
           toast: true,
@@ -957,6 +1104,8 @@ export default {
       this.c_filtreEdit = assignment.c_filtre;
       this.c_dehuilEdit = assignment.c_dehuil;
       this.entretienEdit = assignment.entretien;
+      this.ch_paletteEdit = assignment.ch_palette;
+      this.insp_paletteEdit = assignment.insp_palette;
     },
 
     openShowModal(assignment) {
@@ -970,6 +1119,8 @@ export default {
   this.c_filtreShow = "";
   this.c_dehuilShow = "";
   this.entretienShow = "";
+  this.ch_paletteShow = "";
+  this.insp_paletteShow = "";
       var today = new Date();
       try {
         axios
@@ -985,6 +1136,12 @@ export default {
             }
             if (assignment.c_filtre) {
             this.c_filtreShow = new Date(assignment.updated_c_filtre);
+            }
+            if (assignment.ch_palette) {
+            this.ch_paletteShow = new Date(assignment.updated_ch_palette);
+            }
+            if (assignment.insp_palette) {
+            this.insp_paletteShow = new Date(assignment.updated_insp_palette);
             }
             if (assignment.c_dehuil) {
             this.c_dehuilShow = new Date(assignment.updated_c_dehuil);
@@ -1011,6 +1168,8 @@ export default {
           c_filtre: this.c_filtreEdit,
           c_dehuil: this.c_dehuilEdit,
           entretien: this.entretienEdit,
+          ch_palette: this.ch_paletteEdit,
+          insp_palette: this.insp_paletteEdit,
         });
 
         const toast = Swal.mixin({
@@ -1039,6 +1198,8 @@ export default {
         this.c_filtreEdit = "";
         this.c_dehuilEdit = "";
         this.entretienEdit = "";
+        this.ch_paletteEdit = "";
+        this.insp_paletteEdit = "";
       } catch (error) {
         if (error.response.status === 400) {
           this.validationErrorsEdit = error.response.data.errors;
@@ -1130,6 +1291,69 @@ export default {
             const response = await axios.get(`/api/assignments/show/${assignment_id}`);
             this.assignmentShow = response.data.assignment;
             this.c_filtreShow = new Date(this.assignmentShow.updated_c_filtre);
+            this.get_assignments();
+            Swal.fire(
+                'Réintialisation effectuée avec succés !',
+                '',
+                'success'
+            );
+        }
+
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+
+    async changerPalette(assignment_id){
+        console.log(this.dateShow);
+      try {
+        const result = await Swal.fire({
+            title: 'Réintialiser la date de changement des palettes ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, réintialiser!'
+        });
+
+        if (result.isConfirmed) {
+            await axios.put(`/api/assignments/updateChangerPalette/${assignment_id}`,{date: this.dateShow});
+
+            const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+            this.assignmentShow = response.data.assignment;
+            this.ch_paletteShow = new Date(this.assignmentShow.updated_ch_palette);
+            this.get_assignments();
+            Swal.fire(
+                'Réintialisation effectuée avec succés !',
+                '',
+                'success'
+            );
+        }
+
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async InspecterPalette(assignment_id){
+        console.log(this.dateShow);
+      try {
+        const result = await Swal.fire({
+            title: "Réintialiser la date d'inspection des palettes ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, réintialiser!'
+        });
+
+        if (result.isConfirmed) {
+            await axios.put(`/api/assignments/updateInspecterPalette/${assignment_id}`,{date: this.dateShow});
+
+            const response = await axios.get(`/api/assignments/show/${assignment_id}`);
+            this.assignmentShow = response.data.assignment;
+            this.insp_paletteShow = new Date(this.assignmentShow.updated_insp_palette);
             this.get_assignments();
             Swal.fire(
                 'Réintialisation effectuée avec succés !',

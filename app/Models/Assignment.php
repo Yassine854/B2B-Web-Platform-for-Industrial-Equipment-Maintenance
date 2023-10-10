@@ -16,6 +16,8 @@ class Assignment extends Model
         'c_filtre',
         'c_dehuil',
         'entretien',
+        'ch_palette',
+        'insp_palette'
     ];
 
     public function client()

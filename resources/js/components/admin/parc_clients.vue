@@ -175,6 +175,46 @@
                             </div>
                         </div>
 
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="ch_palette"
+                                style="float: left"
+                                >Changement des palettes</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.ch_palette}]"
+                                id="ch_palette"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps de changement des palettes"
+                                v-model="ch_palette"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.ch_palette" :key="index">{{ err }}<br></span>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label
+                                class="small mb-1"
+                                for="insp_palette"
+                                style="float: left"
+                                >Inspection des Palettes</label
+                                >
+                                <input
+                                :class="['form-control', {'is-invalid': validationErrors.insp_palette}]"
+                                id="insp_palette"
+                                rows="4"
+                                type="text"
+                                placeholder="Entrer le temps d'inspection des palettes"
+                                v-model="insp_palette"
+                                >
+                                <span class="invalid-feedback" v-for="(err, index) in validationErrors.insp_palette" :key="index">{{ err }}<br></span>
+
+                            </div>
+                        </div>
+
 
                         <div class="row gx-3 mb-3">
                             <div class="col-md-6">
@@ -396,6 +436,8 @@ import layout from "../layouts/layout";
         c_filtre:"",
         c_dehuil:"",
         entretien:"",
+        ch_palette:"",
+        insp_palette:"",
 
         Index:0,
         searchSociety:[],
@@ -471,6 +513,8 @@ import layout from "../layouts/layout";
             form.append('c_filtre',this.c_filtre);
             form.append('c_dehuil',this.c_dehuil);
             form.append('entretien', this.entretien);
+            form.append('ch_palette', this.ch_palette);
+            form.append('insp_palette', this.insp_palette);
           await axios.post(`/api/assignments/create`, form);
           console.log(form);
           this.client = "";
@@ -480,6 +524,8 @@ import layout from "../layouts/layout";
           this.c_filtre="";
           this.c_dehuil="";
           this.entretien="";
+          this.ch_palette="";
+          this.insp_palette="";
 
 
           const toast = Swal.mixin({

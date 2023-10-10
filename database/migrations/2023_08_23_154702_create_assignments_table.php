@@ -22,12 +22,16 @@ return new class extends Migration
             $table->string('c_filtre')->nullable();
             $table->string('c_dehuil')->nullable();
             $table->string('entretien')->nullable();
+            $table->string('ch_palette')->nullable();
+            $table->string('insp_palette')->nullable();
+
 
             $table->timestamp('updated_c_huile')->nullable();
             $table->timestamp('updated_c_filtre')->nullable();
             $table->timestamp('updated_c_dehuil')->nullable();
             $table->timestamp('updated_entretien')->nullable();
-
+            $table->timestamp('updated_ch_palette')->nullable();
+            $table->timestamp('updated_insp_palette')->nullable();
 
             $table->foreign('client_id')
               ->references('id')->on('users')->onDelete('restrict');

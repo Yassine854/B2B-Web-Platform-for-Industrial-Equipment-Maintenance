@@ -81,6 +81,8 @@ class AssignmentController extends Controller
         'c_filtre' => 'nullable|integer',
         'c_dehuil' => 'nullable|integer',
         'entretien' => 'nullable|integer',
+        'ch_palette' => 'nullable|integer',
+        'insp_palette' => 'nullable|integer',
     ];
 
     $messages = [
@@ -103,6 +105,8 @@ class AssignmentController extends Controller
     $assignment->c_filtre = $request->c_filtre;
     $assignment->c_dehuil = $request->c_dehuil;
     $assignment->entretien = $request->entretien;
+    $assignment->ch_palette = $request->ch_palette;
+    $assignment->insp_palette = $request->insp_palette;
 
     $product = Product::where('id', $assignment->product_id)->first();
     $today=Carbon::now();
@@ -142,6 +146,24 @@ class AssignmentController extends Controller
         else
         $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
         }
+
+        if($assignment->ch_palette){
+            $ch_paletteDaysLeft=(int) $assignment->ch_palette / (int) $product->time_day; //result in days
+
+            if(isset($assignment->date))
+                $assignment->updated_ch_palette = Carbon::parse($assignment->date)->addDays($ch_paletteDaysLeft);
+            else
+                $assignment->updated_ch_palette = $today->copy()->addDays($ch_paletteDaysLeft);
+        }
+
+        if($assignment->insp_palette){
+            $insp_paletteDaysLeft=(int) $assignment->insp_palette / (int) $product->time_day; //result in days
+
+            if(isset($assignment->date))
+                $assignment->updated_insp_palette = Carbon::parse($assignment->date)->addDays($insp_paletteDaysLeft);
+            else
+                $assignment->updated_insp_palette = $today->copy()->addDays($insp_paletteDaysLeft);
+        }
     $assignment->save();
 
     $assignment->client()->attach($assignment->client_id); // Array of client IDs
@@ -160,6 +182,8 @@ public function updateAssignment(Request $request, $id)
         'c_filtre' => 'nullable|integer',
         'c_dehuil' => 'nullable|integer',
         'entretien' => 'nullable|integer',
+        'ch_palette' => 'nullable|integer',
+        'insp_palette' => 'nullable|integer',
     ];
 
     $messages = [
@@ -190,6 +214,8 @@ public function updateAssignment(Request $request, $id)
         $originalCFiltre = $assignment->c_filtre;
         $originalCDeHuile = $assignment->c_dehuil;
         $originalCEntretien = $assignment->entretien;
+        $originalChPalette = $assignment->ch_palette;
+        $originalInspPalette = $assignment->insp_palette;
 
         $assignment->client_id = $request->client_id;
         $assignment->product_id = $request->product_id;
@@ -198,6 +224,8 @@ public function updateAssignment(Request $request, $id)
         $assignment->c_filtre = $request->c_filtre;
         $assignment->c_dehuil = $request->c_dehuil;
         $assignment->entretien = $request->entretien;
+        $assignment->ch_palette = $request->ch_palette;
+        $assignment->insp_palette = $request->insp_palette;
 
         //updatables
 
@@ -218,6 +246,32 @@ public function updateAssignment(Request $request, $id)
             else
                 $assignment->updated_c_filtre = $today->copy()->addDays($filtreDaysLeft);
         }
+
+        if ($originalChPalette !== $assignment->ch_palette) {
+            $ch_paletteDaysLeft=(int) $assignment->ch_palette / (int) $product->time_day; //result in days
+
+            if($assignment->ch_palette){
+
+                if(isset($assignment->date))
+                    $assignment->updated_ch_palette = Carbon::parse($assignment->date)->addDays($ch_paletteDaysLeft);
+                else
+                    $assignment->updated_ch_palette = $today->copy()->addDays($ch_paletteDaysLeft);
+            }
+        }
+
+        if ($originalInspPalette !== $assignment->insp_palette) {
+            $insp_paletteDaysLeft=(int) $assignment->insp_palette / (int) $product->time_day; //result in days
+
+        if($assignment->insp_palette){
+
+            if(isset($assignment->date))
+                $assignment->updated_insp_palette = Carbon::parse($assignment->date)->addDays($insp_paletteDaysLeft);
+            else
+                $assignment->updated_insp_palette = $today->copy()->addDays($insp_paletteDaysLeft);
+        }
+    }
+
+
         if ($originalCDeHuile !== $assignment->c_dehuil) {
             $DeshuilDaysLeft=(int) $assignment->c_dehuil / (int) $product->time_day; //result in days
 
@@ -403,6 +457,84 @@ public function updateEntretien(Request $request,$id) {
             $assignment->updated_entretien = Carbon::parse($assignment->date)->addDays($EntretienDaysLeft);
         else
             $assignment->updated_entretien = $today->copy()->addDays($EntretienDaysLeft);
+        $assignment->save();
+
+        return response()->json([
+            'message' => 'Assignment updated successfully',
+        ]);
+    } catch (\Exception $e) {
+        // Handle the error and provide an appropriate error message
+        return response()->json([
+            'error' => 'An error occurred while updating the assignment',
+        ], 500);
+    }
+}
+
+
+public function updateChangerPalette(Request $request,$id) {
+    try {
+        $today = Carbon::now();
+        $assignment = Assignment::find($id);
+
+        if (!$assignment) {
+            return response()->json([
+                'error' => 'Assignment not found',
+            ], 404);
+        }
+        $product = Product::find($assignment->product_id);
+
+        if (!$product) {
+            return response()->json([
+                'error' => 'Product not found',
+            ], 404);
+        }
+        $assignment->date = $request->date;
+
+        $ch_paletteDaysLeft=(int) $assignment->ch_palette / (int) $product->time_day; //result in days
+
+        if(isset($assignment->date))
+            $assignment->updated_ch_palette = Carbon::parse($assignment->date)->addDays($ch_paletteDaysLeft);
+        else
+            $assignment->updated_ch_palette = $today->copy()->addDays($ch_paletteDaysLeft);
+        $assignment->save();
+
+        return response()->json([
+            'message' => 'Assignment updated successfully',
+        ]);
+    } catch (\Exception $e) {
+        // Handle the error and provide an appropriate error message
+        return response()->json([
+            'error' => 'An error occurred while updating the assignment',
+        ], 500);
+    }
+}
+
+
+public function updateInspecterPalette(Request $request,$id) {
+    try {
+        $today = Carbon::now();
+        $assignment = Assignment::find($id);
+
+        if (!$assignment) {
+            return response()->json([
+                'error' => 'Assignment not found',
+            ], 404);
+        }
+        $product = Product::find($assignment->product_id);
+
+        if (!$product) {
+            return response()->json([
+                'error' => 'Product not found',
+            ], 404);
+        }
+        $assignment->date = $request->date;
+
+        $insp_paletteDaysLeft=(int) $assignment->insp_palette / (int) $product->time_day; //result in days
+
+        if(isset($assignment->date))
+            $assignment->updated_insp_palette = Carbon::parse($assignment->date)->addDays($insp_paletteDaysLeft);
+        else
+            $assignment->updated_insp_palette = $today->copy()->addDays($insp_paletteDaysLeft);
         $assignment->save();
 
         return response()->json([

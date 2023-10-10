@@ -471,6 +471,60 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="row">
+                    <div class="col-md-6" v-if="ch_paletteShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="ch_palette"
+                          >Changement des palettes</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(ch_paletteShow)"
+                            class="form-control bg-danger text-white"
+                            id="ch_paletteShow"
+                            type="text"
+                            value="Il faut changer les palettes."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="ch_paletteShow"
+                            type="text"
+                            :value="formatDateToFrench(ch_paletteShow)"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6" v-if="insp_paletteShow">
+                      <div class="mb-3">
+                        <label class="small mb-1" for="insp_paletteShow"
+                          >Inspection des palettes</label
+                        >
+                        <div class="input-group">
+                          <input
+                            v-if="isDateInPast(insp_paletteShow)"
+                            class="form-control bg-danger text-white"
+                            id="insp_paletteShow"
+                            type="text"
+                            value="Il faut Inspecter les palettes."
+                            readonly
+                          />
+                          <input
+                            v-else
+                            class="form-control"
+                            id="insp_paletteShow"
+                            type="text"
+                            :value="formatDateToFrench(insp_paletteShow)"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-md-6" v-if="c_dehuilShow">
                       <div class="mb-3">
@@ -642,6 +696,8 @@ export default {
       c_filtreShow: "",
       c_dehuilShow: "",
       entretienShow: "",
+      ch_paletteShow: "",
+      inp_paletteShow: "",
       productShow: "",
 
       //Charts
@@ -965,6 +1021,8 @@ firePhoneCode() {
       this.c_filtreShow = "";
       this.c_dehuilShow = "";
       this.entretienShow = "";
+      this.ch_paletteShow = "";
+      this.inp_paletteShow = "";
       try {
         this.productShow = assignment.product[0].name;
         this.imageShow = assignment.product[0].image;
@@ -981,8 +1039,11 @@ firePhoneCode() {
         if (assignment.c_filtre) {
           this.c_filtreShow = new Date(assignment.updated_c_filtre);
         }
-        if (assignment.c_dehuil) {
-          this.c_dehuilShow = new Date(assignment.updated_c_dehuil);
+        if (assignment.ch_palette) {
+          this.ch_paletteShow = new Date(assignment.updated_ch_palette);
+        }
+        if (assignment.insp_palette) {
+          this.insp_paletteShow = new Date(assignment.updated_insp_palette);
         }
         if (assignment.entretien) {
           this.entretienShow = new Date(assignment.updated_entretien);
