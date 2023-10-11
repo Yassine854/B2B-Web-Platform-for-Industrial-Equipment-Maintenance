@@ -1045,6 +1045,9 @@ firePhoneCode() {
         if (assignment.insp_palette) {
           this.insp_paletteShow = new Date(assignment.updated_insp_palette);
         }
+        if (assignment.c_dehuil) {
+          this.c_dehuilShow = new Date(assignment.updated_c_dehuil);
+        }
         if (assignment.entretien) {
           this.entretienShow = new Date(assignment.updated_entretien);
         }

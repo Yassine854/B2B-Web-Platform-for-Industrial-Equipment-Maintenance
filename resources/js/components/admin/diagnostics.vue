@@ -410,11 +410,12 @@
             <!-- Diagnostic row -->
             <div class="row gx-3 mb-3">
                 <div class="col-md-4">
-                    <label class="small mb-1" for="def" style="float: left">DEF</label>
+                    <label class="small mb-1" for="def" style="float: left">Défaut</label>
                     <input
-                    :class="['form-control', {'is-invalid': validationErrors[`informations.${index}.def`]}]"
+                    :class="['form-control', {'is-invalid': validationErrorsEdit[`informations.${index}.def`]}]"
                     id="def"
-                    :value="'def' + (index + 1)" disabled                    />
+                    v-model="information.def"
+                     disabled         />
                     <span class="invalid-feedback" v-for="(err,ind) in validationErrorsEdit[`informations.${index}.def`]" :key="ind">{{ err }}<br/></span>
 
                 </div>
@@ -988,7 +989,7 @@ const changePage = (page) => {
       },
 
       addDiagnosticEdit() {
-        const nextDef = this.informations.length + 1;
+        const nextDef = this.editInformations.length + 1;
         this.editInformations.push({ def: `def${nextDef}`, description: "", image: "" });
       },
       removeDiagnosticEdit(index) {
