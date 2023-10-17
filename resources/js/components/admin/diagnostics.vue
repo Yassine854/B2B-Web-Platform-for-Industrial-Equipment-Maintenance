@@ -274,6 +274,16 @@
 <span class="invalid-feedback" v-for="(err, index) in validationErrors.pieces" :key="index">{{ err }}<br></span>
 
 
+<!-- Description Textarea -->
+<div class="row mb-3">
+            <div class="col-md-12">
+              <label class="small mb-1" for="description" style="float: left;">Description</label>
+              <textarea class="form-control" id="description" rows="4" placeholder="Entrer la description" v-model="description" ></textarea>
+            </div>
+          </div>
+          <br />
+
+
         <br />
         <div class="modal-footer">
         <button
@@ -461,6 +471,7 @@
 
 
 <label class="small mb-1" style="float: left">Pièces de rechange</label>
+
 <br>
 <div class="container">
     <form :class="['container border p-3 mb-3', {'is-invalid': validationErrorsEdit.pieces}]">
@@ -533,6 +544,27 @@
     <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.pieces" :key="index">{{ err }}<br></span>
 
 </div>
+
+<!-- Description Textarea -->
+<div class="row gx-3 mb-3">
+                      <div class="col-md-12">
+                        <label
+                          class="small mb-1"
+                          for="description"
+                          style="float: left"
+                          >Description</label
+                        >
+                        <textarea
+                        :class="['form-control', {'is-invalid': validationErrorsEdit.description}]"
+                          id="description"
+                          rows="4"
+                          placeholder="Entrer la description"
+                          v-model="descriptionEdit"
+                        ></textarea>
+                        <span class="invalid-feedback" v-for="(err, index) in validationErrorsEdit.description" :key="index">{{ err }}<br></span>
+
+                      </div>
+                    </div>
 
         <br />
         <div class="modal-footer">
@@ -637,6 +669,16 @@
                     <td >{{ piece.quantite }}</td>
                 </tr>
             </tbody>
+            <thead>
+        <tr>
+            <th id="thead" colspan="4" class="text-center text-white">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="4">{{ descriptionShow }}</td>
+        </tr>
+    </tbody>
         </table>
 
 
@@ -902,6 +944,7 @@ const changePage = (page) => {
         client: "",
         product: "",
         date: "",
+        description:"",
 
         pieces: [{ designation: "", reference: "", quantite: "" }],
         informations: [{ def: "def1", description: "", image: "" }],
@@ -910,6 +953,7 @@ const changePage = (page) => {
         diagnosticEdit:{},
         productEdit: "",
         dateEdit: "",
+        descriptionEdit:"",
         editInformations: [{ def: "def1", description: "", image: "" }],
         editPieces: [{ designation: "", reference: "", quantite: "" }],
 
@@ -919,6 +963,7 @@ const changePage = (page) => {
         clientShow: "",
         productShow: "",
         dateShow: "",
+        descriptionShow:"",
         ShowInformations: [{ def: "", description: "", image: "" }],
         ShowPieces: [{ designation: "", reference: "", quantite: "" }],
       };
@@ -1030,6 +1075,8 @@ doc.html(elementHTML, {
     formData.append("client_id", this.client);
     formData.append("product_id", this.product);
     formData.append("date", this.date);
+    formData.append("description", this.description);
+
 
     // Append the pieces data
     this.pieces.forEach((piece, index) => {
@@ -1073,6 +1120,7 @@ doc.html(elementHTML, {
           this.informations = [];
           this.pieces = [];
           this.date = "";
+          this.description = "";
           $("#addIntervention").modal("hide");
           this.get_all_diagnostics();
         } catch (error) {
@@ -1092,6 +1140,7 @@ doc.html(elementHTML, {
         this.client = diagnostic.client_id;
         this.productEdit = diagnostic.product_id;
         this.dateEdit = diagnostic.date;
+        this.descriptionEdit = diagnostic.description;
         this.editInformations = diagnostic.informations.map((information) => ({
           def: information.def,
           description: information.description,
@@ -1111,6 +1160,8 @@ doc.html(elementHTML, {
     formData.append("client_id", this.client);
     formData.append("product_id", this.productEdit);
     formData.append("date", this.dateEdit);
+    formData.append("description", this.descriptionEdit);
+
 
     // Append the pieces data
     this.editPieces.forEach((piece, index) => {
@@ -1167,6 +1218,8 @@ doc.html(elementHTML, {
       this.editInformations = [];
       this.editPieces = [];
       this.dateEdit = "";
+      this.descriptionEdit = "";
+
     } else {
       // Handle unexpected response status
       console.error(`Unexpected status code: ${response.status}`);
@@ -1231,6 +1284,7 @@ doc.html(elementHTML, {
               );
               this.productShow =this.showDiagnostic.product_id;
               this.dateShow = this.showDiagnostic.date;
+              this.descriptionShow = this.showDiagnostic.description;
               this.ShowInformations = this.showDiagnostic.informations;
               this.ShowPieces = this.showDiagnostic.pdrs;
             })

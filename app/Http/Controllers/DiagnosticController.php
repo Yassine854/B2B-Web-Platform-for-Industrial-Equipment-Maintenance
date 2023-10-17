@@ -53,12 +53,14 @@ class DiagnosticController extends Controller
             'informations' => 'required|array',
             'informations.*.def' => 'required',
             'informations.*.description' => 'nullable|string|max:255',
-            'informations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:512',
+            'informations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
 
             'pieces' => 'required|array',
             'pieces.*.designation' => 'required|string|max:255',
             'pieces.*.reference' => 'required|string|max:255',
             'pieces.*.quantite' => 'required|integer',
+
+            'description' => 'nullable|string|max:255',
         ];
 
 
@@ -70,7 +72,6 @@ class DiagnosticController extends Controller
             'string' => 'Ce champ doit être une chaîne de caractères.',
             'max' => 'Ce champ ne doit pas dépasser :max caractères.',
             'informations.*.image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
-            'informations.*.image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
             'informations.required' => 'La définition des informations est requise.',
             'informations.array' => 'Le champ des informations doit être un tableau et doit contenir au moins un élément.',
             'informations.*.def.required' => 'Le champ défaut est requis.',
@@ -94,6 +95,8 @@ class DiagnosticController extends Controller
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
             'date' => $request->date,
+            'description' => $request->description,
+
         ];
 
         // Insert the intervention and get the ID
@@ -150,12 +153,15 @@ class DiagnosticController extends Controller
             'informations' => 'required|array',
             'informations.*.def' => 'required',
             'informations.*.description' => 'nullable|string|max:255',
-            'informations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:512',
+            'informations.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
 
             'pieces' => 'required|array',
             'pieces.*.designation' => 'required|string|max:255',
             'pieces.*.reference' => 'required|string|max:255',
             'pieces.*.quantite' => 'required|integer',
+
+            'description' => 'nullable|string|max:255',
+
         ];
 
 
@@ -167,7 +173,6 @@ class DiagnosticController extends Controller
             'string' => 'Ce champ doit être une chaîne de caractères.',
             'max' => 'Ce champ ne doit pas dépasser :max caractères.',
             'informations.*.image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
-            'informations.*.image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
             'informations.required' => 'La définition des informations est requise.',
             'informations.array' => 'Le champ des informations doit être un tableau et doit contenir au moins un élément.',
             'informations.*.def.required' => 'Le champ défaut est requis.',
@@ -190,6 +195,8 @@ class DiagnosticController extends Controller
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
             'date' => $request->date,
+            'description' => $request->description,
+
         ];
 
         DB::table('diagnostics')->where('id', $id)->update($DiagnosticData);

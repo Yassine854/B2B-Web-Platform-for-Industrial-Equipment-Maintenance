@@ -14,7 +14,8 @@ class Diagnostic extends Model
     protected $fillable = [
         'client_id',
         'product_id',
-        'date'
+        'date',
+        'description'
     ];
 
     public function informations()

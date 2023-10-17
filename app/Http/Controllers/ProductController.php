@@ -31,7 +31,7 @@ class ProductController extends Controller
         'pression' => 'required|string',
         'year' => 'required|integer',
         'time_day' => 'required|integer|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:512',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
     ];
 
     $messages = [
@@ -40,8 +40,6 @@ class ProductController extends Controller
         'max' => 'Ce champ ne doit pas dépasser :max caractères.',
         'integer' => 'Ce champ doit être un entier.',
         'image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
-        'image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
-
     ];
 
     $validator = Validator::make($request->all(), $rules, $messages);
@@ -86,7 +84,7 @@ public function updateProduct(Request $request, $id)
         'time_day' => 'required|integer|max:255',
     ];
     if ($request->hasFile('image')) {
-        $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:255';
+        $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif';
     }
 
     $messages = [
@@ -95,8 +93,6 @@ public function updateProduct(Request $request, $id)
         'max' => 'Ce champ ne doit pas dépasser :max caractères.',
         'integer' => 'Ce champ doit être un entier.',
         'image' => 'Ce champ doit être une image au format jpeg, png, jpg ou gif.',
-        'image.max' => 'Ce champ ne doit pas dépasser :max kilo-octets.',
-
 
     ];
 
