@@ -19,6 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->date('date');
             $table->string('description')->nullable();
+            $table->unsignedBigInteger('assignment_id');
+            $table->foreign('assignment_id')
+            ->references('id')->on('assignments')->onDelete('restrict');
             $table->timestamps();
         });
     }

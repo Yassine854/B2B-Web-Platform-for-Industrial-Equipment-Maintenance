@@ -34,9 +34,33 @@ class AssignmentController extends Controller
         ], 200);
     }
 
-    public function get_assignments($id)
+    // public function get_assignments($id)
+    // {
+    //     $assignments = Assignment::with('client', 'product')->get();
+
+    //     $groupedAssignments = $assignments->groupBy('client_id')->map(function ($group) {
+    //         $firstAssignment = $group->first();
+    //         return [
+    //             'client' => $firstAssignment->client,
+    //             'assignments' => $group,
+    //         ];
+    //     })->values();
+
+    //     return response()->json([
+    //         'assignments' => $groupedAssignments[$id]
+    //     ], 200);
+    // }
+    public function get_assignments($client_id)
     {
-        $assignments = Assignment::with('client', 'product')->get();
+        $assignments = Assignment::where('client_id', $client_id)
+            ->with('client', 'product')
+            ->get();
+
+        if ($assignments->isEmpty()) {
+            return response()->json([
+                'message' => 'No assignments found for the specified client',
+            ], 404);
+        }
 
         $groupedAssignments = $assignments->groupBy('client_id')->map(function ($group) {
             $firstAssignment = $group->first();
@@ -47,9 +71,31 @@ class AssignmentController extends Controller
         })->values();
 
         return response()->json([
-            'assignments' => $groupedAssignments[$id]
+            'assignments' => $groupedAssignments
         ], 200);
     }
+
+    public function searchSocieties(Request $request) {
+        // return response()->json([
+        //     'noo'
+        // ], 500);
+        // $search = $request->get('s');
+
+        // if ($search != null) {
+        //     $assignments = Assignment::with('client', 'product')
+        //         ->where(function ($query) use ($search) {
+        //             $query->where('client_id', 'LIKE', "%$search%");
+        //         })
+        //         ->get();
+
+        //     return response()->json([
+        //         'assignments' => $assignments
+        //     ], 200);
+        // } else {
+        //     return $this->get_all_assignments();
+        // }
+    }
+
 
 
 
@@ -581,6 +627,45 @@ public function search_product(Request $request)
         return $this->get_assignments($assignmentId);
     }
 }
+
+
+public function getAssignmentId($clientId, $productId)
+{
+    $rules = [
+        'client_id' => 'required|integer',
+        'product_id' => 'required|integer',
+    ];
+
+    $messages = [
+        'required' => 'Ce champ est requis.',
+        'integer' => 'Ce champ doit être un entier.',
+    ];
+
+    // Create a validator instance
+    $validator = Validator::make(['client_id' => $clientId, 'product_id' => $productId], $rules, $messages);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 400);
+    }
+
+    $assignment = Assignment::where('client_id', $clientId)
+        ->where('product_id', $productId)
+        ->with('client', 'product')
+        ->first();
+
+    if (!$assignment) {
+        return response()->json([
+            'error' => 'Assignment not found'
+        ], 404);
+    }
+
+    return response()->json([
+        'assignment' => $assignment
+    ], 200);
+}
+
+
 
 
 

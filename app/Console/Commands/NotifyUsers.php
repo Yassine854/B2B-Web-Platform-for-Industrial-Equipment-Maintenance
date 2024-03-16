@@ -33,6 +33,7 @@ class NotifyUsers extends Command
      */
     public function handle()
     {
+        $admins = User::where('role', 2)->get();
         $assignments = Assignment::all();
         foreach ($assignments as $assignment) {
             $client = User::where('id', $assignment->client_id)->where('role', 1)->first();
@@ -50,9 +51,17 @@ class NotifyUsers extends Command
                     $details = new SendEmailNotification([
                     'greeting' => 'Chère '.$client->society,
                     'body' => "Changement de huile pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
-                ]);
 
+                ]);
                 Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement de huile pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 10 jours !",
+                    ]);
+                    Notification::send($admins,$details);
+
                     }
 
                     if ($diffInDays == 5){
@@ -67,6 +76,13 @@ class NotifyUsers extends Command
                 ]);
 
                 Notification::send($client,$details);
+
+                //Admin notfification
+                $details = new SendEmailNotification([
+                    'greeting' => "Chers membres de l'équipe de maintenance,",
+                    'body' => "Changement de huile pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 5 jours !",
+                ]);
+                Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 3){
@@ -81,6 +97,13 @@ class NotifyUsers extends Command
                 ]);
 
                 Notification::send($client,$details);
+
+                //Admin notfification
+                $details = new SendEmailNotification([
+                    'greeting' => "Chers membres de l'équipe de maintenance,",
+                    'body' => "Changement de huile pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 3 jours !",
+                ]);
+                Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 1){
@@ -95,6 +118,13 @@ class NotifyUsers extends Command
                 ]);
 
                 Notification::send($client,$details);
+
+                //Admin notfification
+                $details = new SendEmailNotification([
+                    'greeting' => "Chers membres de l'équipe de maintenance,",
+                    'body' => "Changement de huile pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 1 jour !",
+                ]);
+                Notification::send($admins,$details);
                     }
                  }
                  //Changement de filtre
@@ -112,6 +142,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des cartouches de filtres pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 10 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 5){
@@ -125,6 +162,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des cartouches de filtres pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 5 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 3){
@@ -138,6 +182,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des cartouches de filtres pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 3 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 1){
@@ -151,6 +202,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des cartouches de filtres pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des cartouches de filtres pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 1 jour !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
                  }
 
@@ -169,6 +227,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 10 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 5){
@@ -182,6 +247,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 5 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 3){
@@ -195,6 +267,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 3 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 1){
@@ -208,6 +287,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 1 jour !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
                  }
 
@@ -227,6 +313,13 @@ class NotifyUsers extends Command
                         'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Inspection des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 10 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 5){
@@ -240,6 +333,13 @@ class NotifyUsers extends Command
                         'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Inspection des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 5 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 3){
@@ -253,6 +353,13 @@ class NotifyUsers extends Command
                         'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Inspection des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 3 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 1){
@@ -266,6 +373,13 @@ class NotifyUsers extends Command
                         'body' => "Inspection des palettes pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Inspection des palettes pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 1 jour !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
                  }
 
@@ -285,6 +399,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des déshuileurs pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 10 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 5){
@@ -298,6 +419,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des déshuileurs pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 5 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 3){
@@ -311,6 +439,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des déshuileurs pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 3 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 1){
@@ -324,6 +459,13 @@ class NotifyUsers extends Command
                         'body' => "Changement des déshuileurs pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Changement des déshuileurs pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 1 jour !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
                  }
                  //Entretien génerale
@@ -341,6 +483,13 @@ class NotifyUsers extends Command
                         'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 10 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Entretien génerale pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 10 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 5){
@@ -354,6 +503,13 @@ class NotifyUsers extends Command
                         'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 5 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Entretien génerale pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 5 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 3){
@@ -367,6 +523,13 @@ class NotifyUsers extends Command
                         'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 3 jours !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Entretien génerale pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 3 jours !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
 
                     if ($diffInDays == 1){
@@ -380,6 +543,13 @@ class NotifyUsers extends Command
                         'body' => "Entretien génerale pour la pompe ".$assignment->product[0]->id.'-'.$assignment->product[0]->name." dans 1 jour !",
                     ]);
                     Notification::send($client,$details);
+
+                    //Admin notfification
+                    $details = new SendEmailNotification([
+                        'greeting' => "Chers membres de l'équipe de maintenance,",
+                        'body' => "Entretien génerale pour la pompe " . $assignment->product[0]->id . '-' . $assignment->product[0]->name . " chez ".$client->society." dans 1 jour !",
+                    ]);
+                    Notification::send($admins,$details);
                     }
                  }
             }

@@ -1,7 +1,7 @@
 <template>
   <layout ref="table">
     <div
-      class="container shadow p-3"
+      class="shadow p-3"
       style="background-color: white; position: relative"
     >
       <div class="row">
@@ -123,7 +123,7 @@
                 </div>
                 <div class="col-md-3">
                   <label class="small mb-1" for="quantite" style="float: left;">Quantité</label>
-                  <input :class="['form-control', {'is-invalid': validationErrors[`pieces.${index}.quantite`]}]" type="number" id="quantite" min="0" placeholder="Quantité" v-model="piece.quantite"  />
+                  <input :class="['form-control', {'is-invalid': validationErrors[`pieces.${index}.quantite`]}]" type="text" id="quantite" placeholder="Quantité" v-model="piece.quantite"  />
                   <span class="invalid-feedback" v-for="(err,ind) in validationErrors[`pieces.${index}.quantite`]" :key="ind">{{ err }}<br/></span>
 
                 </div>
@@ -348,9 +348,8 @@
                         <label class="small mb-1" for="quantite">Quantité</label>
                         <input
                         :class="['form-control', {'is-invalid': validationErrorsEdit[`pieces.${index}.quantite`]}]"
-                            type="number"
+                            type="text"
                             id="quantite"
-                            min="0"
                             placeholder="Quantité"
                             v-model="piece.quantite"
                             required
@@ -824,7 +823,8 @@ export default {
       date: "",
 
       pieces: [{ designation: "", reference: "", quantite: "" }],
-
+      diagnosticPieces:[],
+      editdiagnosticPieces:[],
       //Edit
       nameEdit: "",
       clientEdit: "",
@@ -915,9 +915,11 @@ export default {
     axios.get(`/api/diagnostics/show/${diagnostic_id}`)
       .then((response) => {
         const diagnosticInfo = response.data.diagnostic;
-        console.log(diagnosticInfo);
+        console.log("hey");
+        console.log(diagnosticInfo.pdrs);
 
         if (diagnosticInfo) {
+        this.diagnosticPieces=diagnosticInfo.pdrs;
          this.pieces=[];
           diagnosticInfo.pdrs.forEach((pdr) => {
             this.pieces.push({
@@ -945,6 +947,7 @@ loadPiecesEdit(diagnostic_id) {
 
         if (diagnosticInfo) {
          this.editPieces=[];
+         this.editdiagnosticPieces=diagnosticInfo.pdrs;
           diagnosticInfo.pdrs.forEach((pdr) => {
             this.editPieces.push({
               designation: pdr.designation,
@@ -1000,22 +1003,39 @@ doc.html(elementHTML, {
 
     async createIntervention() {
         this.validationErrors={};
+        // console.log("all:",this.pieces);
+
+        // console.log("diag:",this.diagnosticPieces);
+
+        const difference = this.pieces.filter(item1 =>
+            !this.diagnosticPieces.some(item2 =>
+                item1.designation === item2.designation &&
+                item1.reference === item2.reference &&
+                item1.quantite === item2.quantite
+            )
+            );
+
+// console.log("diff is :",difference);
       try {
+            const assignmentResponse = await axios.get(`/api/assignments/${this.client}/${this.product}`);
+            const assignmentData = assignmentResponse.data.assignment;
+
+
         const formData = {
           name: this.name,
           client_id: this.client,
           product_id: this.product,
+          assignment_id:assignmentData.id,
           diagnostic_id:this.diagnostic,
           description: this.description,
           date: this.date,
-          pieces: this.pieces,
+          diagnosticPieces: this.diagnosticPieces,
+          interventionPieces: difference,
         };
         const response = await axios.post(
           "/api/interventions/create",
           formData
         );
-
-        console.log(response.data.message);
         const toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -1063,20 +1083,36 @@ doc.html(elementHTML, {
         quantite: piece.quantite,
       }));
       console.log("intervention:");
-      console.log(this.editPieces);
+      console.log(intervention);
+
+      console.log(this.productEdit);
+      console.log(this.client);
+
     },
 
     async updateIntervention(intervention) {
+        const difference = this.editPieces.filter(item1 =>
+            !this.editdiagnosticPieces.some(item2 =>
+                item1.designation === item2.designation &&
+                item1.reference === item2.reference &&
+                item1.quantite === item2.quantite
+            )
+            );
+
       try {
+        const assignmentResponse = await axios.get(`/api/assignments/${this.client}/${this.productEdit}`);
+        const assignmentData = assignmentResponse.data.assignment;
 
         await axios.put(`/api/interventions/update/${intervention.id}`, {
           name: this.nameEdit,
           client_id: this.client,
           product_id: this.productEdit,
           diagnostic_id:this.diagnosticEdit,
+          assignment_id:assignmentData.id,
           description: this.descriptionEdit,
           date: this.dateEdit,
-          pieces: this.editPieces,
+          diagnosticPieces: this.editdiagnosticPieces,
+          interventionPieces: difference,
         });
         const toast = Swal.mixin({
           toast: true,

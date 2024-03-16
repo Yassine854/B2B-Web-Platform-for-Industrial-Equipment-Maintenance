@@ -1,7 +1,7 @@
 <template>
     <layout ref="table">
       <div
-        class="container shadow p-3"
+        class=" shadow p-3"
         style="background-color: white; position: relative"
       >
         <div class="row">
@@ -165,15 +165,15 @@
                 <div class="col-md-3">
                     <label for="image" class="small mb-1" style="float: left">Image</label>
                     <input
-                    :class="['form-control', {'is-invalid': validationErrors[`informations.${index}.image`]}]"
+                        @change="fixUploadImage(index, $event)"
+                        :class="['form-control', {'is-invalid': validationErrors[`informations.${index}.image`]}]"
                         type="file"
                         ref="informationImages"
                         id="image"
-                        />
-                        <span class="invalid-feedback" v-for="(err,ind) in validationErrors[`informations.${index}.image`]" :key="ind">{{ err }}<br/></span>
-
-
+                    />
+                    <span class="invalid-feedback" v-for="(err, ind) in validationErrors[`informations.${index}.image`]" :key="ind">{{ err }}<br/></span>
                 </div>
+
                 <div class="col-md-1 d-flex align-items-start mt-4">
                     <button
                         class="btn btn-danger"
@@ -242,9 +242,8 @@
                         <label class="small mb-1" for="quantite">Quantité</label>
                         <input
                         :class="['form-control', {'is-invalid': validationErrors[`pieces.${index}.quantite`]}]"
-                            type="number"
+                            type="text"
                             id="quantite"
-                            min="0"
                             placeholder="Quantité"
                             v-model="piece.quantite"
 
@@ -438,6 +437,8 @@
                 <div class="col-md-3">
                     <label for="image" class="small mb-1" style="float: left">Image</label>
                     <input
+                    @change="fixUploadImageEdit(index, $event)"
+
                     :class="['form-control', {'is-invalid': validationErrorsEdit[`informations.${index}.image`]}]"
                         type="file"
                         ref="informationImagesEdit"
@@ -512,9 +513,8 @@
                         <label class="small mb-1" for="quantite">Quantité</label>
                         <input
                         :class="['form-control', {'is-invalid': validationErrorsEdit[`pieces.${index}.quantite`]}]"
-                            type="number"
+                            type="text"
                             id="quantite"
-                            min="0"
                             placeholder="Quantité"
                             v-model="piece.quantite"
                         />
@@ -648,7 +648,8 @@
                     <td >{{ information.def }}</td>
                     <td colspan="2" >{{ information.description }}</td>
                     <td style="text-align: center; vertical-align: middle;">
-                        <img :src="'/storage/img/diagnostics/'+information.image" alt="" style="max-width: 50px; max-height: 50px; display: block; margin: 0 auto;">
+
+                        <img :src="'storage/img/diagnostics/'+information.image" alt="" style="max-width: 50px; max-height: 50px; display: block; margin: 0 auto;">
                     </td>
                 </tr>
             </tbody>
@@ -810,6 +811,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { jsPDF } from "jspdf";
 import html2pdf from 'html2pdf.js';
+import Compressor from "compressorjs";
 
 window.Swal = Swal;
 let diagnostics = ref([]);
@@ -1043,20 +1045,28 @@ const changePage = (page) => {
       changePage(page) {
         this.$emit("page-change", page);
       },
-      uploadImage(e){
-        this.image=e.target.files[0];
-      },
+      fixUploadImage(index, event) {
+  // Assuming this.informations is a ref or reactive object
+  this.informations[index].image = event.target.files[0];
+    },
+
+    fixUploadImageEdit(index, event) {
+  // Assuming this.informations is a ref or reactive object
+  this.editInformations[index].image = event.target.files[0];
+    },
+
 
 
 
 async downloadPdf(diagnostic) {
   const SocietyName=this.getSocietyName(diagnostic.client_id);
   var doc = new jsPDF();
+
 // Source HTMLElement or a string containing HTML.
 var elementHTML = this.$refs.modalBodyRef;
-
 doc.html(elementHTML, {
     callback: function(doc) {
+
         // Save the PDF
         doc.save('rapport-diagnostic '+SocietyName+'_'+diagnostic.product_id+'_'+diagnostic.date+'.pdf');
     },
@@ -1071,9 +1081,12 @@ doc.html(elementHTML, {
     async createDiagnostic() {
         this.validationErrors={};
         try {
+    const assignmentResponse = await axios.get(`/api/assignments/${this.client}/${this.product}`);
+    const assignmentData = assignmentResponse.data.assignment;
     const formData = new FormData();
     formData.append("client_id", this.client);
     formData.append("product_id", this.product);
+    formData.append("assignment_id", assignmentData.id);
     formData.append("date", this.date);
     formData.append("description", this.description);
 
@@ -1085,16 +1098,30 @@ doc.html(elementHTML, {
       formData.append(`pieces[${index}][quantite]`, piece.quantite);
     });
 
-    // Append the informations data with images
-    this.informations.forEach((info, index) => {
+        // Compress images first
+        const compressedImages = await Promise.all(
+      this.informations.map(async (info) => {
+        if (info.image && !this.isLt2MB(info.image)) {
+          try {
+            console.log("File is big");
+            const compressedFile = await this.compressImage(info.image);
+            console.log("Compressed File:", compressedFile);
+            return compressedFile;
+          } catch (compressionError) {
+            console.error("Error compressing image:", info.image);
+            return null; // Return null if compression fails
+          }
+        }
+        return info.image || ""; // Ensure that an empty string is appended if no image
+      })
+    );
+
+    // Append the informations data with compressed images
+    compressedImages.forEach((compressedImage, index) => {
+      const info = this.informations[index];
       formData.append(`informations[${index}][def]`, info.def);
       formData.append(`informations[${index}][description]`, info.description);
-
-      // Check if an image is present for this information item
-      const imageInput = this.$refs.informationImages[index];
-      if (imageInput.files[0]) {
-        formData.append(`informations[${index}][image]`, imageInput.files[0]);
-      }
+      formData.append(`informations[${index}][image]`, compressedImage || "");
     });
           const response = await axios.post(
             "/api/diagnostics/create",
@@ -1133,6 +1160,27 @@ doc.html(elementHTML, {
         }
       },
 
+      isLt2MB(file) {
+            return file.size / 1024 / 1024 < 2;
+        },
+
+    async compressImage(originalImage) {
+    return new Promise((resolve, reject) => {
+      new Compressor(originalImage, {
+        quality: 0.2,
+        success(result) {
+          const compressedFile = new File([result], result.name, {
+            type: result.type,
+          });
+          resolve(compressedFile);
+        },
+        error(error) {
+          reject(error);
+        },
+      });
+    });
+  },
+
       openEditModal(diagnostic) {
         $("#editDiagnostic").modal("show");
         this.validationErrorsEdit={};
@@ -1156,11 +1204,14 @@ doc.html(elementHTML, {
 
       async updateDiagnostic(diagnostic) {
   try {
+    const assignmentResponse = await axios.get(`/api/assignments/${this.client}/${this.productEdit}`);
+    const assignmentData = assignmentResponse.data.assignment;
     const formData = new FormData();
     formData.append("client_id", this.client);
     formData.append("product_id", this.productEdit);
+    formData.append("assignment_id", assignmentData.id);
     formData.append("date", this.dateEdit);
-    formData.append("description", this.descriptionEdit);
+    formData.append("description", this.descriptionEdit || "");
 
 
     // Append the pieces data
@@ -1170,16 +1221,33 @@ doc.html(elementHTML, {
       formData.append(`pieces[${index}][quantite]`, piece.quantite);
     });
 
-    // Append the informations data with images
-    this.editInformations.forEach((info, index) => {
+    const compressedImages = await Promise.all(
+      this.editInformations.map(async (info) => {
+        if (info.image && !this.isLt2MB(info.image)) {
+          try {
+            console.log("File is big");
+            const compressedFile = await this.compressImage(info.image);
+            console.log("Compressed File:", compressedFile);
+            return compressedFile;
+          } catch (compressionError) {
+            console.error("Error compressing image:", info.image);
+            return null; // Return null if compression fails
+          }
+        }
+        return info.image || ""; // Ensure that an empty string is appended if no image
+      })
+    );
+
+    // Append the informations data with compressed images or existing images
+    compressedImages.forEach((compressedImage, index) => {
+      const info = this.editInformations[index];
       formData.append(`informations[${index}][def]`, info.def);
       formData.append(`informations[${index}][description]`, info.description ?? "");
 
-      // Check if an image is present for this information item
-      const imageInput = this.$refs.informationImagesEdit[index];
-      if (imageInput.files[0]) {
-        formData.append(`informations[${index}][image]`, imageInput.files[0]);
-        console.log(imageInput.files[0]);
+      // Check if a new image is present for this information item
+      if (compressedImage) {
+        formData.append(`informations[${index}][image]`, compressedImage);
+        console.log(compressedImage);
       } else if (info.image) {
         formData.append(`informations[${index}][Currentimage]`, info.image);
         console.log(info.image);

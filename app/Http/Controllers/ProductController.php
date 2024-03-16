@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Assignment;
 use Illuminate\Http\Request;
 use App\Notifications\SimpleNotification;
 use Illuminate\Support\Facades\Validator;
@@ -174,5 +175,22 @@ public function searchProduct(Request $request) {
         return $this->get_products();
     }
 }
+
+
+public function searchSocieties($search) {
+
+    if ($search != null) {
+        $assignments = Assignment::with('client', 'product')
+            ->where(function ($query) use ($search) {
+                $query->where('client.society', 'LIKE', "%$search%");
+            })
+            ->get();
+
+        return response()->json([
+            'assignments' => $assignments
+        ], 200);
+    }
+}
+
 
 }

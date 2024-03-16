@@ -21,7 +21,9 @@ class InterventionController extends Controller
 {
     public function get_all_interventions()
 {
-    $interventions = Intervention::with(['pdrs','diagnostic'])->get();
+    $interventions = Intervention::with(['pdrs','diagnostic'])
+    ->orderByDesc('id')
+    ->get();
 
     return response()->json([
         'interventions' => $interventions
@@ -158,10 +160,11 @@ public function getProductName($id)
                 'required',
                 'date',
             ],
-            'pieces' => 'nullable|array',
-            'pieces.*.designation' => 'nullable|string|max:255',
-            'pieces.*.reference' => 'nullable|string|max:255',
-            'pieces.*.quantite' => 'nullable|integer',
+
+            'interventionPieces' => 'nullable|array',
+            'interventionPieces.*.designation' => 'nullable|string|max:255',
+            'interventionPieces.*.reference' => 'nullable|string|max:255',
+            'interventionPieces.*.quantite' => 'nullable|numeric',
         ];
 
         $messages = [
@@ -176,6 +179,8 @@ public function getProductName($id)
             'pieces.*.designation.required' => 'La désignation des pièces est requise.',
             'pieces.*.reference.required' => 'La référence des pièces est requise.',
             'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+            'numeric' => 'Ce champ doit être un nombre.'
+
         ];
 
         // Create a validator instance
@@ -191,6 +196,7 @@ public function getProductName($id)
             'name' => $request->name,
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
+            'assignment_id' => $request->assignment_id,
             'diagnostic_id' => $request->diagnostic_id,
             'description' => $request->description,
             'date' => $request->date,
@@ -198,12 +204,25 @@ public function getProductName($id)
 
         $interventionId = DB::table('interventions')->insertGetId($interventionData);
 
-        foreach ($request->pieces as $piece) {
+        foreach ($request->interventionPieces as $piece) {
             $pieceData = [
                 'designation' => $piece['designation'],
                 'reference' => $piece['reference'],
                 'quantite' => $piece['quantite'],
                 'intervention_id' => $interventionId,
+            ];
+
+            DB::table('pdrs')->insert($pieceData);
+        }
+
+        foreach ($request->diagnosticPieces as $piece) {
+            $pieceData = [
+                'designation' => $piece['designation'],
+                'reference' => $piece['reference'],
+                'quantite' => $piece['quantite'],
+                'intervention_id' => $interventionId,
+                'diagnostic_id' => $request->diagnostic_id,
+
             ];
 
             DB::table('pdrs')->insert($pieceData);
@@ -241,10 +260,10 @@ public function getProductName($id)
                 'required',
                 'date',
             ],
-            'pieces' => 'nullable|array',
-            'pieces.*.designation' => 'nullable|string|max:255',
-            'pieces.*.reference' => 'nullable|string|max:255',
-            'pieces.*.quantite' => 'nullable|integer',
+            'interventionPieces' => 'nullable|array',
+            'interventionPieces.*.designation' => 'nullable|string|max:255',
+            'interventionPieces.*.reference' => 'nullable|string|max:255',
+            'interventionPieces.*.quantite' => 'nullable|numeric',
         ];
 
         $messages = [
@@ -259,6 +278,8 @@ public function getProductName($id)
             'pieces.*.designation.required' => 'La désignation des pièces est requise.',
             'pieces.*.reference.required' => 'La référence des pièces est requise.',
             'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+            'numeric' => 'Ce champ doit être un nombre.'
+
         ];
 
         // Create a validator instance
@@ -274,6 +295,7 @@ public function getProductName($id)
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
             'diagnostic_id' => $request->diagnostic_id,
+            'assignment_id' => $request->assignment_id,
             'description' => $request->description,
             'date' => $request->date,
         ];
@@ -282,17 +304,30 @@ public function getProductName($id)
 
         DB::table('pdrs')->where('intervention_id', $id)->delete();
 
-        // Insert the updated pieces
-        foreach ($request->pieces as $piece) {
-            $pieceData = [
-                'designation' => $piece['designation'],
-                'reference' => $piece['reference'],
-                'quantite' => $piece['quantite'],
-                'intervention_id' => $id,
-            ];
 
-            DB::table('pdrs')->insert($pieceData);
-        }
+            foreach ($request->interventionPieces as $piece) {
+                $pieceData = [
+                    'designation' => $piece['designation'],
+                    'reference' => $piece['reference'],
+                    'quantite' => $piece['quantite'],
+                    'intervention_id' => $id,
+                ];
+
+                DB::table('pdrs')->insert($pieceData);
+            }
+
+            foreach ($request->diagnosticPieces as $piece) {
+                $pieceData = [
+                    'designation' => $piece['designation'],
+                    'reference' => $piece['reference'],
+                    'quantite' => $piece['quantite'],
+                    'intervention_id' => $id,
+                    'diagnostic_id' => $request->diagnostic_id,
+                ];
+
+                DB::table('pdrs')->insert($pieceData);
+            }
+
 
         return "Intervention updated successfully!";
     }

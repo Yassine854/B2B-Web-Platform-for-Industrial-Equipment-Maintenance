@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->date('date');
             $table->foreign('diagnostic_id')->references('id')->on('diagnostics')->onDelete('cascade');
+            $table->unsignedBigInteger('assignment_id');
+            $table->foreign('assignment_id')
+            ->references('id')->on('assignments')->onDelete('restrict');
             $table->timestamps();
 
         });

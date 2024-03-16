@@ -107,12 +107,16 @@ Route::put('/assignments/updateDeshuil/{id}', [AssignmentController::class, 'upd
 Route::put('/assignments/updateEntretien/{id}', [AssignmentController::class, 'updateEntretien']);
 Route::put('/assignments/updateChangerPalette/{id}', [AssignmentController::class, 'updateChangerPalette']);
 Route::put('/assignments/updateInspecterPalette/{id}', [AssignmentController::class, 'updateInspecterPalette']);
+Route::get('/assignments/{clientId}/{productId}', [AssignmentController::class, 'getAssignmentId']);
+
 
 
 
 
 //Parc
 Route::get('/get_assignments/{id}',[AssignmentController::class,'get_assignments']);
+Route::get('/api/searchSocietie', [AssignmentController::class, 'searchSocieties']);
+
 
 //Diagnostic
 Route::get('/get_all_diagnostics', [DiagnosticController::class, 'get_all_diagnostics']);

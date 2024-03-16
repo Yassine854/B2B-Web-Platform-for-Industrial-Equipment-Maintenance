@@ -1,7 +1,7 @@
 <template>
     <layout ref="table">
       <div
-        class="container shadow p-3"
+        class=" shadow p-3"
         style="background-color: white; position: relative"
       >
         <div class="row">
@@ -382,6 +382,8 @@ import layout from "../layouts/layout.vue";
 
 
       async createType() {
+      console.log("hey");
+      console.log(this.name);
         this.validationErrors = {};
         try {
           await axios.post(`/api/types_industrie/create`, {

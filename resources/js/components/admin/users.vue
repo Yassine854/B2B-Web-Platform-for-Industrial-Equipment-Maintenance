@@ -2,7 +2,7 @@
   <layout ref="table">
     <p></p>
     <div
-      class="container shadow p-3"
+      class=" shadow p-3"
       style="background-color: white; position: relative"
     >
       <div class="row">
@@ -1052,6 +1052,7 @@ window.Swal = Swal;
 
 let users = ref([]);
 let type_industries = ref([]);
+const searchUser = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = ref(10); // Set the default number of items per page
 
@@ -1117,6 +1118,11 @@ const totalPages = computed(() =>
 const changePage = (page) => {
   currentPage.value = page;
 };
+
+const search = async () => {
+  let response = await axios.get("/api/search_user?s=" + searchUser.value);
+  users.value = response.data.users;
+};
 </script>
 
 
@@ -1133,7 +1139,6 @@ export default {
   },
   data() {
     return {
-    searchUser:[],
       empty:null,
       countries: listCountries,
       selectedCountry: '222',
@@ -1192,10 +1197,15 @@ export default {
       });
   },
   mounted() {
-  if (this.societyValue) {
-    this.searchUser = this.societyValue;
     this.search();
-  }
+    console.log("3HERE");
+
+    console.log(this.societyValue);
+//   if (this.societyValue) {
+//     this.searchUser = this.societyValue;
+
+//     this.search();
+//   }
 },
 
   props: {
@@ -1242,21 +1252,22 @@ export default {
     },
   },
   watch: {
-  societyValue(newSocietyValue) {
-    if (newSocietyValue) {
-     this.searchUser = newSocietyValue;
-      this.search();
-    }
-  },
+//   societyValue(newSocietyValue) {
+//     if (newSocietyValue) {
+//      this.searchUser = newSocietyValue;
+//       this.search();
+//     }
+//   },
+
 },
 
   methods: {
 
-async search() {
-  let response = await axios.get("/api/search_user?s=" + this.searchUser);
-  console.log("response", response);
-  this.users = response.data.users;
-},
+// async search() {
+//   let response = await axios.get("/api/search_user?s=" + this.searchUser);
+//   console.log("response", response);
+//   this.users = response.data.users;
+// },
 
 
     selectedCountryName(countryId) {
@@ -1332,7 +1343,6 @@ firePhoneCodeEdited() {
         this.emailAdmin = "";
         this.passwordAdmin = "";
         this.$emit("user-added");
-
         const toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -1387,7 +1397,6 @@ firePhoneCodeEdited() {
         this.selectedCountry = "222";
         this.selectedState = "";
         this.address = "";
-
         const toast = Swal.mixin({
           toast: true,
           position: "top-end",
@@ -1404,7 +1413,8 @@ firePhoneCodeEdited() {
         $("#addUserModal").modal("hide");
 
         this.getUsers();
-      }catch (error) {
+        this.handleCountryChange();
+          }catch (error) {
         if (error.response.status === 400) {
           // Validation errors, set the validationErrors object
           this.ClientvalidationErrors = error.response.data.errors;

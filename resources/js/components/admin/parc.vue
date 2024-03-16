@@ -1,7 +1,7 @@
 <template>
   <layout ref="table">
     <div
-      class="container shadow p-3"
+      class=" shadow p-3"
       style="background-color: white; position: relative"
     >
       <div class="row" v-if="clientInfo.disabled==false">
@@ -853,7 +853,7 @@ window.Swal = Swal;
 
 const router = useRouter();
 const route =useRoute();
-const assignmentId = route.params.id;
+const client_id = route.params.id;
 let currentPage = ref(1);
 let itemsPerPage = ref(10);
 
@@ -871,15 +871,15 @@ let products = ref([]);
 
 const get_assignments = async () => {
   try {
-    let response = await axios.get(`/api/get_assignments/${assignmentId}`);
+    let response = await axios.get(`/api/get_assignments/${client_id}`);
     console.log(response.data);
+    assignmentsValue.value = response.data.assignments[0].assignments;
+    society.value = response.data.assignments[0].client[0].society;
+    clientId.value = response.data.assignments[0].client[0].id;
+    clientInfo.value = response.data.assignments[0].client[0];
 
-    assignmentsValue.value = response.data.assignments.assignments;
-    society.value = response.data.assignments.client[0].society;
-    clientId.value = response.data.assignments.client[0].id;
-    clientInfo.value = response.data.assignments.client[0];
 
-    console.log(assignmentsValue.value);
+
   } catch (error) {
     console.log("error here");
     router.push({ path: '/parc_clients' })
@@ -1238,9 +1238,14 @@ export default {
               }
               console.log(response);
             })
-            .catch((error) => {
-              console.log(error);
-            });
+            .catch((errors) => {
+                  console.log(errors);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Il y a eu un problème!",
+                    });
+                });
         }
       });
     },

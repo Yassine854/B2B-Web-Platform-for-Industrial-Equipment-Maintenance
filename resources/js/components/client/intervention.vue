@@ -1,7 +1,7 @@
 <template>
     <layout ref="table">
       <div
-        class="container shadow p-3"
+        class=" shadow p-3"
         style="background-color: white; position: relative"
       >
         <div class="row">
@@ -162,7 +162,7 @@
                           <div
                             class="d-flex align-items-center justify-content-center"
                           >
-                            
+
                           </div>
                         </div>
                       </div>

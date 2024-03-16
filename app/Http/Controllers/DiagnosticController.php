@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\Diagnostic;
 use App\Models\Information;
+use App\Models\Intervention;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -14,12 +15,19 @@ class DiagnosticController extends Controller
 
     public function get_all_diagnostics()
 {
-    $diagnostics = Diagnostic::with(['pdrs', 'informations'])->get();
+    $diagnostics = Diagnostic::with(['pdrs' => function ($query) {
+        $query->whereNull('intervention_id');
+    }, 'informations'])
+    ->orderByDesc('id')
+    ->get();
 
     return response()->json([
         'diagnostics' => $diagnostics
     ], 200);
 }
+
+
+
 
 
 
@@ -46,6 +54,7 @@ class DiagnosticController extends Controller
         $rules = [
             'client_id' => 'required|integer',
             'product_id' => 'required|integer',
+            'assignment_id' => 'required|integer',
             'date' => [
                 'required',
                 'date',
@@ -58,7 +67,7 @@ class DiagnosticController extends Controller
             'pieces' => 'required|array',
             'pieces.*.designation' => 'required|string|max:255',
             'pieces.*.reference' => 'required|string|max:255',
-            'pieces.*.quantite' => 'required|integer',
+            'pieces.*.quantite' => 'required|numeric',
 
             'description' => 'nullable|string|max:255',
         ];
@@ -80,6 +89,7 @@ class DiagnosticController extends Controller
             'pieces.*.designation.required' => 'La désignation des pièces est requise.',
             'pieces.*.reference.required' => 'La référence des pièces est requise.',
             'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+            'pieces.*.quantite.numeric' => 'Ce champ doit être un nombre.',
         ];
 
 
@@ -94,6 +104,7 @@ class DiagnosticController extends Controller
         $DiagnosticData = [
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
+            'assignment_id' => $request->assignment_id,
             'date' => $request->date,
             'description' => $request->description,
 
@@ -103,26 +114,43 @@ class DiagnosticController extends Controller
         $diagnosticId = DB::table('diagnostics')->insertGetId($DiagnosticData);
 
         foreach ($request->informations as $information) {
-            $infoData = [
-                'def' => $information['def'],
-                'description' => $information['description'],
-                'image' => null, // Initialize with null
-                'diagnostic_id' => $diagnosticId,
-            ];
 
-            if (isset($information['image']) && $information['image']->isValid()) {
+            $info = new Information();
+            $info->def = $information['def'];
+            $info->description = $information['description'];
+            $info->diagnostic_id = $diagnosticId;
+            if (isset($information['image'])) {
                 $image = $information['image'];
-
-                // Generate a unique image name (e.g., timestamp + original name)
                 $imageName = time() . '_' . $image->getClientOriginalName();
-
-                // Store the image with the unique name
                 $image->storeAs('public/img/diagnostics', $imageName);
-                $infoData['image'] = $imageName;
+                $info->image = $imageName;
             }
 
-            // Insert diagnostic information
-            DB::table('informations')->insert($infoData);
+
+            $info->save();
+
+
+
+            // $infoData = [
+            //     'def' => $information['def'],
+            //     'description' => $information['description'],
+            //     'image' => null, // Initialize with null
+            //     'diagnostic_id' => $diagnosticId,
+            // ];
+
+            // if (isset($information['image']) ) {
+            //     $image = $information['image'];
+
+            //     // Generate a unique image name (e.g., timestamp + original name)
+            //     $imageName = time() . '_' . $image->getClientOriginalName();
+
+            //     // Store the image with the unique name
+            //     $image->storeAs('public/img/diagnostics', $imageName);
+            //     $infoData['image'] = $imageName;
+            // }
+
+            // // Insert diagnostic information
+            // DB::table('informations')->insert($infoData);
         }
 
         foreach ($request->pieces as $piece) {
@@ -158,7 +186,7 @@ class DiagnosticController extends Controller
             'pieces' => 'required|array',
             'pieces.*.designation' => 'required|string|max:255',
             'pieces.*.reference' => 'required|string|max:255',
-            'pieces.*.quantite' => 'required|integer',
+            'pieces.*.quantite' => 'required|numeric',
 
             'description' => 'nullable|string|max:255',
 
@@ -181,6 +209,8 @@ class DiagnosticController extends Controller
             'pieces.*.designation.required' => 'La désignation des pièces est requise.',
             'pieces.*.reference.required' => 'La référence des pièces est requise.',
             'pieces.*.quantite.required' => 'La quantité des pièces est requise.',
+            'pieces.*.quantite.numeric' => 'Ce champ doit être un nombre.',
+
         ];
 
     $validator = Validator::make($request->all(), $rules, $messages);
@@ -194,6 +224,7 @@ class DiagnosticController extends Controller
         $DiagnosticData = [
             'client_id' => $request->client_id,
             'product_id' => $request->product_id,
+            'assignment_id' => $request->assignment_id,
             'date' => $request->date,
             'description' => $request->description,
 
@@ -235,7 +266,7 @@ class DiagnosticController extends Controller
             DB::table('informations')->insert($infoData);
         }
 
-
+        //Pieces de rechanges
 
         foreach ($request->pieces as $piece) {
             $pieceData = [
@@ -249,24 +280,56 @@ class DiagnosticController extends Controller
             DB::table('pdrs')->insert($pieceData);
         }
 
+        $interventions=Intervention::where('diagnostic_id', $id)
+        ->with(['pdrs','diagnostic'])
+        ->get();
+
+        if($interventions){
+            foreach($interventions as $intervention){
+                DB::table('pdrs')
+            ->where('intervention_id', $intervention->id)
+            ->where('diagnostic_id', $id)
+            ->delete();
+
+
+        // Insert the updated pieces
+        foreach ($request->pieces as $piece) {
+            $pieceData = [
+                'designation' => $piece['designation'],
+                'reference' => $piece['reference'],
+                'quantite' => $piece['quantite'],
+                'intervention_id' => $intervention->id,
+                'diagnostic_id' => $id,
+            ];
+
+            DB::table('pdrs')->insert($pieceData);
+        }
+
+
+        }
+        }
+
         return response()->json(['message' => 'Diagnostic updated successfully'], 200);
     }
 
 
     public function showDiagnostic($id)
-    {
-        $diagnostic = Diagnostic::with(['pdrs', 'informations'])->find($id);
+{
+    $diagnostic = Diagnostic::with(['pdrs' => function ($query) {
+        $query->whereNull('intervention_id');
+    }, 'informations'])
+    ->find($id);
 
-        if (!$diagnostic) {
-            return response()->json([
-                'message' => 'diagnostic not found'
-            ], 404);
-        }
-
+    if (!$diagnostic) {
         return response()->json([
-            'diagnostic' => $diagnostic
-        ], 200);
+            'message' => 'Diagnostic not found'
+        ], 404);
     }
+
+    return response()->json([
+        'diagnostic' => $diagnostic
+    ], 200);
+}
 
     public function deleteDiagnostic($id){
         $diagnostic=Diagnostic::find($id);
