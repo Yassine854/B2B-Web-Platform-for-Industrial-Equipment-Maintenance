@@ -17,6 +17,10 @@ A web-based platform developed to manage the maintenance of industrial equipment
 ## Introduction
 This project was developed as part of an internship at **Envision**, a digital agency specializing in B2B solutions. The platform helps companies manage their industrial equipment maintenance by assigning equipment, tracking diagnostics, and overseeing interventions. It is designed to optimize the operational efficiency of maintenance teams, minimizing unplanned downtime and improving asset management.
 
+![dashboard off](https://github.com/user-attachments/assets/af4ad2e2-50d5-4d4f-a91b-bba531a763e3)
+
+
+
 ## Features
 - **Administrator functionalities**:
   - Manage users, industrial pumps, diagnostics, and interventions.
